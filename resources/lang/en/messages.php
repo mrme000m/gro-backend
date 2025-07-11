@@ -2540,4 +2540,5 @@
   'Admin Panel' => 'Admin Panel',
   'visited_products' => 'Visited products',
   'searched_products' => 'Searched products',
+  'searched_keyword_use...' => 'Searched keyword use...',
 );
