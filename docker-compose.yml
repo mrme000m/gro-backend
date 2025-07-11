@@ -1,0 +1,81 @@
+
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grofresh-app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      # Mount entire codebase for development
+      - .:/var/www/html
+      # Exclude vendor and node_modules to avoid conflicts
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=grofresh
+      - DB_USERNAME=grofresh_user
+      - DB_PASSWORD=grofresh_password
+      - APP_URL=http://localhost:8000
+      - ASSET_URL=http://localhost:8000
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - grofresh-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: grofresh-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: grofresh
+      MYSQL_USER: grofresh_user
+      MYSQL_PASSWORD: grofresh_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./installation/v4.1.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - grofresh-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: grofresh-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - grofresh-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: grofresh-phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root_password
+    ports:
+      - "8080:80"
+    depends_on:
+      - mysql
+    networks:
+      - grofresh-network
+
+volumes:
+  mysql_data:
+
+networks:
+  grofresh-network:
+    driver: bridge
