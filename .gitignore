@@ -1,16 +1,162 @@
-/node_modules
+# Laravel Framework
+/vendor/
+/node_modules/
 /public/hot
 /public/storage
 /storage/*.key
-/vendor
+/storage/app/public/*
+!/storage/app/public/.gitkeep
+/storage/framework/cache/data/*
+!/storage/framework/cache/data/.gitkeep
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitkeep
+/storage/framework/testing/*
+!/storage/framework/testing/.gitkeep
+/storage/framework/views/*
+!/storage/framework/views/.gitkeep
+/storage/logs/*
+!/storage/logs/.gitkeep
+
+# Environment Configuration
 .env
 .env.backup
+.env.production
+.env.local
+.env.testing
 .phpunit.result.cache
-Homestead.json
-Homestead.yaml
-npm-debug.log
-yarn-error.log
+
+# IDE and Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
+Thumbs.db
+
+# Composer
+composer.phar
+composer.lock
+
+# NPM/Yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# Build outputs
+/public/build/
+/public/mix-manifest.json
+/public/js/app.js
+/public/css/app.css
+
+# Docker
+docker-compose.override.yml
+.docker/
+*.log
+
+# Database
+*.sqlite
+*.sqlite3
+*.db
+
+# Cache and temporary files
+/bootstrap/cache/*.php
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+/storage/logs/*
+
+# Testing
+/coverage/
+.phpunit.cache
+phpunit.xml
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Application specific
+/public/assets/uploads/*
+!/public/assets/uploads/.gitkeep
+/storage/app/public/admin/*
+!/storage/app/public/admin/.gitkeep
+/storage/app/public/banner/*
+!/storage/app/public/banner/.gitkeep
+/storage/app/public/category/*
+!/storage/app/public/category/.gitkeep
+/storage/app/public/product/*
+!/storage/app/public/product/.gitkeep
+/storage/app/public/restaurant/*
+!/storage/app/public/restaurant/.gitkeep
+
+# GroFresh specific
 /Modules/Gateways
 /storage/install.zip
 /storage/update.zip
+
+# Laravel Telescope (if installed)
+/storage/telescope/
+
+# Laravel Horizon (if installed)
+/storage/horizon/
+
+# Deployment
+/public_html/
+/dist/
+/build/
+
+# Security
+*.pem
+*.key
+*.crt
+*.p12
+
+# Logs
+*.log
+laravel.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Dependency directories
+jspm_packages/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# Temporary folders
+tmp/
+temp/
+
+# Local development
+/docker/mysql/data/
+/docker/redis/data/
+
+# Homestead
+Homestead.json
+Homestead.yaml
