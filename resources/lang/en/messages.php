@@ -2604,4 +2604,5 @@
   '1 BDT Equal To How Much Loyalty Points?' => '1 BDT Equal To How Much Loyalty Points ',
   'No images uploaded' => 'No images uploaded',
   'Images uploaded' => 'Images uploaded',
+  'recent_searches' => 'Recent searches',
 );

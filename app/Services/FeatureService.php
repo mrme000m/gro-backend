@@ -509,7 +509,7 @@ class FeatureService
         }
 
         if ($this->isEnabled('advanced.multi_language')) {
-            $submenu[] = ['name' => 'Multi Language', 'route' => 'admin.business-settings.web-app.language'];
+            $submenu[] = ['name' => 'Multi Language', 'route' => 'admin.business-settings.web-app.system-setup.language.index'];
         }
 
         if ($this->isEnabled('advanced.multi_currency')) {
