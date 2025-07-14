@@ -386,23 +386,23 @@ class FeatureService
     {
         $submenu = [];
 
-        if ($this->isFeatureEnabled('content.pages')) {
+        if ($this->isEnabled('content.pages')) {
             $submenu[] = ['name' => 'About Us', 'route' => 'admin.business-settings.page-setup.about-us'];
         }
 
-        if ($this->isFeatureEnabled('content.terms_conditions')) {
+        if ($this->isEnabled('content.terms_conditions')) {
             $submenu[] = ['name' => 'Terms & Conditions', 'route' => 'admin.business-settings.page-setup.terms-and-conditions'];
         }
 
-        if ($this->isFeatureEnabled('content.privacy_policy')) {
+        if ($this->isEnabled('content.privacy_policy')) {
             $submenu[] = ['name' => 'Privacy Policy', 'route' => 'admin.business-settings.page-setup.privacy-policy'];
         }
 
-        if ($this->isFeatureEnabled('content.faqs')) {
+        if ($this->isEnabled('content.faqs')) {
             $submenu[] = ['name' => 'FAQs', 'route' => 'admin.business-settings.page-setup.faq'];
         }
 
-        if ($this->isFeatureEnabled('content.blogs')) {
+        if ($this->isEnabled('content.blogs')) {
             $submenu[] = ['name' => 'Blogs', 'route' => 'admin.business-settings.blog.index'];
         }
 
