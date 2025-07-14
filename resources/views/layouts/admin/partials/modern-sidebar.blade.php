@@ -268,9 +268,9 @@
                        class="submenu-link {{ Request::is('admin/report/earning*') ? 'active' : '' }}">
                         <span class="submenu-text">{{ translate('Earning Reports') }}</span>
                     </a>
-                    <a href="{{ route('admin.report.product-sale') }}"
-                       class="submenu-link {{ Request::is('admin/report/product-sale*') ? 'active' : '' }}">
-                        <span class="submenu-text">{{ translate('Product Sales') }}</span>
+                    <a href="{{ route('admin.report.sale-report') }}"
+                       class="submenu-link {{ Request::is('admin/report/sale-report*') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Sale Reports') }}</span>
                     </a>
                 </div>
             </div>
