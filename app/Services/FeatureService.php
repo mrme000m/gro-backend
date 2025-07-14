@@ -204,6 +204,18 @@ class FeatureService
             ];
         }
 
+        // Content Management
+        if ($this->isCategoryEnabled('content')) {
+            $navigation[] = [
+                'name' => 'Content Management',
+                'icon' => 'animated-icon icon-content pulse',
+                'route' => 'admin.business-settings.page-setup.about-us',
+                'active' => request()->routeIs('admin.business-settings.page-setup.*') || request()->routeIs('admin.business-settings.blog.*'),
+                'enabled' => true,
+                'submenu' => $this->getContentSubmenu(),
+            ];
+        }
+
         // Settings (always enabled)
         $navigation[] = [
             'name' => 'Settings',
@@ -363,6 +375,42 @@ class FeatureService
         if ($this->isEnabled('delivery.delivery_charges')) {
             $submenu[] = ['name' => 'Add Delivery Man', 'route' => 'admin.delivery-man.add'];
         }
+
+        return $submenu;
+    }
+
+    /**
+     * Get content management submenu items
+     */
+    private function getContentSubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isFeatureEnabled('content.pages')) {
+            $submenu[] = ['name' => 'About Us', 'route' => 'admin.business-settings.page-setup.about-us'];
+        }
+
+        if ($this->isFeatureEnabled('content.terms_conditions')) {
+            $submenu[] = ['name' => 'Terms & Conditions', 'route' => 'admin.business-settings.page-setup.terms-and-conditions'];
+        }
+
+        if ($this->isFeatureEnabled('content.privacy_policy')) {
+            $submenu[] = ['name' => 'Privacy Policy', 'route' => 'admin.business-settings.page-setup.privacy-policy'];
+        }
+
+        if ($this->isFeatureEnabled('content.faqs')) {
+            $submenu[] = ['name' => 'FAQs', 'route' => 'admin.business-settings.page-setup.faq'];
+        }
+
+        if ($this->isFeatureEnabled('content.blogs')) {
+            $submenu[] = ['name' => 'Blogs', 'route' => 'admin.business-settings.blog.index'];
+        }
+
+        // Always include these policy pages
+        $submenu[] = ['name' => 'Cancellation Policy', 'route' => 'admin.business-settings.page-setup.cancellation-policy'];
+        $submenu[] = ['name' => 'Refund Policy', 'route' => 'admin.business-settings.page-setup.refund-policy'];
+        $submenu[] = ['name' => 'Return Policy', 'route' => 'admin.business-settings.page-setup.return-policy'];
+        $submenu[] = ['name' => 'Social Media', 'route' => 'admin.business-settings.web-app.third-party.social-media'];
 
         return $submenu;
     }

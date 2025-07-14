@@ -51,6 +51,18 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('/fcm/{id}', [DashboardController::class, 'fcm'])->name('fcm-test');     //test route
             Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
             Route::get('/modern', [DashboardController::class, 'modernTest'])->name('modern-dashboard');     //modern dashboard test
+
+        // Debug route to test feature system
+        Route::get('/debug-features', function() {
+            return response()->json([
+                'content.enabled' => feature_enabled('content.enabled'),
+                'content.pages' => feature_enabled('content.pages'),
+                'content.blogs' => feature_enabled('content.blogs'),
+                'content.faqs' => feature_enabled('content.faqs'),
+                'content.terms_conditions' => feature_enabled('content.terms_conditions'),
+                'content.privacy_policy' => feature_enabled('content.privacy_policy'),
+            ]);
+        });
             Route::post('order-stats', [DashboardController::class, 'orderStats'])->name('order-stats');
             Route::get('settings', [SystemController::class, 'settings'])->name('settings');
             Route::post('settings', [SystemController::class, 'settingsUpdate']);

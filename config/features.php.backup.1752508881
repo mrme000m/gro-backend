@@ -67,12 +67,12 @@ return array (
   ),
   'delivery' => 
   array (
-    'enabled' => false,
-    'delivery_zones' => false,
-    'delivery_charges' => false,
-    'delivery_tracking' => false,
-    'delivery_partners' => false,
-    'route_optimization' => false,
+    'enabled' => true,
+    'delivery_zones' => true,
+    'delivery_charges' => true,
+    'delivery_tracking' => true,
+    'delivery_partners' => true,
+    'route_optimization' => true,
   ),
   'payments' => 
   array (
