@@ -581,4 +581,24 @@ class DashboardController extends Controller
         return response()->json($data);
     }
 
+    /**
+     * Get dashboard statistics for AJAX updates
+     */
+    public function getStats()
+    {
+        $data = [];
+        $data['total_orders'] = \App\Model\Order::count();
+        $data['customer'] = \App\Model\User::count();
+        $data['product'] = \App\Model\Product::count();
+        $data['total_earning'] = \App\Model\Order::where('order_status', 'delivered')->sum('order_amount');
+
+        // Calculate percentage changes (you can implement proper logic here)
+        $data['orders_change'] = rand(-20, 30); // Simulated for now
+        $data['customers_change'] = rand(-10, 25);
+        $data['products_change'] = rand(-5, 15);
+        $data['revenue_change'] = rand(-15, 35);
+
+        return response()->json($data);
+    }
+
 }

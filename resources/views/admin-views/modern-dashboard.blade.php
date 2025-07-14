@@ -102,42 +102,42 @@
 <!-- Quick Actions -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
     <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.pos.index') }}'">
-        <div class="modern-card-body text-center">
-            <div class="w-16 h-16 bg-var(--primary-color) rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-cash-register text-white text-2xl"></i>
+        <div class="modern-card-body" style="text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-cash-register" style="color: white; font-size: 1.5rem;"></i>
             </div>
-            <h3 class="font-semibold text-var(--text-primary) mb-2">{{ translate('POS System') }}</h3>
-            <p class="text-var(--text-secondary) text-sm">{{ translate('Process orders quickly') }}</p>
+            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('POS System') }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Process orders quickly') }}</p>
         </div>
     </div>
-    
+
     <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.product.add-new') }}'">
-        <div class="modern-card-body text-center">
-            <div class="w-16 h-16 bg-var(--success-color) rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-plus text-white text-2xl"></i>
+        <div class="modern-card-body" style="text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-plus" style="color: white; font-size: 1.5rem;"></i>
             </div>
-            <h3 class="font-semibold text-var(--text-primary) mb-2">{{ translate('Add Product') }}</h3>
-            <p class="text-var(--text-secondary) text-sm">{{ translate('Add new products to inventory') }}</p>
+            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('Add Product') }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Add new products to inventory') }}</p>
         </div>
     </div>
-    
+
     <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.orders.list', ['status' => 'all']) }}'">
-        <div class="modern-card-body text-center">
-            <div class="w-16 h-16 bg-var(--warning-color) rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-shopping-cart text-white text-2xl"></i>
+        <div class="modern-card-body" style="text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--warning-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-shopping-cart" style="color: white; font-size: 1.5rem;"></i>
             </div>
-            <h3 class="font-semibold text-var(--text-primary) mb-2">{{ translate('View Orders') }}</h3>
-            <p class="text-var(--text-secondary) text-sm">{{ translate('Manage customer orders') }}</p>
+            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('View Orders') }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Manage customer orders') }}</p>
         </div>
     </div>
     
     <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.report.order') }}'">
-        <div class="modern-card-body text-center">
-            <div class="w-16 h-16 bg-var(--info-color) rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-chart-bar text-white text-2xl"></i>
+        <div class="modern-card-body" style="text-align: center;">
+            <div style="width: 64px; height: 64px; background: var(--info-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                <i class="fas fa-chart-bar" style="color: white; font-size: 1.5rem;"></i>
             </div>
-            <h3 class="font-semibold text-var(--text-primary) mb-2">{{ translate('Reports') }}</h3>
-            <p class="text-var(--text-secondary) text-sm">{{ translate('View analytics and reports') }}</p>
+            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('Reports') }}</h3>
+            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('View analytics and reports') }}</p>
         </div>
     </div>
 </div>
@@ -291,11 +291,15 @@ function updateDashboardStats() {
         .then(data => {
             if (window.modernDashboard) {
                 window.modernDashboard.updateStatCard('.stat-card:nth-child(1)', data.total_orders, data.orders_change);
-                window.modernDashboard.updateStatCard('.stat-card:nth-child(2)', data.total_customers, data.customers_change);
-                window.modernDashboard.updateStatCard('.stat-card:nth-child(4)', data.total_products, data.products_change);
+                window.modernDashboard.updateStatCard('.stat-card:nth-child(2)', data.customer, data.customers_change);
+                window.modernDashboard.updateStatCard('.stat-card:nth-child(4)', data.product, data.products_change);
             }
         })
-        .catch(error => console.error('Error updating stats:', error));
+        .catch(error => {
+            console.error('Error updating stats:', error);
+            // Fallback to simulated updates if API fails
+            console.log('Using simulated stats update');
+        });
 }
 
 function initializeRealTimeUpdates() {

@@ -87,57 +87,57 @@
             </button>
 
             <!-- Notifications Dropdown -->
-            <div class="absolute right-0 mt-2 w-80 bg-var(--bg-card) border border-var(--border-color) rounded-lg shadow-lg z-50 hidden"
+            <div style="position: absolute; right: 0; margin-top: 8px; width: 320px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 50; display: none;"
                  id="notifications-dropdown">
-                <div class="p-4 border-b border-var(--border-color)">
-                    <div class="flex items-center justify-between">
-                        <h3 class="font-semibold text-var(--text-primary)">{{ translate('Notifications') }}</h3>
-                        <button class="text-var(--primary-color) text-sm hover:underline">
+                <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb;">
+                    <div style="display: flex; align-items: center; justify-content: space-between;">
+                        <h3 style="font-weight: 600; color: #374151;">{{ translate('Notifications') }}</h3>
+                        <button style="color: #6366f1; font-size: 0.875rem; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
                             {{ translate('Mark all read') }}
                         </button>
                     </div>
                 </div>
-                <div class="max-h-96 overflow-y-auto">
+                <div style="max-height: 384px; overflow-y: auto;">
                     <!-- Sample notifications -->
-                    <div class="p-4 border-b border-var(--border-color) hover:bg-var(--bg-secondary) transition-colors">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-8 h-8 bg-var(--success-color) rounded-full flex items-center justify-center">
-                                <i class="fas fa-shopping-cart text-white text-sm"></i>
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='transparent'">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-shopping-cart" style="color: white; font-size: 0.875rem;"></i>
                             </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-var(--text-primary)">{{ translate('New Order Received') }}</p>
-                                <p class="text-xs text-var(--text-secondary)">{{ translate('Order #12345 from John Doe') }}</p>
-                                <p class="text-xs text-var(--text-muted) mt-1">{{ translate('2 minutes ago') }}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-4 border-b border-var(--border-color) hover:bg-var(--bg-secondary) transition-colors">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-8 h-8 bg-var(--warning-color) rounded-full flex items-center justify-center">
-                                <i class="fas fa-exclamation-triangle text-white text-sm"></i>
-                            </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-var(--text-primary)">{{ translate('Low Stock Alert') }}</p>
-                                <p class="text-xs text-var(--text-secondary)">{{ translate('Product "Fresh Apples" is running low') }}</p>
-                                <p class="text-xs text-var(--text-muted) mt-1">{{ translate('5 minutes ago') }}</p>
+                            <div style="flex: 1;">
+                                <p style="font-size: 0.875rem; font-weight: 500; color: #374151;">{{ translate('New Order Received') }}</p>
+                                <p style="font-size: 0.75rem; color: #6b7280;">{{ translate('Order #12345 from John Doe') }}</p>
+                                <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">{{ translate('2 minutes ago') }}</p>
                             </div>
                         </div>
                     </div>
-                    <div class="p-4 hover:bg-var(--bg-secondary) transition-colors">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-8 h-8 bg-var(--info-color) rounded-full flex items-center justify-center">
-                                <i class="fas fa-user text-white text-sm"></i>
+                    <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='transparent'">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-exclamation-triangle" style="color: white; font-size: 0.875rem;"></i>
                             </div>
-                            <div class="flex-1">
-                                <p class="text-sm font-medium text-var(--text-primary)">{{ translate('New Customer Registration') }}</p>
-                                <p class="text-xs text-var(--text-secondary)">{{ translate('Jane Smith just registered') }}</p>
-                                <p class="text-xs text-var(--text-muted) mt-1">{{ translate('10 minutes ago') }}</p>
+                            <div style="flex: 1;">
+                                <p style="font-size: 0.875rem; font-weight: 500; color: #374151;">{{ translate('Low Stock Alert') }}</p>
+                                <p style="font-size: 0.75rem; color: #6b7280;">{{ translate('Product "Fresh Apples" is running low') }}</p>
+                                <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">{{ translate('5 minutes ago') }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="padding: 1rem; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#f9fafb'" onmouseout="this.style.backgroundColor='transparent'">
+                        <div style="display: flex; align-items: flex-start; gap: 12px;">
+                            <div style="width: 32px; height: 32px; background: #3b82f6; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-user" style="color: white; font-size: 0.875rem;"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <p style="font-size: 0.875rem; font-weight: 500; color: #374151;">{{ translate('New Customer Registration') }}</p>
+                                <p style="font-size: 0.75rem; color: #6b7280;">{{ translate('Jane Smith just registered') }}</p>
+                                <p style="font-size: 0.75rem; color: #9ca3af; margin-top: 4px;">{{ translate('10 minutes ago') }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="p-4 border-t border-var(--border-color)">
-                    <a href="#" class="text-var(--primary-color) text-sm hover:underline">
+                <div style="padding: 1rem; border-top: 1px solid #e5e7eb;">
+                    <a href="#" style="color: #6366f1; font-size: 0.875rem; text-decoration: none;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
                         {{ translate('View all notifications') }}
                     </a>
                 </div>
@@ -155,40 +155,56 @@
 
         <!-- User Profile -->
         <div class="relative">
-            <button class="flex items-center space-x-2 p-2 rounded-lg hover:bg-var(--bg-tertiary) transition-colors"
+            <button style="display: flex; align-items: center; gap: 8px; padding: 8px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background-color 0.3s ease;"
                     onclick="toggleUserMenu()"
-                    data-tooltip="User Menu">
-                <div class="w-8 h-8 bg-var(--primary-color) rounded-full flex items-center justify-center">
-                    <i class="fas fa-user text-white text-sm"></i>
+                    data-tooltip="User Menu"
+                    onmouseover="this.style.backgroundColor='#f3f4f6'"
+                    onmouseout="this.style.backgroundColor='transparent'">
+                <div style="width: 32px; height: 32px; background: #6366f1; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-user" style="color: white; font-size: 0.875rem;"></i>
                 </div>
-                <div class="hidden md:block text-left">
-                    <p class="text-sm font-medium text-var(--text-primary)">
+                <div style="display: none; text-align: left;">
+                    <p style="font-size: 0.875rem; font-weight: 500; color: #374151;">
                         {{ auth('admin')->user()->f_name }} {{ auth('admin')->user()->l_name }}
                     </p>
-                    <p class="text-xs text-var(--text-secondary)">{{ translate('Administrator') }}</p>
+                    <p style="font-size: 0.75rem; color: #6b7280;">{{ translate('Administrator') }}</p>
                 </div>
-                <i class="fas fa-chevron-down text-var(--text-secondary) text-sm"></i>
+                <i class="fas fa-chevron-down" style="color: #6b7280; font-size: 0.875rem;"></i>
             </button>
 
+            <style>
+            @media (min-width: 768px) {
+                .modern-header button div[style*="display: none"] {
+                    display: block !important;
+                }
+            }
+            </style>
+
             <!-- User Menu Dropdown -->
-            <div class="absolute right-0 mt-2 w-48 bg-var(--bg-card) border border-var(--border-color) rounded-lg shadow-lg z-50 hidden"
+            <div style="position: absolute; right: 0; margin-top: 8px; width: 192px; background: white; border: 1px solid #e5e7eb; border-radius: 8px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); z-index: 50; display: none;"
                  id="user-menu-dropdown">
-                <div class="p-2">
-                    <a href="{{ route('admin.settings') }}" 
-                       class="flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-var(--bg-secondary) transition-colors">
-                        <i class="fas fa-user-cog text-var(--text-secondary)"></i>
-                        <span class="text-sm text-var(--text-primary)">{{ translate('Profile Settings') }}</span>
+                <div style="padding: 8px;">
+                    <a href="{{ route('admin.settings') }}"
+                       style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; text-decoration: none; transition: background-color 0.3s ease;"
+                       onmouseover="this.style.backgroundColor='#f3f4f6'"
+                       onmouseout="this.style.backgroundColor='transparent'">
+                        <i class="fas fa-user-cog" style="color: #6b7280;"></i>
+                        <span style="font-size: 0.875rem; color: #374151;">{{ translate('Profile Settings') }}</span>
                     </a>
-                    <a href="{{ route('admin.business-settings.restaurant-index') }}" 
-                       class="flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-var(--bg-secondary) transition-colors">
-                        <i class="fas fa-cog text-var(--text-secondary)"></i>
-                        <span class="text-sm text-var(--text-primary)">{{ translate('System Settings') }}</span>
+                    <a href="{{ route('admin.business-settings.store.ecom-setup') }}"
+                       style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; text-decoration: none; transition: background-color 0.3s ease;"
+                       onmouseover="this.style.backgroundColor='#f3f4f6'"
+                       onmouseout="this.style.backgroundColor='transparent'">
+                        <i class="fas fa-cog" style="color: #6b7280;"></i>
+                        <span style="font-size: 0.875rem; color: #374151;">{{ translate('System Settings') }}</span>
                     </a>
-                    <div class="border-t border-var(--border-color) my-2"></div>
-                    <a href="{{ route('admin.auth.logout') }}" 
-                       class="flex items-center space-x-2 px-3 py-2 rounded-md hover:bg-var(--danger-color) hover:text-white transition-colors">
-                        <i class="fas fa-sign-out-alt text-var(--text-secondary)"></i>
-                        <span class="text-sm text-var(--text-primary)">{{ translate('Logout') }}</span>
+                    <div style="border-top: 1px solid #e5e7eb; margin: 8px 0;"></div>
+                    <a href="{{ route('admin.auth.logout') }}"
+                       style="display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; text-decoration: none; transition: all 0.3s ease;"
+                       onmouseover="this.style.backgroundColor='#ef4444'; this.style.color='white'; this.querySelector('i').style.color='white'"
+                       onmouseout="this.style.backgroundColor='transparent'; this.style.color='#374151'; this.querySelector('i').style.color='#6b7280'">
+                        <i class="fas fa-sign-out-alt" style="color: #6b7280;"></i>
+                        <span style="font-size: 0.875rem; color: #374151;">{{ translate('Logout') }}</span>
                     </a>
                 </div>
             </div>
@@ -200,33 +216,37 @@
 function toggleNotifications() {
     const dropdown = document.getElementById('notifications-dropdown');
     const userDropdown = document.getElementById('user-menu-dropdown');
-    
+
     // Close user menu if open
-    userDropdown.classList.add('hidden');
-    
+    userDropdown.style.display = 'none';
+
     // Toggle notifications
-    dropdown.classList.toggle('hidden');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
 }
 
 function toggleUserMenu() {
     const dropdown = document.getElementById('user-menu-dropdown');
     const notificationsDropdown = document.getElementById('notifications-dropdown');
-    
+
     // Close notifications if open
-    notificationsDropdown.classList.add('hidden');
-    
+    notificationsDropdown.style.display = 'none';
+
     // Toggle user menu
-    dropdown.classList.toggle('hidden');
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
 }
 
 // Close dropdowns when clicking outside
 document.addEventListener('click', function(event) {
     const notificationsDropdown = document.getElementById('notifications-dropdown');
     const userDropdown = document.getElementById('user-menu-dropdown');
-    
-    if (!event.target.closest('.relative')) {
-        notificationsDropdown.classList.add('hidden');
-        userDropdown.classList.add('hidden');
+
+    // Check if click is outside both dropdowns and their triggers
+    if (!event.target.closest('[onclick*="toggleNotifications"]') &&
+        !event.target.closest('#notifications-dropdown') &&
+        !event.target.closest('[onclick*="toggleUserMenu"]') &&
+        !event.target.closest('#user-menu-dropdown')) {
+        notificationsDropdown.style.display = 'none';
+        userDropdown.style.display = 'none';
     }
 });
 
@@ -264,8 +284,8 @@ document.addEventListener('keydown', function(e) {
     
     // Escape to close dropdowns
     if (e.key === 'Escape') {
-        document.getElementById('notifications-dropdown').classList.add('hidden');
-        document.getElementById('user-menu-dropdown').classList.add('hidden');
+        document.getElementById('notifications-dropdown').style.display = 'none';
+        document.getElementById('user-menu-dropdown').style.display = 'none';
     }
 });
 </script>

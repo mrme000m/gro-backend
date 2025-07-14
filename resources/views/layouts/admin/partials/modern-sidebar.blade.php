@@ -132,8 +132,8 @@
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.sub-category.add') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/sub-category*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.category.add-sub-category') }}"
+                               class="modern-nav-link text-sm {{ Request::is('admin/category/add-sub-category*') ? 'active' : '' }}">
                                 <i class="fas fa-layer-group modern-nav-icon"></i>
                                 <span>{{ translate('Sub Categories') }}</span>
                             </a>
@@ -164,7 +164,7 @@
             </li>
             @endif
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['customer_management']))
+            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
             <li class="modern-nav-item">
                 <a href="{{ route('admin.customer.list') }}" 
                    class="modern-nav-link {{ Request::is('admin/customer*') ? 'active' : '' }}"
@@ -214,7 +214,7 @@
             </li>
             @endif
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_and_analytics']))
+            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_management']))
             <li class="modern-nav-item">
                 <div class="modern-nav-group">
                     <button class="modern-nav-link w-full flex items-center justify-between" 
@@ -228,24 +228,24 @@
                     </button>
                     <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="reports-submenu">
                         <li>
-                            <a href="{{ route('admin.report.order') }}" 
+                            <a href="{{ route('admin.report.order') }}"
                                class="modern-nav-link text-sm {{ Request::is('admin/report/order*') ? 'active' : '' }}">
                                 <i class="fas fa-shopping-cart modern-nav-icon"></i>
                                 <span>{{ translate('Order Report') }}</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.report.product') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/report/product*') ? 'active' : '' }}">
-                                <i class="fas fa-box modern-nav-icon"></i>
-                                <span>{{ translate('Product Report') }}</span>
+                            <a href="{{ route('admin.report.earning') }}"
+                               class="modern-nav-link text-sm {{ Request::is('admin/report/earning*') ? 'active' : '' }}">
+                                <i class="fas fa-dollar-sign modern-nav-icon"></i>
+                                <span>{{ translate('Earning Report') }}</span>
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('admin.report.customer') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/report/customer*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.analytics.customer-search') }}"
+                               class="modern-nav-link text-sm {{ Request::is('admin/analytics/customer-search*') ? 'active' : '' }}">
                                 <i class="fas fa-users modern-nav-icon"></i>
-                                <span>{{ translate('Customer Report') }}</span>
+                                <span>{{ translate('Customer Analytics') }}</span>
                             </a>
                         </li>
                     </ul>
@@ -267,10 +267,10 @@
                     </button>
                     <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="system-submenu">
                         <li>
-                            <a href="{{ route('admin.business-settings.restaurant-index') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/business-settings/restaurant*') ? 'active' : '' }}">
+                            <a href="{{ route('admin.business-settings.store.ecom-setup') }}"
+                               class="modern-nav-link text-sm {{ Request::is('admin/business-settings/store*') ? 'active' : '' }}">
                                 <i class="fas fa-store modern-nav-icon"></i>
-                                <span>{{ translate('Restaurant Settings') }}</span>
+                                <span>{{ translate('Store Settings') }}</span>
                             </a>
                         </li>
                         <li>
