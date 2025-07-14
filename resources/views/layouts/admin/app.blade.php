@@ -20,6 +20,7 @@
         src="{{asset('assets/admin')}}/vendor/hs-navbar-vertical-aside/hs-navbar-vertical-aside-mini-cache.js"></script>
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/toastr.css">
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/custom-helper.css">
+    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/ux-standards.css">
 </head>
 
 <body class="footer-offset">
@@ -76,6 +77,11 @@
 <script src="{{asset('assets/admin')}}/js/sweet_alert.js"></script>
 <script src="{{asset('assets/admin')}}/js/toastr.js"></script>
 <script src="{{asset('assets/admin/js/owl.min.js')}}"></script>
+
+<!-- UX Enhancement Scripts -->
+<script src="{{asset('assets/admin')}}/js/auto-save.js"></script>
+<script src="{{asset('assets/admin')}}/js/form-validation.js"></script>
+<script src="{{asset('assets/admin')}}/js/accessibility.js"></script>
 
 
 {!! Toastr::message() !!}

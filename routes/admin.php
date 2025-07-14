@@ -181,6 +181,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         Route::group(['prefix' => 'product', 'as' => 'product.','middleware'=>['module:product_management']], function () {
             Route::get('add-new', [ProductController::class, 'index'])->name('add-new');
+            Route::get('add-enhanced', [ProductController::class, 'addEnhanced'])->name('add-enhanced');
             Route::post('variant-combination', [ProductController::class, 'variantCombination'])->name('variant-combination');
             Route::post('store', [ProductController::class, 'store'])->name('store');
             Route::get('edit/{id}', [ProductController::class, 'edit'])->name('edit');

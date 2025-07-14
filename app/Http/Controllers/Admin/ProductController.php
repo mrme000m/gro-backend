@@ -105,6 +105,16 @@ class ProductController extends Controller
     }
 
     /**
+     * Enhanced product add form with modern UX
+     * @return Factory|View|Application
+     */
+    public function addEnhanced(): View|Factory|Application
+    {
+        $categories = $this->category->where(['position' => 0])->get();
+        return view('admin-views.product.add-enhanced', compact('categories'));
+    }
+
+    /**
      * @param Request $request
      * @return Factory|View|Application
      */
