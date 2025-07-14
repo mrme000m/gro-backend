@@ -36,15 +36,18 @@ return array (
     'customer_reviews' => true,
     'customer_support' => true,
     'loyalty_program' => true,
+    'customer_wallet' => true,
+    'wallet_bonus' => true,
   ),
   'marketing' =>
   array (
     'enabled' => true,
-    'coupons' => false,
-    'discounts' => false,
+    'coupons' => true,
+    'discounts' => true,
     'banners' => true,
     'email_campaigns' => true,
     'push_notifications' => true,
+    'offers' => true,
     'social_media' => false,
     'referral_program' => false,
   ),
@@ -67,11 +70,11 @@ return array (
   ),
   'delivery' =>
   array (
-    'enabled' => false,
+    'enabled' => true,
     'delivery_zones' => false,
     'delivery_charges' => false,
     'delivery_tracking' => false,
-    'delivery_partners' => false,
+    'delivery_partners' => true,
     'route_optimization' => false,
   ),
   'payments' =>
@@ -81,6 +84,7 @@ return array (
     'payment_gateways' => true,
     'transaction_logs' => true,
     'refund_management' => true,
+    'offline_payments' => true,
   ),
   'content' =>
   array (
@@ -100,6 +104,10 @@ return array (
     'backup_restore' => false,
     'maintenance_mode' => true,
     'api_management' => false,
+    'branches' => true,
+    'pos_system' => true,
+    'time_slots' => true,
+    'system_addons' => true,
   ),
   'advanced' =>
   array (

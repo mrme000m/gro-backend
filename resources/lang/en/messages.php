@@ -2617,4 +2617,12 @@
   'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.' => 'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.',
   'Privacy Notice:' => 'Privacy Notice:',
   'Page views, purchases, add to cart, view content, and other conversion events.' => 'Page views  purchases  add to cart  view content  and other conversion events.',
+  'This integration is currently under development. You can configure the settings now, but the actual synchronization functionality will be available in a future update.' => 'This integration is currently under development. You can configure the settings now  but the actual synchronization functionality will be available in a future update.',
+  'Coming Soon' => 'Coming Soon',
+  'Events Tracked:' => 'Events Tracked:',
+  'Save the settings to start tracking Facebook events' => 'Save the settings to start tracking Facebook events',
+  'Note:' => 'Note:',
+  'Create OAuth App and get Client ID/Secret' => 'Create OAuth App and get Client ID/Secret',
+  'loyalty_transactions' => 'Loyalty transactions',
+  'Save the settings to start tracking' => 'Save the settings to start tracking',
 );

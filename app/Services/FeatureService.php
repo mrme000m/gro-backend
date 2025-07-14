@@ -192,11 +192,11 @@ class FeatureService
             ];
         }
 
-        // Delivery
+        // Delivery Management
         if ($this->isCategoryEnabled('delivery')) {
             $navigation[] = [
                 'name' => 'Delivery',
-                'icon' => 'animated-icon icon-delivery',
+                'icon' => 'animated-icon icon-delivery bounce',
                 'route' => 'admin.delivery-man.list',
                 'active' => request()->routeIs('admin.delivery-man.*'),
                 'enabled' => true,
@@ -334,14 +334,45 @@ class FeatureService
     {
         $submenu = [];
 
-        $submenu[] = ['name' => 'All Customers', 'route' => 'admin.customer.list'];
+        if ($this->isEnabled('customers.view_customers')) {
+            $submenu[] = ['name' => 'All Customers', 'route' => 'admin.customer.list'];
+        }
 
-        if ($this->isEnabled('customers.customer_groups')) {
+        if ($this->isEnabled('customers.customer_support')) {
+            $submenu[] = ['name' => 'Customer Support', 'route' => 'admin.message.list'];
+        }
+
+        if ($this->isEnabled('customers.customer_wallet')) {
             $submenu[] = ['name' => 'Customer Wallet', 'route' => 'admin.customer.wallet.add-fund'];
+        }
+
+        if ($this->isEnabled('customers.wallet_bonus')) {
+            $submenu[] = ['name' => 'Wallet Bonus', 'route' => 'admin.customer.wallet.bonus.index'];
         }
 
         if ($this->isEnabled('customers.loyalty_program')) {
             $submenu[] = ['name' => 'Loyalty Program', 'route' => 'admin.customer.loyalty-point.report'];
+        }
+
+        if ($this->isEnabled('customers.customer_reviews')) {
+            $submenu[] = ['name' => 'Customer Reviews', 'route' => 'admin.reviews.list'];
+        }
+
+        return $submenu;
+    }
+
+    /**
+     * Get delivery submenu items
+     */
+    private function getDeliverySubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isEnabled('delivery.delivery_partners')) {
+            $submenu[] = ['name' => 'Delivery Men', 'route' => 'admin.delivery-man.list'];
+            $submenu[] = ['name' => 'Add Delivery Man', 'route' => 'admin.delivery-man.add'];
+            $submenu[] = ['name' => 'Pending Applications', 'route' => 'admin.delivery-man.pending'];
+            $submenu[] = ['name' => 'Delivery Reviews', 'route' => 'admin.delivery-man.reviews.list'];
         }
 
         return $submenu;
@@ -358,12 +389,20 @@ class FeatureService
             $submenu[] = ['name' => 'Coupons', 'route' => 'admin.coupon.add-new'];
         }
 
+        if ($this->isEnabled('marketing.discounts')) {
+            $submenu[] = ['name' => 'Discounts', 'route' => 'admin.discount.add-new'];
+        }
+
         if ($this->isEnabled('marketing.banners')) {
             $submenu[] = ['name' => 'Banners', 'route' => 'admin.banner.add-new'];
         }
 
-        if ($this->isEnabled('marketing.email_campaigns')) {
-            $submenu[] = ['name' => 'Notifications', 'route' => 'admin.notification.add-new'];
+        if ($this->isEnabled('marketing.offers')) {
+            $submenu[] = ['name' => 'Flash Deals', 'route' => 'admin.offer.flash.index'];
+        }
+
+        if ($this->isEnabled('marketing.push_notifications')) {
+            $submenu[] = ['name' => 'Push Notifications', 'route' => 'admin.notification.add-new'];
         }
 
         return $submenu;
@@ -409,23 +448,7 @@ class FeatureService
         return $submenu;
     }
 
-    /**
-     * Get delivery submenu items
-     */
-    private function getDeliverySubmenu(): array
-    {
-        $submenu = [];
 
-        if ($this->isEnabled('delivery.delivery_zones')) {
-            $submenu[] = ['name' => 'Delivery Men', 'route' => 'admin.delivery-man.list'];
-        }
-
-        if ($this->isEnabled('delivery.delivery_charges')) {
-            $submenu[] = ['name' => 'Add Delivery Man', 'route' => 'admin.delivery-man.add'];
-        }
-
-        return $submenu;
-    }
 
     /**
      * Get content management submenu items
@@ -470,7 +493,7 @@ class FeatureService
     {
         $submenu = [];
 
-        // Only show system features that actually exist
+        // User & Role Management
         if ($this->isEnabled('system.user_management')) {
             $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.list'];
         }
@@ -479,12 +502,26 @@ class FeatureService
             $submenu[] = ['name' => 'Role Permissions', 'route' => 'admin.custom-role.create'];
         }
 
+        // System Features
+        if ($this->isEnabled('system.branches')) {
+            $submenu[] = ['name' => 'Branch Management', 'route' => 'admin.branch.list'];
+        }
+
+        if ($this->isEnabled('system.pos_system')) {
+            $submenu[] = ['name' => 'POS System', 'route' => 'admin.pos.index'];
+        }
+
+        if ($this->isEnabled('system.time_slots')) {
+            $submenu[] = ['name' => 'Time Slots', 'route' => 'admin.business-settings.store.timeSlot.add-new'];
+        }
+
         if ($this->isEnabled('system.maintenance_mode')) {
             $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.store.maintenance-mode'];
         }
 
-        // Note: System Logs, Backup Restore, and API Management
-        // are disabled in config as they don't have admin interfaces
+        if ($this->isEnabled('system.system_addons')) {
+            $submenu[] = ['name' => 'System Addons', 'route' => 'admin.system-addon.index'];
+        }
 
         return $submenu;
     }
