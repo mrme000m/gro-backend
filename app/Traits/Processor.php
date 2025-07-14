@@ -12,6 +12,7 @@ use Illuminate\Foundation\Application;
 use App\Models\AddonSetting;
 use Illuminate\Support\Facades\Storage;
 use App\Models\PaymentRequest;
+use App\Services\ImageOptimizationService;
 
 trait  Processor
 {
@@ -77,6 +78,46 @@ trait  Processor
         Storage::disk('public')->put($dir . $imageName, file_get_contents($image));
 
         return $imageName;
+    }
+
+    /**
+     * Upload and optimize image with multiple sizes and WebP support
+     *
+     * @param string $dir
+     * @param \Illuminate\Http\UploadedFile $image
+     * @param array $old_images
+     * @param array $options
+     * @return array
+     */
+    public function optimized_file_uploader(string $dir, $image = null, array $old_images = [], array $options = []): array
+    {
+        if ($image == null) {
+            return $old_images ?: ['medium' => 'def.png'];
+        }
+
+        try {
+            $imageOptimizationService = app(ImageOptimizationService::class);
+
+            // Delete old images if updating
+            if (!empty($old_images)) {
+                $imageOptimizationService->deleteFiles($dir, array_values($old_images));
+            }
+
+            // Upload and optimize new image
+            $results = $imageOptimizationService->uploadAndOptimize($image, $dir, $options);
+
+            return $results;
+
+        } catch (\Exception $e) {
+            // Fallback to original method if optimization fails
+            \Log::warning('Image optimization failed, falling back to original upload', [
+                'error' => $e->getMessage(),
+                'directory' => $dir
+            ]);
+
+            $imageName = $this->file_uploader($dir, $image->getClientOriginalExtension(), $image, $old_images['medium'] ?? null);
+            return ['medium' => $imageName];
+        }
     }
 
     public function payment_response($payment_info, $payment_flag): Application|JsonResponse|Redirector|RedirectResponse|\Illuminate\Contracts\Foundation\Application

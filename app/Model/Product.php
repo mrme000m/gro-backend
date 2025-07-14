@@ -21,6 +21,7 @@ class Product extends Model
         'created_at'  => 'datetime',
         'updated_at'  => 'datetime',
         'is_featured'  => 'integer',
+        'image_data'  => 'array',
     ];
 
     public function translations(): \Illuminate\Database\Eloquent\Relations\MorphMany
@@ -98,7 +99,70 @@ class Product extends Model
         return $imageUrlArray;
     }
 
+    /**
+     * Get optimized image URL
+     *
+     * @param string $size
+     * @param bool $preferWebP
+     * @return string
+     */
+    public function getOptimizedImageUrl(string $size = 'medium', bool $preferWebP = true): string
+    {
+        $cdnService = app(\App\Services\CdnService::class);
+        return $cdnService->getOptimizedImageUrl('product', $this->image, $size, $preferWebP);
+    }
 
+    /**
+     * Get responsive image data for API
+     *
+     * @return array
+     */
+    public function getResponsiveImageData(): array
+    {
+        $lazyLoadingService = app(\App\Services\LazyLoadingService::class);
+        return $lazyLoadingService->generateResponsiveImageData('product', $this->image, [
+            'sizes' => ['thumbnail', 'small', 'medium', 'large'],
+            'include_webp' => true
+        ]);
+    }
 
+    /**
+     * Get image URLs for all sizes
+     *
+     * @return array
+     */
+    public function getImageUrls(): array
+    {
+        $sizes = ['thumbnail', 'small', 'medium', 'large'];
+        $urls = [];
 
+        foreach ($sizes as $size) {
+            $urls[$size] = $this->getOptimizedImageUrl($size, false);
+            $urls[$size . '_webp'] = $this->getOptimizedImageUrl($size, true);
+        }
+
+        return $urls;
+    }
+
+    /**
+     * Generate lazy loading HTML for product image
+     *
+     * @param array $options
+     * @return string
+     */
+    public function getLazyImageHtml(array $options = []): string
+    {
+        $lazyLoadingService = app(\App\Services\LazyLoadingService::class);
+
+        $defaultOptions = [
+            'alt' => $this->name,
+            'class' => 'product-image lazy-image',
+            'sizes' => ['small', 'medium', 'large'],
+            'default_size' => 'medium',
+        ];
+
+        $options = array_merge($defaultOptions, $options);
+
+        return $lazyLoadingService->generateLazyImage('product', $this->image, $options);
+    }
 }

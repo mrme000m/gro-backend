@@ -11,6 +11,9 @@ use App\Observers\ProductObserver;
 use App\Services\CacheService;
 use App\Services\ApiResponseService;
 use App\Services\PaginationService;
+use App\Services\ImageOptimizationService;
+use App\Services\CdnService;
+use App\Services\LazyLoadingService;
 use App\Traits\SystemAddonTrait;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
@@ -39,6 +42,24 @@ class AppServiceProvider extends ServiceProvider
         // Register PaginationService as singleton
         $this->app->singleton(PaginationService::class, function ($app) {
             return new PaginationService();
+        });
+
+        // Register ImageOptimizationService as singleton
+        $this->app->singleton(ImageOptimizationService::class, function ($app) {
+            return new ImageOptimizationService();
+        });
+
+        // Register CdnService as singleton
+        $this->app->singleton(CdnService::class, function ($app) {
+            return new CdnService();
+        });
+
+        // Register LazyLoadingService as singleton
+        $this->app->singleton(LazyLoadingService::class, function ($app) {
+            return new LazyLoadingService(
+                $app->make(CdnService::class),
+                $app->make(ImageOptimizationService::class)
+            );
         });
     }
 
