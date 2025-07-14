@@ -79,6 +79,10 @@ run_migrations() {
             echo "Initializing complete database schema..."
             php artisan db:init-complete || echo "Warning: Complete database initialization failed"
 
+            # Create default admin user
+            echo "Creating default admin user..."
+            php artisan admin:create-default || echo "Warning: Default admin creation failed"
+
             echo "Database initialization complete!"
         else
             echo "No DATABASE_URL found. To connect database:"
