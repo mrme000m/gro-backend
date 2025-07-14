@@ -4,340 +4,318 @@
         @php
             $logo = \App\Model\BusinessSetting::where(['key'=>'logo'])->first()->value;
         @endphp
-        <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
-            <img src="{{ App\CentralLogics\Helpers::onErrorImage($logo, asset('storage/app/public/restaurant') . '/' . $logo, asset('assets/admin/img/160x160/img2.jpg'), 'restaurant/') }}"
-                 alt="{{ translate('logo') }}"
-                 style="height: 40px; width: auto;">
-            <span style="font-size: 1.25rem; font-weight: 700;" class="text-gradient">{{ config('app.name', 'GroFresh') }}</span>
+        <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
+            <div class="brand-logo">
+                <img src="{{ App\CentralLogics\Helpers::onErrorImage($logo, asset('storage/app/public/restaurant') . '/' . $logo, asset('assets/admin/img/160x160/img2.jpg'), 'restaurant/') }}"
+                     alt="{{ translate('logo') }}"
+                     class="logo-image">
+            </div>
+            <div class="brand-text">
+                <span class="brand-name">{{ config('app.name', 'GroFresh') }}</span>
+                <span class="brand-tagline">{{ translate('Admin Panel') }}</span>
+            </div>
         </a>
+
+        <!-- Sidebar Toggle -->
+        <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </button>
     </div>
 
-    <!-- Search -->
-    <div style="padding: 1rem;">
-        <div style="position: relative;">
+    <!-- Quick Search -->
+    <div class="sidebar-search">
+        <div class="search-container">
+            <i class="fas fa-search search-icon"></i>
             <input type="text"
                    id="search-sidebar-menu"
                    placeholder="{{ translate('Search Menu...') }}"
-                   style="width: 100%; padding: 8px 12px 8px 40px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; outline: none; transition: all 0.3s ease;"
-                   onfocus="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)';"
-                   onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
-            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
-            <kbd style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); padding: 2px 6px; font-size: 0.75rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 4px;">⌘K</kbd>
+                   class="search-input"
+                   autocomplete="off">
+            <kbd class="search-shortcut">⌘K</kbd>
         </div>
+        <div class="search-results" id="searchResults" style="display: none;"></div>
     </div>
 
     <!-- Navigation -->
     <nav class="modern-sidebar-nav">
-        <ul style="list-style: none; padding: 0; margin: 0;"">
+        <!-- Main Navigation -->
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Main') }}</div>
+
             @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
-            <li class="modern-nav-item">
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="modern-nav-link {{ Request::is('admin') ? 'active' : '' }}"
+            <div class="nav-item">
+                <a href="{{ route('admin.dashboard') }}"
+                   class="nav-link {{ Request::is('admin') ? 'active' : '' }}"
                    data-tooltip="Dashboard">
-                    <i class="fas fa-home modern-nav-icon"></i>
-                    <span>{{ translate('dashboard') }}</span>
+                    <div class="nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Dashboard') }}</span>
+                    <div class="nav-indicator"></div>
                 </a>
-            </li>
+            </div>
             @endif
 
             @if(Helpers::module_permission_check(MANAGEMENT_SECTION['pos_management']))
-            <li class="modern-nav-item">
-                <a href="{{ route('admin.pos.index') }}" 
-                   class="modern-nav-link {{ Request::is('admin/pos*') ? 'active' : '' }}"
-                   data-tooltip="POS System">
-                    <i class="fas fa-cash-register modern-nav-icon"></i>
-                    <span>{{ translate('POS') }}</span>
+            <div class="nav-item">
+                <a href="{{ route('admin.pos.index') }}"
+                   class="nav-link {{ Request::is('admin/pos*') ? 'active' : '' }}"
+                   data-tooltip="Point of Sale">
+                    <div class="nav-icon">
+                        <i class="fas fa-cash-register"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('POS System') }}</span>
+                    <div class="nav-indicator"></div>
                 </a>
-            </li>
+            </div>
             @endif
+        </div>
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['order_management']))
-            <li class="modern-nav-item">
-                <div class="modern-nav-group">
-                    <button class="modern-nav-link w-full flex items-center justify-between" 
-                            onclick="toggleSubmenu('orders-submenu')"
-                            data-tooltip="Order Management">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-shopping-cart modern-nav-icon"></i>
-                            <span>{{ translate('Order Management') }}</span>
-                        </div>
-                        <i class="fas fa-chevron-down transition-transform duration-200" id="orders-submenu-icon"></i>
-                    </button>
-                    <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="orders-submenu">
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'all']) }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/orders*') ? 'active' : '' }}">
-                                <i class="fas fa-list modern-nav-icon"></i>
-                                <span>{{ translate('All Orders') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'pending']) }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-clock modern-nav-icon"></i>
-                                <span>{{ translate('Pending') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'confirmed']) }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-check-circle modern-nav-icon"></i>
-                                <span>{{ translate('Confirmed') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'processing']) }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-cog modern-nav-icon"></i>
-                                <span>{{ translate('Processing') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'out_for_delivery']) }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-truck modern-nav-icon"></i>
-                                <span>{{ translate('Out for Delivery') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.orders.list', ['status' => 'delivered']) }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-check-double modern-nav-icon"></i>
-                                <span>{{ translate('Delivered') }}</span>
-                            </a>
-                        </li>
-                    </ul>
+        <!-- Order Management -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['order_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Order Management') }}</div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-toggle {{ Request::is('admin/orders*') ? 'active' : '' }}"
+                        onclick="toggleSubmenu('orders-submenu')"
+                        data-tooltip="Orders">
+                    <div class="nav-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Orders') }}</span>
+                    <div class="nav-arrow">
+                        <i class="fas fa-chevron-right" id="orders-submenu-icon"></i>
+                    </div>
+                </button>
+                <div class="nav-submenu {{ Request::is('admin/orders*') ? 'expanded' : '' }}" id="orders-submenu">
+                    <a href="{{ route('admin.orders.list', ['status' => 'all']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/all') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('All Orders') }}</span>
+                        <span class="submenu-badge">{{\App\Model\Order::notPos()->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'pending']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/pending') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Pending') }}</span>
+                        <span class="submenu-badge warning">{{\App\Model\Order::where(['order_status'=>'pending'])->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'confirmed']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/confirmed') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Confirmed') }}</span>
+                        <span class="submenu-badge success">{{\App\Model\Order::where(['order_status'=>'confirmed'])->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'processing']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/processing') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Processing') }}</span>
+                        <span class="submenu-badge info">{{\App\Model\Order::where(['order_status'=>'processing'])->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'out_for_delivery']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/out_for_delivery') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Out for Delivery') }}</span>
+                        <span class="submenu-badge info">{{\App\Model\Order::where(['order_status'=>'out_for_delivery'])->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'delivered']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/delivered') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Delivered') }}</span>
+                        <span class="submenu-badge success">{{\App\Model\Order::notPos()->where(['order_status'=>'delivered'])->count()}}</span>
+                    </a>
+                    <a href="{{ route('admin.orders.list', ['status' => 'canceled']) }}"
+                       class="submenu-link {{ Request::is('admin/orders/list/canceled') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Canceled') }}</span>
+                        <span class="submenu-badge danger">{{\App\Model\Order::where(['order_status'=>'canceled'])->count()}}</span>
+                    </a>
                 </div>
-            </li>
-            @endif
+            </div>
+        </div>
+        @endif
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['product_management']))
-            <li class="modern-nav-item">
-                <div class="modern-nav-group">
-                    <button class="modern-nav-link w-full flex items-center justify-between" 
-                            onclick="toggleSubmenu('products-submenu')"
-                            data-tooltip="Product Management">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-box modern-nav-icon"></i>
-                            <span>{{ translate('Product Management') }}</span>
-                        </div>
-                        <i class="fas fa-chevron-down transition-transform duration-200" id="products-submenu-icon"></i>
-                    </button>
-                    <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="products-submenu">
-                        <li>
-                            <a href="{{ route('admin.category.add') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/category*') ? 'active' : '' }}">
-                                <i class="fas fa-tags modern-nav-icon"></i>
-                                <span>{{ translate('Categories') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.category.add-sub-category') }}"
-                               class="modern-nav-link text-sm {{ Request::is('admin/category/add-sub-category*') ? 'active' : '' }}">
-                                <i class="fas fa-layer-group modern-nav-icon"></i>
-                                <span>{{ translate('Sub Categories') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.product.add-new') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/product*') ? 'active' : '' }}">
-                                <i class="fas fa-plus-circle modern-nav-icon"></i>
-                                <span>{{ translate('Add Product') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.product.list') }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-list modern-nav-icon"></i>
-                                <span>{{ translate('Product List') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.product.bulk-import') }}" 
-                               class="modern-nav-link text-sm">
-                                <i class="fas fa-upload modern-nav-icon"></i>
-                                <span>{{ translate('Bulk Import') }}</span>
-                            </a>
-                        </li>
-                    </ul>
+        <!-- Product Management -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['product_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Product Management') }}</div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-toggle {{ Request::is('admin/category*') ? 'active' : '' }}"
+                        onclick="toggleSubmenu('category-submenu')"
+                        data-tooltip="Categories">
+                    <div class="nav-icon">
+                        <i class="fas fa-tags"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Categories') }}</span>
+                    <div class="nav-arrow">
+                        <i class="fas fa-chevron-right" id="category-submenu-icon"></i>
+                    </div>
+                </button>
+                <div class="nav-submenu {{ Request::is('admin/category*') ? 'expanded' : '' }}" id="category-submenu">
+                    <a href="{{ route('admin.category.add') }}"
+                       class="submenu-link {{ Request::is('admin/category/add') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Main Categories') }}</span>
+                    </a>
+                    <a href="{{ route('admin.category.add-sub-category') }}"
+                       class="submenu-link {{ Request::is('admin/category/add-sub-category') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Sub Categories') }}</span>
+                    </a>
                 </div>
-            </li>
-            @endif
+            </div>
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
-            <li class="modern-nav-item">
-                <a href="{{ route('admin.customer.list') }}" 
-                   class="modern-nav-link {{ Request::is('admin/customer*') ? 'active' : '' }}"
-                   data-tooltip="Customer Management">
-                    <i class="fas fa-users modern-nav-icon"></i>
-                    <span>{{ translate('Customer Management') }}</span>
+            <div class="nav-item">
+                <button class="nav-link nav-toggle {{ Request::is('admin/product*') || Request::is('admin/attribute*') ? 'active' : '' }}"
+                        onclick="toggleSubmenu('product-submenu')"
+                        data-tooltip="Products">
+                    <div class="nav-icon">
+                        <i class="fas fa-box"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Products') }}</span>
+                    <div class="nav-arrow">
+                        <i class="fas fa-chevron-right" id="product-submenu-icon"></i>
+                    </div>
+                </button>
+                <div class="nav-submenu {{ Request::is('admin/product*') || Request::is('admin/attribute*') ? 'expanded' : '' }}" id="product-submenu">
+                    <a href="{{ route('admin.attribute.add-new') }}"
+                       class="submenu-link {{ Request::is('admin/attribute*') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Attributes') }}</span>
+                    </a>
+                    <a href="{{ route('admin.product.list') }}"
+                       class="submenu-link {{ Request::is('admin/product/list*') || Request::is('admin/product/add-new') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Product List') }}</span>
+                    </a>
+                    <a href="{{ route('admin.product.bulk-import') }}"
+                       class="submenu-link {{ Request::is('admin/product/bulk-import') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Bulk Import') }}</span>
+                    </a>
+                    <a href="{{ route('admin.product.bulk-export-index') }}"
+                       class="submenu-link {{ Request::is('admin/product/bulk-export-index') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Bulk Export') }}</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <!-- Customer Management -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Customer Management') }}</div>
+
+            <div class="nav-item">
+                <a href="{{ route('admin.customer.list') }}"
+                   class="nav-link {{ Request::is('admin/customer*') ? 'active' : '' }}"
+                   data-tooltip="Customers">
+                    <div class="nav-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Customers') }}</span>
+                    <div class="nav-indicator"></div>
                 </a>
-            </li>
-            @endif
+            </div>
+        </div>
+        @endif
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
-            <li class="modern-nav-item">
-                <div class="modern-nav-group">
-                    <button class="modern-nav-link w-full flex items-center justify-between" 
-                            onclick="toggleSubmenu('promotions-submenu')"
-                            data-tooltip="Promotions">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-percentage modern-nav-icon"></i>
-                            <span>{{ translate('Promotions') }}</span>
-                        </div>
-                        <i class="fas fa-chevron-down transition-transform duration-200" id="promotions-submenu-icon"></i>
-                    </button>
-                    <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="promotions-submenu">
-                        <li>
-                            <a href="{{ route('admin.coupon.add-new') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/coupon*') ? 'active' : '' }}">
-                                <i class="fas fa-ticket-alt modern-nav-icon"></i>
-                                <span>{{ translate('Coupons') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.banner.add-new') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/banner*') ? 'active' : '' }}">
-                                <i class="fas fa-image modern-nav-icon"></i>
-                                <span>{{ translate('Banners') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.notification.add-new') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/notification*') ? 'active' : '' }}">
-                                <i class="fas fa-bell modern-nav-icon"></i>
-                                <span>{{ translate('Push Notifications') }}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            @endif
+        <!-- Marketing & Promotions -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Marketing') }}</div>
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_management']))
-            <li class="modern-nav-item">
-                <div class="modern-nav-group">
-                    <button class="modern-nav-link w-full flex items-center justify-between" 
-                            onclick="toggleSubmenu('reports-submenu')"
-                            data-tooltip="Reports & Analytics">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-chart-bar modern-nav-icon"></i>
-                            <span>{{ translate('Reports & Analytics') }}</span>
-                        </div>
-                        <i class="fas fa-chevron-down transition-transform duration-200" id="reports-submenu-icon"></i>
-                    </button>
-                    <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="reports-submenu">
-                        <li>
-                            <a href="{{ route('admin.report.order') }}"
-                               class="modern-nav-link text-sm {{ Request::is('admin/report/order*') ? 'active' : '' }}">
-                                <i class="fas fa-shopping-cart modern-nav-icon"></i>
-                                <span>{{ translate('Order Report') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.report.earning') }}"
-                               class="modern-nav-link text-sm {{ Request::is('admin/report/earning*') ? 'active' : '' }}">
-                                <i class="fas fa-dollar-sign modern-nav-icon"></i>
-                                <span>{{ translate('Earning Report') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.analytics.customer-search') }}"
-                               class="modern-nav-link text-sm {{ Request::is('admin/analytics/customer-search*') ? 'active' : '' }}">
-                                <i class="fas fa-users modern-nav-icon"></i>
-                                <span>{{ translate('Customer Analytics') }}</span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-            @endif
+            <div class="nav-item">
+                <a href="{{ route('admin.coupon.add-new') }}"
+                   class="nav-link {{ Request::is('admin/coupon*') ? 'active' : '' }}"
+                   data-tooltip="Coupons">
+                    <div class="nav-icon">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Coupons') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
-            <li class="modern-nav-item">
-                <div class="modern-nav-group">
-                    <button class="modern-nav-link w-full flex items-center justify-between" 
-                            onclick="toggleSubmenu('system-submenu')"
-                            data-tooltip="System Settings">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-cog modern-nav-icon"></i>
-                            <span>{{ translate('System Settings') }}</span>
-                        </div>
-                        <i class="fas fa-chevron-down transition-transform duration-200" id="system-submenu-icon"></i>
-                    </button>
-                    <ul class="modern-submenu hidden mt-2 ml-8 space-y-1" id="system-submenu">
-                        <li>
-                            <a href="{{ route('admin.business-settings.store.ecom-setup') }}"
-                               class="modern-nav-link text-sm {{ Request::is('admin/business-settings/store*') ? 'active' : '' }}">
-                                <i class="fas fa-store modern-nav-icon"></i>
-                                <span>{{ translate('Store Settings') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.employee.add-new') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/employee*') ? 'active' : '' }}">
-                                <i class="fas fa-user-tie modern-nav-icon"></i>
-                                <span>{{ translate('Employees') }}</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('admin.settings') }}" 
-                               class="modern-nav-link text-sm {{ Request::is('admin/settings*') ? 'active' : '' }}">
-                                <i class="fas fa-sliders-h modern-nav-icon"></i>
-                                <span>{{ translate('System Settings') }}</span>
-                            </a>
-                        </li>
-                    </ul>
+            <div class="nav-item">
+                <a href="{{ route('admin.banner.add-new') }}"
+                   class="nav-link {{ Request::is('admin/banner*') ? 'active' : '' }}"
+                   data-tooltip="Banners">
+                    <div class="nav-icon">
+                        <i class="fas fa-image"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Banners') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+        </div>
+        @endif
+
+        <!-- Reports & Analytics -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Analytics') }}</div>
+
+            <div class="nav-item">
+                <button class="nav-link nav-toggle {{ Request::is('admin/report*') ? 'active' : '' }}"
+                        onclick="toggleSubmenu('reports-submenu')"
+                        data-tooltip="Reports">
+                    <div class="nav-icon">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Reports') }}</span>
+                    <div class="nav-arrow">
+                        <i class="fas fa-chevron-right" id="reports-submenu-icon"></i>
+                    </div>
+                </button>
+                <div class="nav-submenu {{ Request::is('admin/report*') ? 'expanded' : '' }}" id="reports-submenu">
+                    <a href="{{ route('admin.report.order') }}"
+                       class="submenu-link {{ Request::is('admin/report/order*') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Order Reports') }}</span>
+                    </a>
+                    <a href="{{ route('admin.report.earning') }}"
+                       class="submenu-link {{ Request::is('admin/report/earning*') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Earning Reports') }}</span>
+                    </a>
+                    <a href="{{ route('admin.report.product-sale') }}"
+                       class="submenu-link {{ Request::is('admin/report/product-sale*') ? 'active' : '' }}">
+                        <span class="submenu-text">{{ translate('Product Sales') }}</span>
+                    </a>
                 </div>
-            </li>
-            @endif
-        </ul>
+            </div>
+        </div>
+        @endif
+
+        <!-- System Settings -->
+        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('System') }}</div>
+
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.restaurant-index') }}"
+                   class="nav-link {{ Request::is('admin/business-settings*') ? 'active' : '' }}"
+                   data-tooltip="Settings">
+                    <div class="nav-icon">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Settings') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+        </div>
+        @endif
     </nav>
 
     <!-- Sidebar Footer -->
-    <div class="mt-auto p-4 border-t border-var(--border-color)">
-        <div class="flex items-center gap-3 p-3 bg-var(--bg-tertiary) rounded-lg">
-            <div class="w-8 h-8 bg-var(--primary-color) rounded-full flex items-center justify-center">
-                <i class="fas fa-user text-white text-sm"></i>
+    <div class="sidebar-footer">
+        <div class="footer-user">
+            <div class="user-avatar">
+                <img src="{{ asset('assets/admin/img/160x160/img1.jpg') }}" alt="User">
             </div>
-            <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-var(--text-primary) truncate">
-                    {{ auth('admin')->user()->f_name }} {{ auth('admin')->user()->l_name }}
-                </p>
-                <p class="text-xs text-var(--text-secondary) truncate">
-                    {{ auth('admin')->user()->email }}
-                </p>
+            <div class="user-info">
+                <div class="user-name">{{ auth('admin')->user()->f_name ?? 'Admin' }}</div>
+                <div class="user-role">{{ translate('Administrator') }}</div>
             </div>
+        </div>
+
+        <div class="footer-actions">
+            <button class="action-btn" onclick="toggleTheme()" data-tooltip="Toggle Theme">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="{{ route('admin.auth.logout') }}" class="action-btn" data-tooltip="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </div>
     </div>
 </aside>
-
-<script>
-function toggleSubmenu(submenuId) {
-    const submenu = document.getElementById(submenuId);
-    const icon = document.getElementById(submenuId + '-icon');
-    
-    if (submenu.classList.contains('hidden')) {
-        submenu.classList.remove('hidden');
-        icon.style.transform = 'rotate(180deg)';
-    } else {
-        submenu.classList.add('hidden');
-        icon.style.transform = 'rotate(0deg)';
-    }
-}
-
-// Auto-expand active submenu
-document.addEventListener('DOMContentLoaded', function() {
-    const activeLinks = document.querySelectorAll('.modern-nav-link.active');
-    activeLinks.forEach(link => {
-        const submenu = link.closest('.modern-submenu');
-        if (submenu) {
-            submenu.classList.remove('hidden');
-            const icon = document.querySelector(`#${submenu.id}-icon`);
-            if (icon) {
-                icon.style.transform = 'rotate(180deg)';
-            }
-        }
-    });
-});
-</script>

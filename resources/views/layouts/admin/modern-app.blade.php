@@ -5,28 +5,74 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@yield('title') - {{ config('app.name') }}</title>
-    
+
     @php($icon = \App\Model\BusinessSetting::where(['key' => 'fav_icon'])->first()->value)
     <link rel="icon" type="image/x-icon" href="{{ asset('storage/app/public/restaurant/' . $icon ?? '') }}">
-    
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Core CSS -->
     <link rel="stylesheet" href="{{ asset('public/assets/admin/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/assets/admin/css/modern-dashboard.css') }}">
     <link rel="stylesheet" href="{{ asset('public/assets/admin/css/toastr.css') }}">
-    
+
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
+
     @stack('css')
-    
+
+    <style>
+        /* Layout adjustments for modern sidebar */
+        .main-content {
+            margin-left: 280px;
+            transition: margin-left var(--transition-normal);
+            min-height: 100vh;
+            background: var(--bg-secondary);
+        }
+
+        .main-content.sidebar-collapsed {
+            margin-left: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .content-wrapper {
+            padding: var(--spacing-6);
+        }
+
+        .page-header {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            padding: var(--spacing-6);
+            margin-bottom: var(--spacing-6);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .page-title {
+            font-size: var(--font-size-3xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .page-subtitle {
+            font-size: var(--font-size-base);
+            color: var(--text-secondary);
+            margin: var(--spacing-2) 0 0 0;
+        }
+    </style>
+
     <style>
         /* Additional modern styles */
         .modern-tooltip {
@@ -44,12 +90,12 @@
             transition: all 0.2s ease;
             pointer-events: none;
         }
-        
+
         .modern-tooltip.show {
             opacity: 1;
             transform: translateY(0);
         }
-        
+
         .modern-notification {
             position: fixed;
             top: 1rem;
@@ -64,34 +110,34 @@
             transition: transform 0.3s ease;
             max-width: 400px;
         }
-        
+
         .modern-notification.show {
             transform: translateX(0);
         }
-        
+
         .modern-notification.info {
             border-left: 4px solid var(--info-color);
         }
-        
+
         .modern-notification.success {
             border-left: 4px solid var(--success-color);
         }
-        
+
         .modern-notification.warning {
             border-left: 4px solid var(--warning-color);
         }
-        
+
         .modern-notification.error {
             border-left: 4px solid var(--danger-color);
         }
-        
+
         .notification-content {
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 1rem;
         }
-        
+
         .notification-close {
             background: none;
             border: none;
@@ -107,53 +153,53 @@
             border-radius: 50%;
             transition: all 0.2s ease;
         }
-        
+
         .notification-close:hover {
             background: var(--bg-tertiary);
             color: var(--text-primary);
         }
-        
+
         .highlight-search {
             background: rgba(99, 102, 241, 0.1) !important;
             color: var(--primary-color) !important;
         }
-        
+
         .main-content {
             margin-left: 280px;
             min-height: 100vh;
             background: var(--bg-secondary);
             transition: margin-left var(--transition-normal);
         }
-        
+
         @media (max-width: 768px) {
             .main-content {
                 margin-left: 0;
             }
         }
-        
+
         .page-header {
             background: var(--bg-primary);
             border-bottom: 1px solid var(--border-color);
             padding: 1.5rem 2rem;
             margin-bottom: 2rem;
         }
-        
+
         .page-title {
             font-size: 1.875rem;
             font-weight: 700;
             color: var(--text-primary);
             margin: 0;
         }
-        
+
         .page-subtitle {
             color: var(--text-secondary);
             margin: 0.5rem 0 0 0;
         }
-        
+
         .content-wrapper {
             padding: 0 2rem 2rem 2rem;
         }
-        
+
         /* Loading states */
         .loading-overlay {
             position: fixed;
@@ -170,12 +216,12 @@
             visibility: hidden;
             transition: all 0.3s ease;
         }
-        
+
         .loading-overlay.show {
             opacity: 1;
             visibility: visible;
         }
-        
+
         .loading-spinner {
             width: 3rem;
             height: 3rem;
@@ -184,7 +230,7 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-        
+
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
@@ -229,6 +275,7 @@
     <script src="{{ asset('public/assets/admin/js/sweet_alert.js') }}"></script>
     <script src="{{ asset('public/assets/admin/js/toastr.js') }}"></script>
     <script src="{{ asset('public/assets/admin/js/modern-dashboard.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/modern-sidebar.js') }}"></script>
 
     @stack('scripts')
 

@@ -6,54 +6,186 @@
 
 @push('css')
 <style>
+    /* Enhanced Dashboard Styles */
     .metric-card {
-        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
         color: white;
         border: none;
+        position: relative;
+        overflow: hidden;
     }
-    
+
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        transform: translate(30px, -30px);
+    }
+
     .metric-card .stat-value {
         color: white;
+        font-size: var(--font-size-3xl);
+        font-weight: var(--font-weight-bold);
+        margin-bottom: var(--spacing-2);
     }
-    
+
     .metric-card .stat-label {
         color: rgba(255, 255, 255, 0.9);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-medium);
     }
-    
+
+    .metric-card .stat-change {
+        margin-top: var(--spacing-3);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-1);
+        font-size: var(--font-size-sm);
+    }
+
     .chart-card {
         height: 400px;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        box-shadow: var(--shadow-sm);
     }
-    
+
+    .chart-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: var(--spacing-6);
+    }
+
+    .chart-title {
+        font-size: var(--font-size-lg);
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary);
+    }
+
     .quick-action-card {
-        transition: all 0.3s ease;
+        transition: all var(--transition-normal);
         cursor: pointer;
+        background: var(--bg-card);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
     }
-    
+
+    .quick-action-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
+        transform: scaleX(0);
+        transition: transform var(--transition-normal);
+    }
+
     .quick-action-card:hover {
         transform: translateY(-4px);
         box-shadow: var(--shadow-xl);
+        border-color: var(--brand-primary);
     }
-    
-    .recent-orders-table {
-        background: var(--bg-card);
-        border-radius: var(--radius-lg);
-        overflow: hidden;
+
+    .quick-action-card:hover::before {
+        transform: scaleX(1);
     }
-    
+
     .status-badge {
-        padding: 0.25rem 0.75rem;
-        border-radius: 9999px;
-        font-size: 0.75rem;
-        font-weight: 600;
+        padding: var(--spacing-1) var(--spacing-3);
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-xs);
+        font-weight: var(--font-weight-semibold);
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
-    
-    .status-pending { background: rgba(245, 158, 11, 0.1); color: rgb(245, 158, 11); }
-    .status-confirmed { background: rgba(59, 130, 246, 0.1); color: rgb(59, 130, 246); }
-    .status-processing { background: rgba(139, 69, 19, 0.1); color: rgb(139, 69, 19); }
-    .status-delivered { background: rgba(16, 185, 129, 0.1); color: rgb(16, 185, 129); }
-    .status-cancelled { background: rgba(239, 68, 68, 0.1); color: rgb(239, 68, 68); }
+
+    .status-pending {
+        background: var(--warning-light);
+        color: var(--warning-dark);
+    }
+    .status-confirmed {
+        background: var(--info-light);
+        color: var(--info-dark);
+    }
+    .status-processing {
+        background: var(--warning-light);
+        color: var(--warning-dark);
+    }
+    .status-delivered {
+        background: var(--success-light);
+        color: var(--success-dark);
+    }
+    .status-cancelled {
+        background: var(--danger-light);
+        color: var(--danger-dark);
+    }
+
+    /* Modern Table Styles */
+    .modern-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .modern-table th {
+        background: var(--bg-tertiary);
+        color: var(--text-secondary);
+        font-weight: var(--font-weight-semibold);
+        font-size: var(--font-size-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: var(--spacing-3) var(--spacing-4);
+        text-align: left;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .modern-table td {
+        padding: var(--spacing-4);
+        border-bottom: 1px solid var(--border-light);
+        color: var(--text-primary);
+        font-size: var(--font-size-sm);
+    }
+
+    .modern-table tr:hover {
+        background: var(--bg-secondary);
+    }
+
+    /* Grid System */
+    .grid {
+        display: grid;
+        gap: var(--spacing-6);
+    }
+
+    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
+    @media (min-width: 768px) {
+        .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .md\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .md\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (min-width: 1024px) {
+        .lg\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        .lg\\:col-span-2 { grid-column: span 2 / span 2; }
+    }
 </style>
 @endpush
 
@@ -130,7 +262,7 @@
             <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Manage customer orders') }}</p>
         </div>
     </div>
-    
+
     <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.report.order') }}'">
         <div class="modern-card-body" style="text-align: center;">
             <div style="width: 64px; height: 64px; background: var(--info-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
@@ -156,7 +288,7 @@
         </div>
         <canvas id="revenueChart"></canvas>
     </div>
-    
+
     <!-- Orders Chart -->
     <div class="chart-container chart-card">
         <div class="chart-header">
@@ -174,7 +306,7 @@
             <div class="modern-card-header">
                 <div class="flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-var(--text-primary)">{{ translate('Recent Orders') }}</h3>
-                    <a href="{{ route('admin.orders.list', ['status' => 'all']) }}" 
+                    <a href="{{ route('admin.orders.list', ['status' => 'all']) }}"
                        class="text-var(--primary-color) hover:underline text-sm">
                         {{ translate('View All') }}
                     </a>
@@ -218,7 +350,7 @@
             </div>
         </div>
     </div>
-    
+
     <!-- Top Products -->
     <div class="lg:col-span-1">
         <div class="modern-card">
@@ -279,7 +411,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Update stats periodically
     setInterval(updateDashboardStats, 30000); // Update every 30 seconds
-    
+
     // Initialize real-time features
     initializeRealTimeUpdates();
 });
@@ -305,7 +437,7 @@ function updateDashboardStats() {
 function initializeRealTimeUpdates() {
     // This would typically connect to a WebSocket or use Server-Sent Events
     // For now, we'll simulate real-time updates
-    
+
     // Simulate new order notifications
     setInterval(() => {
         if (Math.random() > 0.9) { // 10% chance every interval

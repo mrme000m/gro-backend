@@ -1,80 +1,388 @@
 <header class="modern-header">
-    <div class="modern-header-left">
-        <!-- Mobile Sidebar Toggle -->
-        <button class="sidebar-toggle"
-                style="display: none; padding: 8px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background-color 0.3s ease;"
-                data-tooltip="Toggle Sidebar"
-                onmouseover="this.style.backgroundColor='var(--bg-tertiary)'"
-                onmouseout="this.style.backgroundColor='transparent'">
-            <i class="fas fa-bars" style="color: var(--text-primary);"></i>
+    <div class="header-left">
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-toggle" onclick="toggleMobileSidebar()">
+            <i class="fas fa-bars"></i>
         </button>
 
-        <style>
-        @media (max-width: 1024px) {
-            .sidebar-toggle {
-                display: block !important;
-            }
-        }
-        </style>
-
         <!-- Breadcrumb -->
-        <nav style="display: none; align-items: center; gap: 8px; font-size: 0.875rem;">
-
-        <style>
-        @media (min-width: 768px) {
-            .modern-header nav {
-                display: flex !important;
-            }
-        }
-        </style>
-            <a href="{{ route('admin.dashboard') }}" 
-               class="text-var(--text-secondary) hover:text-var(--primary-color) transition-colors">
-                {{ translate('Dashboard') }}
-            </a>
-            @if(isset($breadcrumbs) && count($breadcrumbs) > 0)
-                @foreach($breadcrumbs as $breadcrumb)
-                    <i class="fas fa-chevron-right text-var(--text-muted) text-xs"></i>
-                    @if($loop->last)
-                        <span class="text-var(--text-primary) font-medium">{{ $breadcrumb['title'] }}</span>
-                    @else
-                        <a href="{{ $breadcrumb['url'] ?? '#' }}" 
-                           class="text-var(--text-secondary) hover:text-var(--primary-color) transition-colors">
-                            {{ $breadcrumb['title'] }}
-                        </a>
-                    @endif
-                @endforeach
-            @endif
+        <nav class="breadcrumb-nav">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="fas fa-home"></i>
+                        {{ translate('Dashboard') }}
+                    </a>
+                </li>
+                @if(Request::segment(2))
+                    <li class="breadcrumb-item">
+                        {{ ucfirst(str_replace('-', ' ', Request::segment(2))) }}
+                    </li>
+                @endif
+                @if(Request::segment(3))
+                    <li class="breadcrumb-item active">
+                        {{ ucfirst(str_replace('-', ' ', Request::segment(3))) }}
+                    </li>
+                @endif
+            </ol>
         </nav>
     </div>
 
-    <div class="modern-header-right">
+    <div class="header-right">
         <!-- Quick Actions -->
-        <div class="hidden md:flex items-center space-x-2">
-            <!-- Quick Add Product -->
-            <a href="{{ route('admin.product.add-new') }}" 
-               class="btn-modern btn-modern-secondary"
-               data-tooltip="Quick Add Product">
-                <i class="fas fa-plus"></i>
-                <span class="hidden lg:inline">{{ translate('Add Product') }}</span>
-            </a>
-
-            <!-- Quick POS -->
-            <a href="{{ route('admin.pos.index') }}" 
-               class="btn-modern btn-modern-primary"
-               data-tooltip="Open POS">
+        <div class="quick-actions">
+            <button class="quick-action-btn" onclick="window.location.href='{{ route('admin.pos.index') }}'"
+                    data-tooltip="POS System">
                 <i class="fas fa-cash-register"></i>
-                <span class="hidden lg:inline">{{ translate('POS') }}</span>
-            </a>
+            </button>
+
+            <button class="quick-action-btn" onclick="window.location.href='{{ route('admin.product.add-new') }}'"
+                    data-tooltip="Add Product">
+                <i class="fas fa-plus"></i>
+            </button>
+
+            <button class="quick-action-btn" onclick="window.location.href='{{ route('admin.orders.list', ['status' => 'pending']) }}'"
+                    data-tooltip="Pending Orders">
+                <i class="fas fa-clock"></i>
+                @if(\App\Model\Order::where(['order_status'=>'pending'])->count() > 0)
+                    <span class="notification-badge">{{ \App\Model\Order::where(['order_status'=>'pending'])->count() }}</span>
+                @endif
+            </button>
         </div>
 
-        <!-- Search -->
-        <div class="relative hidden lg:block">
-            <input type="text" 
-                   placeholder="{{ translate('Search orders, products...') }}" 
-                   class="w-64 px-4 py-2 pl-10 bg-var(--bg-tertiary) border border-var(--border-color) rounded-lg focus:outline-none focus:ring-2 focus:ring-var(--primary-color) focus:border-transparent transition-all"
-                   id="global-search">
-            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-var(--text-secondary)"></i>
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" onclick="toggleTheme()" data-tooltip="Toggle Theme">
+            <i class="fas fa-moon" id="themeIcon"></i>
+        </button>
+
+        <!-- User Menu -->
+        <div class="user-menu-dropdown">
+            <button class="user-menu-btn" onclick="toggleUserMenu()">
+                <div class="user-avatar">
+                    <img src="{{ asset('assets/admin/img/160x160/img1.jpg') }}" alt="User">
+                </div>
+                <div class="user-info">
+                    <div class="user-name">{{ auth('admin')->user()->f_name ?? 'Admin' }}</div>
+                    <div class="user-role">{{ translate('Administrator') }}</div>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </button>
+
+            <div class="user-menu-panel" id="userMenuPanel">
+                <div class="user-menu-header">
+                    <div class="user-avatar-large">
+                        <img src="{{ asset('assets/admin/img/160x160/img1.jpg') }}" alt="User">
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name">{{ auth('admin')->user()->f_name ?? 'Admin' }}</div>
+                        <div class="user-email">{{ auth('admin')->user()->email ?? 'admin@example.com' }}</div>
+                    </div>
+                </div>
+
+                <div class="user-menu-items">
+                    <a href="{{ route('admin.settings') }}" class="user-menu-item">
+                        <i class="fas fa-user-cog"></i>
+                        <span>{{ translate('Profile Settings') }}</span>
+                    </a>
+
+                    <a href="{{ route('admin.business-settings.restaurant-index') }}" class="user-menu-item">
+                        <i class="fas fa-cog"></i>
+                        <span>{{ translate('System Settings') }}</span>
+                    </a>
+
+                    <div class="menu-divider"></div>
+
+                    <a href="{{ route('admin.auth.logout') }}" class="user-menu-item logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>{{ translate('Logout') }}</span>
+                    </a>
+                </div>
+            </div>
         </div>
+    </div>
+</header>
+
+<style>
+/* Modern Header Styles */
+.modern-header {
+    background: var(--bg-header);
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-4) var(--spacing-6);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: var(--z-sticky);
+    backdrop-filter: blur(8px);
+    box-shadow: var(--shadow-sm);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+}
+
+.mobile-menu-toggle {
+    background: none;
+    border: none;
+    font-size: var(--font-size-lg);
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-md);
+    transition: all var(--transition-fast);
+    display: none;
+}
+
+.mobile-menu-toggle:hover {
+    background: var(--bg-tertiary);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: var(--font-size-sm);
+}
+
+.breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-item:not(:last-child)::after {
+    content: '/';
+    margin-left: var(--spacing-2);
+    color: var(--text-muted);
+}
+
+.breadcrumb-item a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+}
+
+.breadcrumb-item a:hover {
+    color: var(--brand-primary);
+}
+
+.breadcrumb-item.active {
+    color: var(--text-primary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Quick Actions */
+.quick-actions {
+    display: flex;
+    gap: var(--spacing-2);
+}
+
+.quick-action-btn {
+    position: relative;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2-5);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.quick-action-btn:hover {
+    background: var(--brand-primary);
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: var(--danger-color);
+    color: white;
+    border-radius: var(--radius-full);
+    padding: 2px 6px;
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    min-width: 18px;
+    text-align: center;
+}
+
+/* Theme Toggle */
+.theme-toggle {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-2-5);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.theme-toggle:hover {
+    background: var(--brand-primary);
+    color: white;
+    transform: scale(1.05);
+}
+
+/* User Menu */
+.user-menu-dropdown {
+    position: relative;
+}
+
+.user-menu-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.user-menu-btn:hover {
+    background: var(--bg-tertiary);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    border: 2px solid var(--border-color);
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    text-align: left;
+}
+
+.user-name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-primary);
+    line-height: var(--line-height-tight);
+}
+
+.user-role {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    line-height: var(--line-height-tight);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: block !important;
+    }
+
+    .breadcrumb {
+        display: none;
+    }
+
+    .quick-actions {
+        display: none;
+    }
+
+    .user-info {
+        display: none;
+    }
+}
+</style>
+
+<script>
+function toggleMobileSidebar() {
+    if (window.modernSidebar) {
+        window.modernSidebar.openMobileSidebar();
+    }
+}
+
+function toggleUserMenu() {
+    const panel = document.getElementById('userMenuPanel');
+    if (panel) {
+        panel.classList.toggle('show');
+    }
+}
+
+function toggleTheme() {
+    const html = document.documentElement;
+    const icon = document.getElementById('themeIcon');
+
+    if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        if (icon) icon.className = 'fas fa-moon';
+        localStorage.setItem('theme', 'light');
+    } else {
+        html.setAttribute('data-theme', 'dark');
+        if (icon) icon.className = 'fas fa-sun';
+        localStorage.setItem('theme', 'dark');
+    }
+}
+
+// Initialize theme
+document.addEventListener('DOMContentLoaded', function() {
+    const savedTheme = localStorage.getItem('theme');
+    const icon = document.getElementById('themeIcon');
+
+    if (savedTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (icon) icon.className = 'fas fa-sun';
+    }
+});
+
+// Close dropdowns when clicking outside
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.user-menu-dropdown')) {
+        const panel = document.getElementById('userMenuPanel');
+        if (panel) panel.classList.remove('show');
+    }
+});
+
+// Handle sidebar layout changes
+window.addEventListener('sidebarToggle', function(e) {
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        if (e.detail.collapsed && !e.detail.mobile) {
+            mainContent.classList.add('sidebar-collapsed');
+        } else {
+            mainContent.classList.remove('sidebar-collapsed');
+        }
+    }
+});
+</script>
 
         <!-- Notifications -->
         <div class="relative">
@@ -82,7 +390,7 @@
                     onclick="toggleNotifications()"
                     data-tooltip="Notifications">
                 <i class="fas fa-bell text-var(--text-primary)"></i>
-                <span class="notification-badge absolute -top-1 -right-1 w-5 h-5 bg-var(--danger-color) text-white text-xs rounded-full flex items-center justify-center" 
+                <span class="notification-badge absolute -top-1 -right-1 w-5 h-5 bg-var(--danger-color) text-white text-xs rounded-full flex items-center justify-center"
                       style="display: none;">3</span>
             </button>
 
@@ -253,11 +561,11 @@ document.addEventListener('click', function(event) {
 // Global search functionality
 document.getElementById('global-search')?.addEventListener('input', function(e) {
     const query = e.target.value.toLowerCase();
-    
+
     if (query.length > 2) {
         // Implement global search logic here
         console.log('Searching for:', query);
-        
+
         // You can make AJAX calls to search orders, products, customers, etc.
         // Example:
         // fetch(`/admin/search?q=${encodeURIComponent(query)}`)
@@ -275,13 +583,13 @@ document.addEventListener('keydown', function(e) {
         e.preventDefault();
         window.location.href = '{{ route("admin.pos.index") }}';
     }
-    
+
     // Ctrl/Cmd + Shift + O for Orders
     if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'O') {
         e.preventDefault();
         window.location.href = '{{ route("admin.orders.list", ["status" => "all"]) }}';
     }
-    
+
     // Escape to close dropdowns
     if (e.key === 'Escape') {
         document.getElementById('notifications-dropdown').style.display = 'none';
