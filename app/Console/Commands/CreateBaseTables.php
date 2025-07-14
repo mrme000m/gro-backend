@@ -40,7 +40,6 @@ class CreateBaseTables extends Command
                         `discount` decimal(24,2) NOT NULL DEFAULT 0.00,
                         `discount_type` varchar(20) NOT NULL DEFAULT 'percent',
                         `tax_type` varchar(20) NOT NULL DEFAULT 'percent',
-                        `unit` varchar(191) DEFAULT NULL,
                         `capacity` double(8,2) DEFAULT NULL,
                         `total_stock` int(11) DEFAULT NULL,
                         `daily_needs` tinyint(1) NOT NULL DEFAULT 0,

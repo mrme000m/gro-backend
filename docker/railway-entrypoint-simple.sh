@@ -79,6 +79,10 @@ run_migrations() {
             echo "Creating essential base tables..."
             php artisan db:create-base-tables || echo "Warning: Base table creation failed, continuing..."
 
+            # Fix migration conflicts
+            echo "Fixing migration conflicts..."
+            php artisan db:fix-migrations || echo "Warning: Migration fix failed, continuing..."
+
             # Try full schema initialization as backup
             echo "Attempting full schema initialization..."
             php artisan db:initialize || echo "Warning: Full schema initialization failed, continuing..."
