@@ -470,6 +470,7 @@ class FeatureService
     {
         $submenu = [];
 
+        // Only show system features that actually exist
         if ($this->isEnabled('system.user_management')) {
             $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.list'];
         }
@@ -478,21 +479,12 @@ class FeatureService
             $submenu[] = ['name' => 'Role Permissions', 'route' => 'admin.custom-role.create'];
         }
 
-        if ($this->isEnabled('system.system_logs')) {
-            $submenu[] = ['name' => 'System Logs', 'route' => 'admin.business-settings.web-app.system-setup.db-index'];
-        }
-
-        if ($this->isEnabled('system.backup_restore')) {
-            $submenu[] = ['name' => 'Database Backup', 'route' => 'admin.business-settings.web-app.system-setup.db-index'];
-        }
-
         if ($this->isEnabled('system.maintenance_mode')) {
             $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.store.maintenance-mode'];
         }
 
-        if ($this->isEnabled('system.api_management')) {
-            $submenu[] = ['name' => 'Firebase Config', 'route' => 'admin.business-settings.web-app.system-setup.firebase_message_config_index'];
-        }
+        // Note: System Logs, Backup Restore, and API Management
+        // are disabled in config as they don't have admin interfaces
 
         return $submenu;
     }

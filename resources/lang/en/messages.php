@@ -2608,4 +2608,11 @@
   'Save Configuration' => 'Save Configuration',
   'product_tag' => 'Product tag',
   'product_searched_by_...' => 'Product searched by ...',
+  'payment_requests' => 'Payment requests',
+  'order_partial_paymen...' => 'Order partial paymen...',
+  'order_images' => 'Order images',
+  'offline_payments' => 'Offline payments',
+  'offline_payment_meth...' => 'Offline payment meth...',
+  'Google Analytics will track page views, user interactions, and conversion events on your website.' => 'Google Analytics will track page views  user interactions  and conversion events on your website.',
+  'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.' => 'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.',
 );

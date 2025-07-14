@@ -96,10 +96,10 @@ return array (
     'enabled' => true,
     'user_management' => true,
     'role_permissions' => true,
-    'system_logs' => true,
-    'backup_restore' => true,
+    'system_logs' => false,
+    'backup_restore' => false,
     'maintenance_mode' => true,
-    'api_management' => true,
+    'api_management' => false,
   ),
   'advanced' =>
   array (
