@@ -18,6 +18,39 @@ use Illuminate\Support\Str;
 
 class Helpers
 {
+    /**
+     * Parse Railway DATABASE_URL for Laravel database configuration
+     * Supports both MySQL and PostgreSQL URLs
+     */
+    public static function parseDatabaseUrl($url = null)
+    {
+        $url = $url ?: env('DATABASE_URL');
+
+        if (!$url) {
+            return [];
+        }
+
+        $parsed = parse_url($url);
+
+        if (!$parsed) {
+            return [];
+        }
+
+        $driver = $parsed['scheme'] ?? 'mysql';
+        if ($driver === 'postgres') {
+            $driver = 'pgsql';
+        }
+
+        return [
+            'driver' => $driver,
+            'host' => $parsed['host'] ?? '127.0.0.1',
+            'port' => $parsed['port'] ?? ($driver === 'pgsql' ? 5432 : 3306),
+            'database' => ltrim($parsed['path'] ?? '', '/'),
+            'username' => $parsed['user'] ?? '',
+            'password' => $parsed['pass'] ?? '',
+        ];
+    }
+
     public static function error_processor($validator)
     {
         $err_keeper = [];

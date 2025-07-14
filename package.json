@@ -7,7 +7,10 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "railway:build": "chmod +x ./build-app.sh && ./build-app.sh",
+        "railway:worker": "chmod +x ./run-worker.sh && ./run-worker.sh",
+        "railway:cron": "chmod +x ./run-cron.sh && ./run-cron.sh"
     },
     "devDependencies": {
         "axios": "^0.19",

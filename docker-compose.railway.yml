@@ -1,0 +1,113 @@
+# Railway-compatible Docker Compose for local testing
+# This mimics Railway's deployment structure for local development
+
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grofresh-railway-app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DATABASE_URL=mysql://grofresh_user:grofresh_password@mysql:3306/grofresh
+      - REDIS_URL=redis://redis:6379
+      - RAILWAY_ENVIRONMENT=production
+      - RAILWAY_SERVICE_NAME=app
+      - LOG_CHANNEL=errorlog
+      - CACHE_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - SESSION_DRIVER=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - railway-network
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grofresh-railway-worker
+    restart: unless-stopped
+    command: ["./run-worker.sh"]
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DATABASE_URL=mysql://grofresh_user:grofresh_password@mysql:3306/grofresh
+      - REDIS_URL=redis://redis:6379
+      - RAILWAY_ENVIRONMENT=production
+      - RAILWAY_SERVICE_NAME=worker
+      - LOG_CHANNEL=errorlog
+      - CACHE_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - SESSION_DRIVER=redis
+    depends_on:
+      - mysql
+      - redis
+      - app
+    networks:
+      - railway-network
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: grofresh-railway-cron
+    restart: unless-stopped
+    command: ["./run-cron.sh"]
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+      - DATABASE_URL=mysql://grofresh_user:grofresh_password@mysql:3306/grofresh
+      - REDIS_URL=redis://redis:6379
+      - RAILWAY_ENVIRONMENT=production
+      - RAILWAY_SERVICE_NAME=cron
+      - LOG_CHANNEL=errorlog
+      - CACHE_DRIVER=redis
+      - QUEUE_CONNECTION=redis
+      - SESSION_DRIVER=redis
+    depends_on:
+      - mysql
+      - redis
+      - app
+    networks:
+      - railway-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: grofresh-railway-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: grofresh
+      MYSQL_USER: grofresh_user
+      MYSQL_PASSWORD: grofresh_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - mysql_railway_data:/var/lib/mysql
+      - ./installation/v4.1.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3307:3306"
+    networks:
+      - railway-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: grofresh-railway-redis
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    networks:
+      - railway-network
+
+volumes:
+  mysql_railway_data:
+
+networks:
+  railway-network:
+    driver: bridge

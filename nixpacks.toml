@@ -1,0 +1,28 @@
+# Nixpacks configuration for Railway deployment
+# This file provides additional configuration for Railway's Nixpacks builder
+# when not using Dockerfile
+
+[variables]
+NODE_ENV = "production"
+APP_ENV = "production"
+
+[phases.setup]
+nixPkgs = ["php81", "nodejs-18_x", "nginx"]
+aptPkgs = ["libpng-dev", "libonig-dev", "libxml2-dev", "libzip-dev"]
+
+[phases.install]
+cmds = [
+    "composer install --no-dev --optimize-autoloader --no-interaction",
+    "npm ci --only=production"
+]
+
+[phases.build]
+cmds = [
+    "npm run production",
+    "php artisan config:cache",
+    "php artisan route:cache",
+    "php artisan view:cache"
+]
+
+[start]
+cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"

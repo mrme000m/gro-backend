@@ -2625,4 +2625,7 @@
   'Create OAuth App and get Client ID/Secret' => 'Create OAuth App and get Client ID/Secret',
   'loyalty_transactions' => 'Loyalty transactions',
   'Save the settings to start tracking' => 'Save the settings to start tracking',
+  'guest_users' => 'Guest users',
+  'Config Updated Successfully' => 'Config Updated Successfully',
+  'Congratulations ! Your account at Restaurant Bazar has been created successfully.' => 'Congratulations ! Your account at Restaurant Bazar has been created successfully.',
 );
