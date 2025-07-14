@@ -82,10 +82,10 @@
                                    <div class="cmn--media right-dropdown-icon d-flex align-items-center">
                                     <div class="media-body pl-0 pr-2">
                                         <span class="card-title h5 text-right">
-                                            {{auth('admin')->user()->f_name}}
-                                            {{auth('admin')->user()->l_name}}
+                                            {{auth('admin')->user()->f_name ?? 'Admin'}}
+                                            {{auth('admin')->user()->l_name ?? 'User'}}
                                         </span>
-                                        <span class="card-text">{{auth('admin')->user()->role->name}}</span>
+                                        <span class="card-text">{{auth('admin')->user()->role->name ?? 'Admin'}}</span>
                                     </div>
                                     <div class="avatar avatar-sm avatar-circle">
                                         <img class="avatar-img"
@@ -107,8 +107,8 @@
                                                  alt="{{ translate('admin') }}">
                                         </div>
                                         <div class="media-body">
-                                            <span class="card-title h5">{{auth('admin')->user()->f_name}}</span>
-                                            <span class="card-text">{{auth('admin')->user()->email}}</span>
+                                            <span class="card-title h5">{{auth('admin')->user()->f_name ?? 'Admin User'}}</span>
+                                            <span class="card-text">{{auth('admin')->user()->email ?? 'admin@4restaurants.store'}}</span>
                                         </div>
                                     </div>
                                 </div>
