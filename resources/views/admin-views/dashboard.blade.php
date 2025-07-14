@@ -1,4 +1,4 @@
-@extends('layouts.admin.modern-app')
+@extends('layouts.admin.app')
 
 @section('title', translate('Dashboard'))
 

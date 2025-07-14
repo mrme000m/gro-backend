@@ -359,7 +359,7 @@
             @foreach(admin_navigation() as $item)
                 @if($item['enabled'])
                     <div class="nav-item">
-                        <a href="{{ route($item['route']) }}" class="nav-link {{ $item['active'] ? 'active' : '' }}">
+                        <a href="{{ isset($item['route_params']) ? route($item['route'], $item['route_params']) : route($item['route']) }}" class="nav-link {{ $item['active'] ? 'active' : '' }}">
                             <i class="{{ $item['icon'] }} nav-icon"></i>
                             {{ $item['name'] }}
                         </a>

@@ -114,6 +114,7 @@ class FeatureService
                 'name' => 'Orders',
                 'icon' => 'fas fa-shopping-cart',
                 'route' => 'admin.orders.list',
+                'route_params' => ['all'],
                 'active' => request()->routeIs('admin.orders.*'),
                 'enabled' => true,
                 'submenu' => $this->getOrdersSubmenu(),
@@ -375,9 +376,6 @@ class FeatureService
         }
 
         $submenu[] = ['name' => 'Business Settings', 'route' => 'admin.business-settings.store.ecom-setup'];
-
-        // Feature Management (always available to admins)
-        $submenu[] = ['name' => 'Feature Management', 'route' => 'admin.settings.features.index'];
 
         return $submenu;
     }

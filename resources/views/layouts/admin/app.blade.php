@@ -37,7 +37,7 @@
 </div>
 
 @include('layouts.admin.partials._header')
-@include('layouts.admin.partials._sidebar')
+@include('layouts.admin.partials._sidebar-featured')
 
 <main id="content" role="main" class="main pointer-event">
 
