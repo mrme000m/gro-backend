@@ -18,9 +18,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/modern-dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('assets/admin/css/toastr.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/modern-dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/toastr.css') }}">
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -224,11 +224,11 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('assets/admin/js/vendor.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/theme.min.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/sweet_alert.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/toastr.js') }}"></script>
-    <script src="{{ asset('assets/admin/js/modern-dashboard.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/vendor.min.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/theme.min.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/sweet_alert.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/toastr.js') }}"></script>
+    <script src="{{ asset('public/assets/admin/js/modern-dashboard.js') }}"></script>
 
     @stack('scripts')
 

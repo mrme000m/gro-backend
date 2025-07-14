@@ -200,7 +200,77 @@ class DashboardController extends Controller
             }
         }
 
-        return view('admin-views.dashboard', compact('data', 'earning', 'orderStatisticsChart'));
+        // Prepare data for modern dashboard
+        $dashboardData = [
+            'total_orders' => $data['total_orders'] ?? 0,
+            'total_customers' => $data['customer'] ?? 0,
+            'total_revenue' => $data['total_earning'] ?? 0,
+            'total_products' => $data['product'] ?? 0,
+            'recent_orders' => $data['recent_orders'] ?? [],
+            'top_products' => $data['top_sell'] ?? [],
+            'earning_chart' => $earning,
+            'order_statistics' => $orderStatisticsChart,
+        ];
+
+        // Add breadcrumbs for modern layout
+        $breadcrumbs = [
+            ['title' => 'Dashboard', 'url' => route('admin.dashboard')]
+        ];
+
+        return view('admin-views.modern-dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
+    }
+
+    /**
+     * Test method for modern dashboard
+     */
+    public function modernTest()
+    {
+        // Simple test data
+        $data = [
+            'total_orders' => 150,
+            'customer' => 89,
+            'total_earning' => 12500.50,
+            'product' => 45,
+            'recent_orders' => [
+                [
+                    'id' => 1001,
+                    'customer_name' => 'John Doe',
+                    'order_amount' => 125.50,
+                    'order_status' => 'delivered',
+                    'created_at' => now()->subHours(2)
+                ],
+                [
+                    'id' => 1002,
+                    'customer_name' => 'Jane Smith',
+                    'order_amount' => 89.99,
+                    'order_status' => 'processing',
+                    'created_at' => now()->subHours(4)
+                ]
+            ],
+            'top_sell' => [
+                [
+                    'name' => 'Fresh Apples',
+                    'price' => 4.99,
+                    'order_count' => 25,
+                    'image' => 'def.png'
+                ],
+                [
+                    'name' => 'Organic Bananas',
+                    'price' => 3.49,
+                    'order_count' => 18,
+                    'image' => 'def.png'
+                ]
+            ]
+        ];
+
+        $earning = [];
+        $orderStatisticsChart = [];
+        $dashboardData = $data;
+        $breadcrumbs = [
+            ['title' => 'Dashboard', 'url' => route('admin.dashboard')]
+        ];
+
+        return view('admin-views.modern-dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
     }
 
     /**

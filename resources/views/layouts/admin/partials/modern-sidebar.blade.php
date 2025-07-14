@@ -4,29 +4,31 @@
         @php
             $logo = \App\Model\BusinessSetting::where(['key'=>'logo'])->first()->value;
         @endphp
-        <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-            <img src="{{ App\CentralLogics\Helpers::onErrorImage($logo, asset('storage/app/public/restaurant') . '/' . $logo, asset('assets/admin/img/160x160/img2.jpg'), 'restaurant/') }}" 
-                 alt="{{ translate('logo') }}" 
-                 class="h-10 w-auto">
-            <span class="text-xl font-bold text-gradient">{{ config('app.name', 'GroFresh') }}</span>
+        <a href="{{ route('admin.dashboard') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+            <img src="{{ App\CentralLogics\Helpers::onErrorImage($logo, asset('storage/app/public/restaurant') . '/' . $logo, asset('assets/admin/img/160x160/img2.jpg'), 'restaurant/') }}"
+                 alt="{{ translate('logo') }}"
+                 style="height: 40px; width: auto;">
+            <span style="font-size: 1.25rem; font-weight: 700;" class="text-gradient">{{ config('app.name', 'GroFresh') }}</span>
         </a>
     </div>
 
     <!-- Search -->
-    <div class="p-4">
-        <div class="relative">
-            <input type="text" 
-                   id="search-sidebar-menu" 
-                   placeholder="{{ translate('Search Menu...') }}" 
-                   class="w-full px-4 py-2 pl-10 bg-var(--bg-tertiary) border border-var(--border-color) rounded-lg focus:outline-none focus:ring-2 focus:ring-var(--primary-color) focus:border-transparent transition-all">
-            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-var(--text-secondary)"></i>
-            <kbd class="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-1 text-xs bg-var(--bg-secondary) border border-var(--border-color) rounded">⌘K</kbd>
+    <div style="padding: 1rem;">
+        <div style="position: relative;">
+            <input type="text"
+                   id="search-sidebar-menu"
+                   placeholder="{{ translate('Search Menu...') }}"
+                   style="width: 100%; padding: 8px 12px 8px 40px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px; outline: none; transition: all 0.3s ease;"
+                   onfocus="this.style.borderColor='var(--primary-color)'; this.style.boxShadow='0 0 0 3px rgba(99, 102, 241, 0.1)';"
+                   onblur="this.style.borderColor='var(--border-color)'; this.style.boxShadow='none';">
+            <i class="fas fa-search" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-secondary);"></i>
+            <kbd style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); padding: 2px 6px; font-size: 0.75rem; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 4px;">⌘K</kbd>
         </div>
     </div>
 
     <!-- Navigation -->
     <nav class="modern-sidebar-nav">
-        <ul class="space-y-1">
+        <ul style="list-style: none; padding: 0; margin: 0;"">
             @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
             <li class="modern-nav-item">
                 <a href="{{ route('admin.dashboard') }}" 

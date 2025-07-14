@@ -180,6 +180,7 @@ body {
   top: 0;
   z-index: 1000;
   overflow-y: auto;
+  width: 280px;
 }
 
 .modern-sidebar-header {

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Dashboard Test</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/admin/css/modern-dashboard.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .test-container {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .test-section {
+            margin-bottom: 3rem;
+        }
+        
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .theme-demo {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>Modern Dashboard Components Test</h1>
+        
+        <!-- Theme Toggle Demo -->
+        <div class="test-section">
+            <h2 class="test-title">Theme Toggle</h2>
+            <div class="theme-demo">
+                <button class="theme-toggle" onclick="toggleTheme()" style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;">
+                    <i class="fas fa-moon" style="color: #64748b;"></i>
+                </button>
+                <span>Click to toggle between light and dark themes</span>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="test-section">
+            <h2 class="test-title">Statistics Cards</h2>
+            <div class="stats-grid">
+                <div class="stat-card metric-card">
+                    <div class="stat-value" data-count="1250">0</div>
+                    <div class="stat-label">Total Orders</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+12%</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" data-count="89">0</div>
+                    <div class="stat-label">Total Customers</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+8%</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value">$12,500.50</div>
+                    <div class="stat-label">Total Revenue</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>+15%</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" data-count="45">0</div>
+                    <div class="stat-label">Total Products</div>
+                    <div class="stat-change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>-2%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Cards -->
+        <div class="test-section">
+            <h2 class="test-title">Modern Cards</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div class="modern-card">
+                    <div class="modern-card-header">
+                        <h3>Card Header</h3>
+                    </div>
+                    <div class="modern-card-body">
+                        <p>This is a modern card with header, body, and footer sections.</p>
+                    </div>
+                    <div class="modern-card-footer">
+                        <button class="btn-modern btn-modern-primary">Primary Action</button>
+                        <button class="btn-modern btn-modern-secondary">Secondary</button>
+                    </div>
+                </div>
+                
+                <div class="modern-card hover-lift">
+                    <div class="modern-card-body">
+                        <div style="text-align: center; padding: 2rem;">
+                            <div style="width: 64px; height: 64px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                                <i class="fas fa-chart-bar" style="color: white; font-size: 1.5rem;"></i>
+                            </div>
+                            <h3>Quick Action</h3>
+                            <p style="color: var(--text-secondary);">Click to perform action</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modern Table -->
+        <div class="test-section">
+            <h2 class="test-title">Modern Table</h2>
+            <div class="modern-card">
+                <div class="modern-card-header">
+                    <h3>Recent Orders</h3>
+                </div>
+                <div class="modern-card-body" style="padding: 0;">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 500;">#1001</td>
+                                <td>John Doe</td>
+                                <td style="font-weight: 500;">$125.50</td>
+                                <td>
+                                    <span style="padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: rgba(16, 185, 129, 0.1); color: rgb(16, 185, 129);">
+                                        DELIVERED
+                                    </span>
+                                </td>
+                                <td>Dec 15, 2024</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 500;">#1002</td>
+                                <td>Jane Smith</td>
+                                <td style="font-weight: 500;">$89.99</td>
+                                <td>
+                                    <span style="padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; background: rgba(245, 158, 11, 0.1); color: rgb(245, 158, 11);">
+                                        PROCESSING
+                                    </span>
+                                </td>
+                                <td>Dec 15, 2024</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="test-section">
+            <h2 class="test-title">Modern Buttons</h2>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn-modern btn-modern-primary">
+                    <i class="fas fa-plus"></i>
+                    Primary Button
+                </button>
+                <button class="btn-modern btn-modern-secondary">
+                    <i class="fas fa-edit"></i>
+                    Secondary Button
+                </button>
+                <button class="btn-modern btn-modern-primary" onclick="showTestNotification()">
+                    <i class="fas fa-bell"></i>
+                    Test Notification
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/admin/js/modern-dashboard.js"></script>
+    <script>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            
+            const icon = document.querySelector('.theme-toggle i');
+            icon.className = newTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+
+        function showTestNotification() {
+            if (window.modernDashboard) {
+                window.modernDashboard.showNotification('This is a test notification!', 'success');
+            } else {
+                alert('Modern dashboard not loaded');
+            }
+        }
+
+        // Initialize counters when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate counters
+            document.querySelectorAll('[data-count]').forEach(counter => {
+                const target = parseInt(counter.dataset.count);
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+
+                setTimeout(updateCounter, 500);
+            });
+        });
+    </script>
+</body>
+</html>

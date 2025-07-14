@@ -1,13 +1,32 @@
 <header class="modern-header">
     <div class="modern-header-left">
         <!-- Mobile Sidebar Toggle -->
-        <button class="sidebar-toggle lg:hidden p-2 rounded-lg hover:bg-var(--bg-tertiary) transition-colors" 
-                data-tooltip="Toggle Sidebar">
-            <i class="fas fa-bars text-var(--text-primary)"></i>
+        <button class="sidebar-toggle"
+                style="display: none; padding: 8px; border-radius: 8px; background: none; border: none; cursor: pointer; transition: background-color 0.3s ease;"
+                data-tooltip="Toggle Sidebar"
+                onmouseover="this.style.backgroundColor='var(--bg-tertiary)'"
+                onmouseout="this.style.backgroundColor='transparent'">
+            <i class="fas fa-bars" style="color: var(--text-primary);"></i>
         </button>
 
+        <style>
+        @media (max-width: 1024px) {
+            .sidebar-toggle {
+                display: block !important;
+            }
+        }
+        </style>
+
         <!-- Breadcrumb -->
-        <nav class="hidden md:flex items-center space-x-2 text-sm">
+        <nav style="display: none; align-items: center; gap: 8px; font-size: 0.875rem;">
+
+        <style>
+        @media (min-width: 768px) {
+            .modern-header nav {
+                display: flex !important;
+            }
+        }
+        </style>
             <a href="{{ route('admin.dashboard') }}" 
                class="text-var(--text-secondary) hover:text-var(--primary-color) transition-colors">
                 {{ translate('Dashboard') }}
@@ -126,8 +145,12 @@
         </div>
 
         <!-- Theme Toggle -->
-        <button class="theme-toggle" data-tooltip="Toggle Theme">
-            <i class="fas fa-moon"></i>
+        <button class="theme-toggle"
+                data-tooltip="Toggle Theme"
+                style="background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 12px; padding: 8px; cursor: pointer; transition: all 0.15s ease; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px;"
+                onmouseover="this.style.background='#ffffff'; this.style.transform='scale(1.05)'"
+                onmouseout="this.style.background='#f1f5f9'; this.style.transform='scale(1)'">
+            <i class="fas fa-moon" style="color: #64748b;"></i>
         </button>
 
         <!-- User Profile -->

@@ -48,6 +48,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
     Route::group(['middleware' => ['admin', 'employee_active_check']], function () {
             Route::get('/fcm/{id}', [DashboardController::class, 'fcm'])->name('dashboard');     //test route
             Route::get('/', [DashboardController::class, 'dashboard'])->name('dashboard');
+            Route::get('/modern', [DashboardController::class, 'modernTest'])->name('modern-dashboard');     //modern dashboard test
             Route::post('order-stats', [DashboardController::class, 'orderStats'])->name('order-stats');
             Route::get('settings', [SystemController::class, 'settings'])->name('settings');
             Route::post('settings', [SystemController::class, 'settingsUpdate']);

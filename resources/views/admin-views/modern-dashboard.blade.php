@@ -63,34 +63,34 @@
 <!-- Statistics Cards -->
 <div class="stats-grid">
     <div class="stat-card metric-card">
-        <div class="stat-value" data-count="{{ $data['total_orders'] ?? 0 }}">0</div>
+        <div class="stat-value" data-count="{{ $data['total_orders'] ?? 0 }}">{{ $data['total_orders'] ?? 0 }}</div>
         <div class="stat-label">{{ translate('Total Orders') }}</div>
         <div class="stat-change positive">
             <i class="fas fa-arrow-up"></i>
             <span>+12%</span>
         </div>
     </div>
-    
+
     <div class="stat-card">
-        <div class="stat-value" data-count="{{ $data['total_customers'] ?? 0 }}">0</div>
+        <div class="stat-value" data-count="{{ $data['customer'] ?? 0 }}">{{ $data['customer'] ?? 0 }}</div>
         <div class="stat-label">{{ translate('Total Customers') }}</div>
         <div class="stat-change positive">
             <i class="fas fa-arrow-up"></i>
             <span>+8%</span>
         </div>
     </div>
-    
+
     <div class="stat-card">
-        <div class="stat-value">${{ number_format($data['total_revenue'] ?? 0, 2) }}</div>
+        <div class="stat-value">${{ number_format($data['total_earning'] ?? 0, 2) }}</div>
         <div class="stat-label">{{ translate('Total Revenue') }}</div>
         <div class="stat-change positive">
             <i class="fas fa-arrow-up"></i>
             <span>+15%</span>
         </div>
     </div>
-    
+
     <div class="stat-card">
-        <div class="stat-value" data-count="{{ $data['total_products'] ?? 0 }}">0</div>
+        <div class="stat-value" data-count="{{ $data['product'] ?? 0 }}">{{ $data['product'] ?? 0 }}</div>
         <div class="stat-label">{{ translate('Total Products') }}</div>
         <div class="stat-change negative">
             <i class="fas fa-arrow-down"></i>
@@ -193,21 +193,21 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($recent_orders ?? [] as $order)
+                            @forelse($data['recent_orders'] ?? [] as $order)
                             <tr>
-                                <td class="font-medium">#{{ $order->id }}</td>
-                                <td>{{ $order->customer_name ?? 'Guest' }}</td>
-                                <td class="font-medium">${{ number_format($order->order_amount, 2) }}</td>
+                                <td style="font-weight: 500;">#{{ $order['id'] }}</td>
+                                <td>{{ $order['customer_name'] ?? 'Guest' }}</td>
+                                <td style="font-weight: 500;">${{ number_format($order['order_amount'], 2) }}</td>
                                 <td>
-                                    <span class="status-badge status-{{ $order->order_status }}">
-                                        {{ translate($order->order_status) }}
+                                    <span class="status-badge status-{{ $order['order_status'] }}">
+                                        {{ translate($order['order_status']) }}
                                     </span>
                                 </td>
-                                <td>{{ $order->created_at->format('M d, Y') }}</td>
+                                <td>{{ \Carbon\Carbon::parse($order['created_at'])->format('M d, Y') }}</td>
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="5" class="text-center py-8 text-var(--text-secondary)">
+                                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
                                     {{ translate('No recent orders found') }}
                                 </td>
                             </tr>
@@ -226,28 +226,29 @@
                 <h3 class="text-lg font-semibold text-var(--text-primary)">{{ translate('Top Products') }}</h3>
             </div>
             <div class="modern-card-body">
-                <div class="space-y-4">
-                    @forelse($top_products ?? [] as $product)
-                    <div class="flex items-center space-x-3">
-                        <img src="{{ $product->image_url ?? asset('assets/admin/img/160x160/img2.jpg') }}" 
-                             alt="{{ $product->name }}" 
-                             class="w-12 h-12 rounded-lg object-cover">
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium text-var(--text-primary) truncate">
-                                {{ $product->name }}
+                <div style="display: flex; flex-direction: column; gap: 1rem;">
+                    @forelse($data['top_sell'] ?? [] as $product)
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <img src="{{ asset('storage/app/public/product/' . $product['image']) }}"
+                             alt="{{ $product['name'] }}"
+                             style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;"
+                             onerror="this.src='{{ asset('assets/admin/img/160x160/img2.jpg') }}'">
+                        <div style="flex: 1; min-width: 0;">
+                            <p style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                {{ $product['name'] }}
                             </p>
-                            <p class="text-xs text-var(--text-secondary)">
-                                {{ $product->sales_count ?? 0 }} {{ translate('sold') }}
+                            <p style="font-size: 0.75rem; color: var(--text-secondary);">
+                                {{ $product['order_count'] ?? 0 }} {{ translate('sold') }}
                             </p>
                         </div>
-                        <div class="text-right">
-                            <p class="text-sm font-medium text-var(--text-primary)">
-                                ${{ number_format($product->price, 2) }}
+                        <div style="text-align: right;">
+                            <p style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">
+                                ${{ number_format($product['price'], 2) }}
                             </p>
                         </div>
                     </div>
                     @empty
-                    <div class="text-center py-8 text-var(--text-secondary)">
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
                         {{ translate('No products found') }}
                     </div>
                     @endforelse

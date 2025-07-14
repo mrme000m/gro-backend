@@ -2547,4 +2547,11 @@
   'One Referrer Equal To How Much BDT' => 'One Referrer Equal To How Much BDT',
   'No addons' => 'No addons',
   'No system addons installed. Upload addon files to enable this feature.' => 'No system addons installed. Upload addon files to enable this feature.',
+  'No products found' => 'No products found',
+  'No recent orders found' => 'No recent orders found',
+  'Date' => 'Date',
+  'View All' => 'View All',
+  'Recent Orders' => 'Recent Orders',
+  'Order Status Distribution' => 'Order Status Distribution',
+  'This year' => 'This year',
 );
