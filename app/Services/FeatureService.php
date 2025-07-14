@@ -216,6 +216,54 @@ class FeatureService
             ];
         }
 
+        // System Management
+        if ($this->isCategoryEnabled('system')) {
+            $navigation[] = [
+                'name' => 'System',
+                'icon' => 'animated-icon icon-system pulse',
+                'route' => 'admin.custom-role.create',
+                'active' => request()->routeIs('admin.custom-role.*') || request()->routeIs('admin.employee.*') || request()->routeIs('admin.business-settings.web-app.system-setup.*'),
+                'enabled' => true,
+                'submenu' => $this->getSystemSubmenu(),
+            ];
+        }
+
+        // Advanced Features
+        if ($this->isCategoryEnabled('advanced')) {
+            $navigation[] = [
+                'name' => 'Advanced',
+                'icon' => 'animated-icon icon-advanced rotate',
+                'route' => 'admin.business-settings.web-app.system-setup.app_setting',
+                'active' => request()->routeIs('admin.business-settings.web-app.language*') || request()->routeIs('admin.business-settings.currency*'),
+                'enabled' => true,
+                'submenu' => $this->getAdvancedSubmenu(),
+            ];
+        }
+
+        // Integrations
+        if ($this->isCategoryEnabled('integrations')) {
+            $navigation[] = [
+                'name' => 'Integrations',
+                'icon' => 'animated-icon icon-integrations bounce',
+                'route' => 'admin.business-settings.web-app.third-party.google-analytics',
+                'active' => request()->routeIs('admin.business-settings.web-app.third-party.*') || request()->routeIs('admin.business-settings.web-app.sms-module*'),
+                'enabled' => true,
+                'submenu' => $this->getIntegrationsSubmenu(),
+            ];
+        }
+
+        // Mobile App
+        if ($this->isCategoryEnabled('mobile_app')) {
+            $navigation[] = [
+                'name' => 'Mobile App',
+                'icon' => 'animated-icon icon-mobile pulse',
+                'route' => 'admin.business-settings.web-app.system-setup.app_setting',
+                'active' => request()->routeIs('admin.business-settings.web-app.system-setup.firebase*'),
+                'enabled' => true,
+                'submenu' => $this->getMobileAppSubmenu(),
+            ];
+        }
+
         // Settings (always enabled)
         $navigation[] = [
             'name' => 'Settings',
@@ -411,6 +459,134 @@ class FeatureService
         $submenu[] = ['name' => 'Refund Policy', 'route' => 'admin.business-settings.page-setup.refund-policy'];
         $submenu[] = ['name' => 'Return Policy', 'route' => 'admin.business-settings.page-setup.return-policy'];
         $submenu[] = ['name' => 'Social Media', 'route' => 'admin.business-settings.web-app.third-party.social-media'];
+
+        return $submenu;
+    }
+
+    /**
+     * Get system management submenu items
+     */
+    private function getSystemSubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isEnabled('system.user_management')) {
+            $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.list'];
+        }
+
+        if ($this->isEnabled('system.role_permissions')) {
+            $submenu[] = ['name' => 'Role Permissions', 'route' => 'admin.custom-role.create'];
+        }
+
+        if ($this->isEnabled('system.system_logs')) {
+            $submenu[] = ['name' => 'System Logs', 'route' => 'admin.business-settings.web-app.system-setup.db-index'];
+        }
+
+        if ($this->isEnabled('system.backup_restore')) {
+            $submenu[] = ['name' => 'Database Backup', 'route' => 'admin.business-settings.web-app.system-setup.db-index'];
+        }
+
+        if ($this->isEnabled('system.maintenance_mode')) {
+            $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.maintenance-mode'];
+        }
+
+        if ($this->isEnabled('system.api_management')) {
+            $submenu[] = ['name' => 'Firebase Config', 'route' => 'admin.business-settings.web-app.system-setup.firebase_message_config_index'];
+        }
+
+        return $submenu;
+    }
+
+    /**
+     * Get advanced features submenu items
+     */
+    private function getAdvancedSubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isEnabled('advanced.multi_vendor')) {
+            $submenu[] = ['name' => 'Multi Vendor', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        if ($this->isEnabled('advanced.multi_language')) {
+            $submenu[] = ['name' => 'Multi Language', 'route' => 'admin.business-settings.web-app.language'];
+        }
+
+        if ($this->isEnabled('advanced.multi_currency')) {
+            $submenu[] = ['name' => 'Multi Currency', 'route' => 'admin.business-settings.currency-add'];
+        }
+
+        if ($this->isEnabled('advanced.advanced_seo')) {
+            $submenu[] = ['name' => 'Advanced SEO', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        if ($this->isEnabled('advanced.custom_fields')) {
+            $submenu[] = ['name' => 'Custom Fields', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        if ($this->isEnabled('advanced.webhooks')) {
+            $submenu[] = ['name' => 'Webhooks', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        if ($this->isEnabled('advanced.api_access')) {
+            $submenu[] = ['name' => 'API Access', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        return $submenu;
+    }
+
+    /**
+     * Get integrations submenu items
+     */
+    private function getIntegrationsSubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isEnabled('integrations.google_analytics')) {
+            $submenu[] = ['name' => 'Google Analytics', 'route' => 'admin.business-settings.web-app.third-party.google-analytics'];
+        }
+
+        if ($this->isEnabled('integrations.facebook_pixel')) {
+            $submenu[] = ['name' => 'Facebook Pixel', 'route' => 'admin.business-settings.web-app.third-party.facebook-pixel'];
+        }
+
+        if ($this->isEnabled('integrations.whatsapp_integration')) {
+            $submenu[] = ['name' => 'WhatsApp Integration', 'route' => 'admin.business-settings.web-app.third-party.chat-index'];
+        }
+
+        if ($this->isEnabled('integrations.sms_gateway')) {
+            $submenu[] = ['name' => 'SMS Gateway', 'route' => 'admin.business-settings.web-app.sms-module'];
+        }
+
+        if ($this->isEnabled('integrations.accounting_software')) {
+            $submenu[] = ['name' => 'Accounting Software', 'route' => 'admin.business-settings.web-app.third-party.accounting-software'];
+        }
+
+        if ($this->isEnabled('integrations.crm_integration')) {
+            $submenu[] = ['name' => 'CRM Integration', 'route' => 'admin.business-settings.web-app.third-party.crm-integration'];
+        }
+
+        return $submenu;
+    }
+
+    /**
+     * Get mobile app submenu items
+     */
+    private function getMobileAppSubmenu(): array
+    {
+        $submenu = [];
+
+        if ($this->isEnabled('mobile_app.push_notifications')) {
+            $submenu[] = ['name' => 'Push Notifications', 'route' => 'admin.business-settings.web-app.system-setup.firebase_message_config_index'];
+        }
+
+        if ($this->isEnabled('mobile_app.app_settings')) {
+            $submenu[] = ['name' => 'App Settings', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
+        }
+
+        if ($this->isEnabled('mobile_app.app_analytics')) {
+            $submenu[] = ['name' => 'App Analytics', 'route' => 'admin.analytics.keyword-search'];
+        }
 
         return $submenu;
     }
