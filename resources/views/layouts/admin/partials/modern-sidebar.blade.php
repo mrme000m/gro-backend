@@ -277,6 +277,83 @@
         </div>
         @endif
 
+        <!-- Content Management -->
+        @if(feature_enabled('content.enabled'))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Content') }}</div>
+
+            @if(feature_enabled('content.pages'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.page-setup.about-us') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/page-setup/about-us*') ? 'active' : '' }}"
+                   data-tooltip="About Us">
+                    <div class="nav-icon">
+                        <i class="fas fa-info-circle"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('About Us') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('content.terms_conditions'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.page-setup.terms-and-conditions') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/page-setup/terms-and-conditions*') ? 'active' : '' }}"
+                   data-tooltip="Terms & Conditions">
+                    <div class="nav-icon">
+                        <i class="fas fa-file-contract"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Terms & Conditions') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('content.privacy_policy'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.page-setup.privacy-policy') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/page-setup/privacy-policy*') ? 'active' : '' }}"
+                   data-tooltip="Privacy Policy">
+                    <div class="nav-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Privacy Policy') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('content.faqs'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.page-setup.faq') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/page-setup/faq*') ? 'active' : '' }}"
+                   data-tooltip="FAQs">
+                    <div class="nav-icon">
+                        <i class="fas fa-question-circle"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('FAQs') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('content.blogs'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.blog.index') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/blog*') ? 'active' : '' }}"
+                   data-tooltip="Blogs">
+                    <div class="nav-icon">
+                        <i class="fas fa-blog"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Blogs') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+        </div>
+        @endif
+
         <!-- Integrations -->
         @if(feature_enabled('integrations.enabled'))
         <div class="nav-section">

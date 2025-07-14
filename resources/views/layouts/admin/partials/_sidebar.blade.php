@@ -848,38 +848,113 @@
                                 </ul>
                             </li>
 
+                            @if(feature_enabled('content.enabled'))
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:"
-                                   title="{{translate('Pages & Media')}}"
+                                   title="{{translate('Content Management')}}"
                                 >
                                     <i class="tio-pages-outlined nav-icon"></i>
                                     <span
-                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Pages & Media')}}</span>
+                                        class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Content Management')}}</span>
                                 </a>
                                 <ul class="js-navbar-vertical-aside-submenu nav nav-sub"
                                     style="display: {{Request::is('admin/business-settings/page-setup/*')?'block':''}} {{Request::is('admin/business-settings/web-app/third-party/social-media')?'block':''}}">
-                                    <li class="nav-item mt-0 {{Request::is('admin/business-settings/page-setup/*')?'active':''}}">
+
+                                    @if(feature_enabled('content.pages'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/about-us')?'active':''}}">
                                         <a class="nav-link"
                                            href="{{route('admin.business-settings.page-setup.about-us')}}"
-                                           title="{{translate('Page Setup')}}">
+                                           title="{{translate('About Us')}}">
                                             <span class="tio-circle nav-indicator-icon"></span>
-                                            <span
-                                                class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">{{translate('Page Setup')}}</span>
+                                            <span class="text-truncate">{{translate('About Us')}}</span>
                                         </a>
                                     </li>
+                                    @endif
+
+                                    @if(feature_enabled('content.terms_conditions'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/terms-and-conditions')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.terms-and-conditions')}}"
+                                           title="{{translate('Terms & Conditions')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Terms & Conditions')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('content.privacy_policy'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/privacy-policy')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.privacy-policy')}}"
+                                           title="{{translate('Privacy Policy')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Privacy Policy')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('content.faqs'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/faq')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.faq')}}"
+                                           title="{{translate('FAQs')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('FAQs')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('content.blogs'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/blog*')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.blog.index')}}"
+                                           title="{{translate('Blogs')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Blogs')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/cancellation-policy')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.cancellation-policy')}}"
+                                           title="{{translate('Cancellation Policy')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Cancellation Policy')}}</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/refund-policy')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.refund-policy')}}"
+                                           title="{{translate('Refund Policy')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Refund Policy')}}</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item {{Request::is('admin/business-settings/page-setup/return-policy')?'active':''}}">
+                                        <a class="nav-link"
+                                           href="{{route('admin.business-settings.page-setup.return-policy')}}"
+                                           title="{{translate('Return Policy')}}">
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Return Policy')}}</span>
+                                        </a>
+                                    </li>
+
                                     <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/social-media')?'active':''}}">
                                         <a class="nav-link "
                                            href="{{route('admin.business-settings.web-app.third-party.social-media')}}"
                                            title="{{translate('Social Media')}}"
                                         >
                                             <span class="tio-circle nav-indicator-icon"></span>
-                                            <span
-                                                class="text-truncate">{{translate('Social Media')}}</span>
+                                            <span class="text-truncate">{{translate('Social Media')}}</span>
                                         </a>
                                     </li>
                                 </ul>
                             </li>
+                            @endif
 
                             <li class="nav-item mt-0
                                 {{Request::is('admin/business-settings/web-app/system-setup*')?'active':''}}">

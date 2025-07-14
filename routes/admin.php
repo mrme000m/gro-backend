@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\WalletBonusController;
 use App\Http\Controllers\Admin\OfflinePaymentMethodController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
+use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\BusinessSettingsController;
 use App\Http\Controllers\Admin\FeatureController;
@@ -388,18 +389,18 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
             });
 
-            Route::group(['prefix' => 'page-setup', 'as' => 'page-setup.'], function () {
-                Route::get('terms-and-conditions', [BusinessSettingsController::class, 'termsAndConditions'])->name('terms-and-conditions');
-                Route::post('terms-and-conditions', [BusinessSettingsController::class, 'termsAndConditionsUpdate']);
+            Route::group(['prefix' => 'page-setup', 'as' => 'page-setup.', 'middleware'=>['feature:content.enabled']], function () {
+                Route::get('terms-and-conditions', [BusinessSettingsController::class, 'termsAndConditions'])->name('terms-and-conditions')->middleware('feature:content.terms_conditions');
+                Route::post('terms-and-conditions', [BusinessSettingsController::class, 'termsAndConditionsUpdate'])->middleware('feature:content.terms_conditions');
 
-                Route::get('privacy-policy', [BusinessSettingsController::class, 'privacyPolicy'])->name('privacy-policy');
-                Route::post('privacy-policy', [BusinessSettingsController::class, 'privacyPolicyUpdate']);
+                Route::get('privacy-policy', [BusinessSettingsController::class, 'privacyPolicy'])->name('privacy-policy')->middleware('feature:content.privacy_policy');
+                Route::post('privacy-policy', [BusinessSettingsController::class, 'privacyPolicyUpdate'])->middleware('feature:content.privacy_policy');
 
-                Route::get('about-us', [BusinessSettingsController::class, 'aboutUs'])->name('about-us');
-                Route::post('about-us', [BusinessSettingsController::class, 'aboutUsUpdate']);
+                Route::get('about-us', [BusinessSettingsController::class, 'aboutUs'])->name('about-us')->middleware('feature:content.pages');
+                Route::post('about-us', [BusinessSettingsController::class, 'aboutUsUpdate'])->middleware('feature:content.pages');
 
-                Route::get('faq', [BusinessSettingsController::class, 'faq'])->name('faq');
-                Route::post('faq', [BusinessSettingsController::class, 'faqUpdate']);
+                Route::get('faq', [BusinessSettingsController::class, 'faq'])->name('faq')->middleware('feature:content.faqs');
+                Route::post('faq', [BusinessSettingsController::class, 'faqUpdate'])->middleware('feature:content.faqs');
 
                 Route::get('cancellation-policy', [BusinessSettingsController::class, 'cancellationPolicy'])->name('cancellation-policy');
                 Route::post('cancellation-policy', [BusinessSettingsController::class, 'cancellationPolicyUpdate']);
@@ -413,6 +414,17 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                 Route::post('return-policy', [BusinessSettingsController::class, 'returnPolicyUpdate']);
                 Route::get('return-policy/status/{status}', [BusinessSettingsController::class, 'returnPolicyStatus'])->name('return-policy.status');
 
+            });
+
+            // Blog Management Routes
+            Route::group(['prefix' => 'blog', 'as' => 'blog.', 'middleware'=>['feature:content.blogs']], function () {
+                Route::get('/', [BlogController::class, 'index'])->name('index');
+                Route::get('create', [BlogController::class, 'create'])->name('create');
+                Route::post('store', [BlogController::class, 'store'])->name('store');
+                Route::get('edit/{id}', [BlogController::class, 'edit'])->name('edit');
+                Route::post('update/{id}', [BlogController::class, 'update'])->name('update');
+                Route::delete('delete/{id}', [BlogController::class, 'destroy'])->name('delete');
+                Route::post('status/{id}', [BlogController::class, 'status'])->name('status');
             });
 
             Route::get('currency-add', [BusinessSettingsController::class, 'currencyIndex'])->name('currency-add')->middleware('actch');
