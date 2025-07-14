@@ -2599,4 +2599,5 @@
   'Customer Management' => 'Customer Management',
   'POS System' => 'POS System',
   'Main' => 'Main',
+  'register_devices' => 'Register devices',
 );

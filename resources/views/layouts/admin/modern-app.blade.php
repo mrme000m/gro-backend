@@ -4,37 +4,116 @@
     <meta charset="utf-8">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@yield('title') - {{ config('app.name') }}</title>
+    <title>@yield('title') - Modern Dashboard</title>
 
     @php($icon = \App\Model\BusinessSetting::where(['key' => 'fav_icon'])->first()->value)
     <link rel="icon" type="image/x-icon" href="{{ asset('storage/app/public/restaurant/' . $icon ?? '') }}">
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/admin/css/bootstrap.min.css') }}">
 
-    <!-- Icons -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Core CSS -->
-    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/modern-dashboard.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/assets/admin/css/toastr.css') }}">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     @stack('css')
 
     <style>
-        /* Layout adjustments for modern sidebar */
+        /* Simple Modern Layout */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f8fafc;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Modern Sidebar */
+        .modern-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            z-index: 1000;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+
+        /* Sidebar Header */
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-brand {
+            color: white;
+            text-decoration: none;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar-nav {
+            padding: 1rem 0;
+        }
+
+        .nav-item {
+            margin: 0.25rem 1rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            border-radius: 0.5rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-icon {
+            margin-right: 0.75rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
         .main-content {
             margin-left: 280px;
-            transition: margin-left var(--transition-normal);
             min-height: 100vh;
-            background: var(--bg-secondary);
         }
+
+        /* Modern Header */
+        .modern-header {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* Content Area */
+        .content-wrapper {
+            padding: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .modern-sidebar {
+                transform: translateX(-100%);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
 
         .main-content.sidebar-collapsed {
             margin-left: 80px;
@@ -239,92 +318,64 @@
 </head>
 
 <body>
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
+    <!-- Simple Modern Sidebar -->
+    <div class="modern-sidebar">
+        <div class="sidebar-header">
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
+                <i class="fas fa-leaf"></i> GroFresh Admin
+            </a>
+        </div>
 
-    <!-- Modern Sidebar -->
-    @include('layouts.admin.partials.modern-sidebar')
+        <nav class="sidebar-nav">
+            <div class="nav-item">
+                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::is('admin') ? 'active' : '' }}">
+                    <i class="fas fa-tachometer-alt nav-icon"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-shopping-cart nav-icon"></i>
+                    Orders
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-box nav-icon"></i>
+                    Products
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-users nav-icon"></i>
+                    Customers
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog nav-icon"></i>
+                    Settings
+                </a>
+            </div>
+        </nav>
+    </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <!-- Modern Header -->
-        @include('layouts.admin.partials.modern-header')
+        <!-- Simple Header -->
+        <div class="modern-header">
+            <h1 class="mb-0">@yield('title', 'Dashboard')</h1>
+        </div>
 
-        <!-- Page Content -->
-        <main>
-            @hasSection('page-header')
-                <div class="page-header">
-                    <h1 class="page-title">@yield('page-title')</h1>
-                    @hasSection('page-subtitle')
-                        <p class="page-subtitle">@yield('page-subtitle')</p>
-                    @endif
-                </div>
-            @endif
+        <!-- Content -->
+        <div class="content-wrapper">
+            @yield('content')
+        </div>
+    </div></body>
 
-            <div class="content-wrapper">
-                @yield('content')
-            </div>
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script src="{{ asset('public/assets/admin/js/vendor.min.js') }}"></script>
-    <script src="{{ asset('public/assets/admin/js/theme.min.js') }}"></script>
-    <script src="{{ asset('public/assets/admin/js/sweet_alert.js') }}"></script>
-    <script src="{{ asset('public/assets/admin/js/toastr.js') }}"></script>
-    <script src="{{ asset('public/assets/admin/js/modern-dashboard.js') }}"></script>
-    <script src="{{ asset('public/assets/admin/js/modern-sidebar.js') }}"></script>
+    <!-- Bootstrap JS -->
+    <script src="{{ asset('assets/admin/js/vendor.min.js') }}"></script>
 
     @stack('scripts')
-
-    <!-- Toastr Messages -->
-    {!! Toastr::message() !!}
-
-    <script>
-        // Global JavaScript utilities
-        window.showLoading = function() {
-            document.getElementById('loadingOverlay').classList.add('show');
-        };
-
-        window.hideLoading = function() {
-            document.getElementById('loadingOverlay').classList.remove('show');
-        };
-
-        window.showNotification = function(message, type = 'info') {
-            if (window.modernDashboard) {
-                window.modernDashboard.showNotification(message, type);
-            }
-        };
-
-        // CSRF token setup for AJAX requests
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        // Global error handler
-        window.addEventListener('error', function(e) {
-            console.error('Global error:', e.error);
-            hideLoading();
-        });
-
-        // Handle AJAX errors globally
-        $(document).ajaxError(function(event, xhr, settings, thrownError) {
-            hideLoading();
-            if (xhr.status === 419) {
-                showNotification('Session expired. Please refresh the page.', 'warning');
-            } else if (xhr.status >= 500) {
-                showNotification('Server error occurred. Please try again.', 'error');
-            }
-        });
-
-        // Auto-hide loading on page load
-        $(document).ready(function() {
-            hideLoading();
-        });
-    </script>
 </body>
 </html>
