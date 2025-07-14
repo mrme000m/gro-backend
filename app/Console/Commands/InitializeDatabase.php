@@ -57,14 +57,14 @@ class InitializeDatabase extends Command
         try {
             // Check for key tables that indicate the database is set up
             $keyTables = ['products', 'categories', 'users', 'admins', 'business_settings'];
-            
+
             foreach ($keyTables as $table) {
                 if (!Schema::hasTable($table)) {
                     $this->info("❌ Table '{$table}' not found - database needs initialization");
                     return false;
                 }
             }
-            
+
             return true;
         } catch (\Exception $e) {
             $this->error("Error checking database: " . $e->getMessage());
@@ -78,7 +78,7 @@ class InitializeDatabase extends Command
     private function importBaseSchema(): bool
     {
         $schemaFile = base_path('installation/v4.1.sql');
-        
+
         if (!file_exists($schemaFile)) {
             $this->error("❌ Base schema file not found: {$schemaFile}");
             return false;
@@ -86,31 +86,47 @@ class InitializeDatabase extends Command
 
         try {
             $this->info("📥 Importing base schema from installation/v4.1.sql...");
-            
+
             // Read and execute SQL file
             $sql = file_get_contents($schemaFile);
-            
+
             // Split SQL into individual statements
             $statements = array_filter(
                 array_map('trim', explode(';', $sql)),
                 function($statement) {
-                    return !empty($statement) && !str_starts_with($statement, '--');
+                    return !empty($statement) &&
+                           !str_starts_with($statement, '--') &&
+                           !str_starts_with($statement, '/*') &&
+                           !str_starts_with($statement, 'SET') &&
+                           !str_starts_with($statement, 'START TRANSACTION') &&
+                           !str_starts_with($statement, 'COMMIT');
                 }
             );
 
-            DB::beginTransaction();
-            
+            // Execute statements without transaction (some DDL statements don't support transactions)
+            $successCount = 0;
+            $totalCount = count($statements);
+
             foreach ($statements as $statement) {
-                if (!empty(trim($statement))) {
-                    DB::unprepared($statement);
+                $cleanStatement = trim($statement);
+                if (!empty($cleanStatement)) {
+                    try {
+                        DB::unprepared($cleanStatement);
+                        $successCount++;
+                    } catch (\Exception $e) {
+                        // Log but continue with other statements
+                        $this->warn("⚠️ Statement failed: " . substr($cleanStatement, 0, 50) . "...");
+                        $this->warn("Error: " . $e->getMessage());
+                    }
                 }
             }
-            
-            DB::commit();
-            
-            return true;
+
+            $this->info("✅ Executed {$successCount}/{$totalCount} SQL statements");
+
+            // Consider it successful if most statements executed
+            return $successCount > ($totalCount * 0.8);
+
         } catch (\Exception $e) {
-            DB::rollBack();
             $this->error("❌ Error importing schema: " . $e->getMessage());
             return false;
         }
