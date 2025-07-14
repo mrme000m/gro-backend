@@ -2605,4 +2605,6 @@
   'No images uploaded' => 'No images uploaded',
   'Images uploaded' => 'Images uploaded',
   'recent_searches' => 'Recent searches',
+  'Save Configuration' => 'Save Configuration',
+  'product_tag' => 'Product tag',
 );

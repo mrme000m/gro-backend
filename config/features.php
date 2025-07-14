@@ -1,13 +1,13 @@
 <?php
 
 return array (
-  'core' => 
+  'core' =>
   array (
     'dashboard' => true,
     'authentication' => true,
     'settings' => true,
   ),
-  'orders' => 
+  'orders' =>
   array (
     'enabled' => true,
     'view_orders' => true,
@@ -17,7 +17,7 @@ return array (
     'refunds' => true,
     'order_notifications' => true,
   ),
-  'products' => 
+  'products' =>
   array (
     'enabled' => true,
     'add_products' => true,
@@ -28,7 +28,7 @@ return array (
     'bulk_import' => true,
     'product_seo' => true,
   ),
-  'customers' => 
+  'customers' =>
   array (
     'enabled' => true,
     'view_customers' => true,
@@ -37,7 +37,7 @@ return array (
     'customer_support' => true,
     'loyalty_program' => true,
   ),
-  'marketing' => 
+  'marketing' =>
   array (
     'enabled' => true,
     'coupons' => false,
@@ -48,7 +48,7 @@ return array (
     'social_media' => false,
     'referral_program' => false,
   ),
-  'analytics' => 
+  'analytics' =>
   array (
     'enabled' => true,
     'sales_reports' => true,
@@ -57,7 +57,7 @@ return array (
     'financial_reports' => true,
     'export_data' => true,
   ),
-  'inventory' => 
+  'inventory' =>
   array (
     'enabled' => false,
     'stock_management' => false,
@@ -65,7 +65,7 @@ return array (
     'supplier_management' => false,
     'purchase_orders' => false,
   ),
-  'delivery' => 
+  'delivery' =>
   array (
     'enabled' => false,
     'delivery_zones' => false,
@@ -74,7 +74,7 @@ return array (
     'delivery_partners' => false,
     'route_optimization' => false,
   ),
-  'payments' => 
+  'payments' =>
   array (
     'enabled' => true,
     'payment_methods' => true,
@@ -82,7 +82,7 @@ return array (
     'transaction_logs' => true,
     'refund_management' => true,
   ),
-  'content' => 
+  'content' =>
   array (
     'enabled' => true,
     'pages' => true,
@@ -91,7 +91,7 @@ return array (
     'terms_conditions' => true,
     'privacy_policy' => true,
   ),
-  'system' => 
+  'system' =>
   array (
     'enabled' => true,
     'user_management' => true,
@@ -101,18 +101,18 @@ return array (
     'maintenance_mode' => true,
     'api_management' => true,
   ),
-  'advanced' => 
+  'advanced' =>
   array (
     'enabled' => true,
     'multi_vendor' => false,
-    'multi_language' => false,
-    'multi_currency' => false,
-    'advanced_seo' => true,
-    'custom_fields' => true,
-    'webhooks' => true,
-    'api_access' => true,
+    'multi_language' => true,
+    'multi_currency' => true,
+    'advanced_seo' => false,
+    'custom_fields' => false,
+    'webhooks' => false,
+    'api_access' => false,
   ),
-  'integrations' => 
+  'integrations' =>
   array (
     'enabled' => true,
     'google_analytics' => true,
@@ -122,7 +122,7 @@ return array (
     'accounting_software' => false,
     'crm_integration' => false,
   ),
-  'mobile_app' => 
+  'mobile_app' =>
   array (
     'enabled' => true,
     'push_notifications' => true,
