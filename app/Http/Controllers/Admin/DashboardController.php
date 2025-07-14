@@ -20,6 +20,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -62,50 +63,97 @@ class DashboardController extends Controller
      */
     public function dashboard(): View|Factory|Application
     {
-        $topSell = $this->orderDetail->with(['product'])
-            ->whereHas('order', function ($query){
-                $query->where('order_status', 'delivered');
-            })
-            ->select('product_id', DB::raw('SUM(quantity) as count'))
-            ->groupBy('product_id')
-            ->orderBy("count", 'desc')
+        // Optimized top selling products query with proper joins
+        $topSell = $this->orderDetail
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->where('orders.order_status', 'delivered')
+            ->select(
+                'order_details.product_id',
+                'products.name as product_name',
+                'products.image as product_image',
+                DB::raw('SUM(order_details.quantity) as total_quantity')
+            )
+            ->groupBy('order_details.product_id', 'products.name', 'products.image')
+            ->orderBy('total_quantity', 'desc')
             ->take(6)
             ->get();
 
-        $mostRatedProducts = $this->review->with(['product'])
-            ->select(['product_id',
-                DB::raw('AVG(rating) as ratings_average'),
-                DB::raw('COUNT(rating) as total'),
+        // Optimized most rated products query
+        $mostRatedProducts = $this->review
+            ->join('products', 'reviews.product_id', '=', 'products.id')
+            ->where('reviews.is_active', 1)
+            ->select([
+                'reviews.product_id',
+                'products.name as product_name',
+                'products.image as product_image',
+                DB::raw('AVG(reviews.rating) as ratings_average'),
+                DB::raw('COUNT(reviews.rating) as total_reviews'),
             ])
-            ->groupBy('product_id')
-            ->orderBy("total", 'desc')
-            ->orderBy("ratings_average", 'desc')
+            ->groupBy('reviews.product_id', 'products.name', 'products.image')
+            ->orderBy('total_reviews', 'desc')
+            ->orderBy('ratings_average', 'desc')
             ->take(6)
             ->get();
 
-        $topCustomer = $this->order->with(['customer'])
-            ->select('user_id', DB::raw('COUNT(user_id) as count'))
-            ->groupBy('user_id')
-            ->orderBy("count", 'desc')
+        // Optimized top customers query
+        $topCustomer = $this->order
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->select(
+                'orders.user_id',
+                'users.f_name',
+                'users.l_name',
+                'users.email',
+                'users.image',
+                DB::raw('COUNT(orders.id) as total_orders'),
+                DB::raw('SUM(orders.order_amount) as total_spent')
+            )
+            ->whereNotNull('orders.user_id')
+            ->groupBy('orders.user_id', 'users.f_name', 'users.l_name', 'users.email', 'users.image')
+            ->orderBy('total_orders', 'desc')
             ->take(6)
             ->get();
 
         $data = self::orderStatsData();
 
-        $data['customer'] = $this->user->count();
-        $data['product'] = $this->product->count();
-        $data['order'] = $this->order->count();
-        $data['category'] = $this->category->where('parent_id', 0)->count();
-        $data['branch'] = $this->branch->count();
+        // Cache these counts for better performance
+        $data['customer'] = Cache::remember('dashboard_customer_count', 300, function() {
+            return $this->user->count();
+        });
+        $data['product'] = Cache::remember('dashboard_product_count', 300, function() {
+            return $this->product->count();
+        });
+        $data['order'] = Cache::remember('dashboard_order_count', 300, function() {
+            return $this->order->count();
+        });
+        $data['category'] = Cache::remember('dashboard_category_count', 300, function() {
+            return $this->category->where('parent_id', 0)->count();
+        });
+        $data['branch'] = Cache::remember('dashboard_branch_count', 300, function() {
+            return $this->branch->count();
+        });
 
-        $data['pending_count'] = $this->order->where(['order_status' => 'pending'])->count();
-        $data['ongoing_count'] = $this->order->whereIn('order_status', ['confirmed', 'processing', 'out_for_delivery'])->count();
-        $data['delivered_count'] = $this->order->where(['order_status' => 'delivered'])->count();
-        $data['canceled_count'] = $this->order->where(['order_status' => 'canceled'])->count();
-        $data['returned_count'] = $this->order->where(['order_status' => 'returned'])->count();
-        $data['failed_count'] = $this->order->where(['order_status' => 'failed'])->count();
+        // Optimized order status counts with single query
+        $orderStatusCounts = $this->order
+            ->select('order_status', DB::raw('COUNT(*) as count'))
+            ->groupBy('order_status')
+            ->pluck('count', 'order_status')
+            ->toArray();
 
-        $data['recent_orders'] = $this->order->notPos()->latest()->take(5)->get(['id', 'created_at', 'order_status']);
+        $data['pending_count'] = $orderStatusCounts['pending'] ?? 0;
+        $data['ongoing_count'] = ($orderStatusCounts['confirmed'] ?? 0) +
+                                 ($orderStatusCounts['processing'] ?? 0) +
+                                 ($orderStatusCounts['out_for_delivery'] ?? 0);
+        $data['delivered_count'] = $orderStatusCounts['delivered'] ?? 0;
+        $data['canceled_count'] = $orderStatusCounts['canceled'] ?? 0;
+        $data['returned_count'] = $orderStatusCounts['returned'] ?? 0;
+        $data['failed_count'] = $orderStatusCounts['failed'] ?? 0;
+
+        $data['recent_orders'] = $this->order->notPos()
+            ->select(['id', 'created_at', 'order_status', 'order_amount'])
+            ->latest()
+            ->take(5)
+            ->get();
 
 
         $data['top_sell'] = $topSell;

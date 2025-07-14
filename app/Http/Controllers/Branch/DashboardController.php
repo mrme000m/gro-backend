@@ -14,6 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -28,32 +29,61 @@ class DashboardController extends Controller
      */
     public function dashboard(): View|Factory|Application
     {
-        $topSell = $this->orderDetail->whereHas('order', function ($q){
-            $q->where('branch_id', auth('branch')->id());
-        })->with(['product'])
-            ->select('product_id', DB::raw('SUM(quantity) as count'))
-            ->groupBy('product_id')
-            ->orderBy("count", 'desc')
+        $branchId = auth('branch')->id();
+
+        // Optimized top selling products query for branch
+        $topSell = $this->orderDetail
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->join('products', 'order_details.product_id', '=', 'products.id')
+            ->where('orders.branch_id', $branchId)
+            ->where('orders.order_status', 'delivered')
+            ->select(
+                'order_details.product_id',
+                'products.name as product_name',
+                'products.image as product_image',
+                DB::raw('SUM(order_details.quantity) as total_quantity')
+            )
+            ->groupBy('order_details.product_id', 'products.name', 'products.image')
+            ->orderBy('total_quantity', 'desc')
             ->take(5)
             ->get();
 
-
-        $mostRatedProducts = $this->review->with(['product'])
-            ->select(['product_id',
-                DB::raw('AVG(rating) as ratings_average'),
-                DB::raw('COUNT(rating) as total'),
+        // Optimized most rated products query for branch products
+        $mostRatedProducts = $this->review
+            ->join('products', 'reviews.product_id', '=', 'products.id')
+            ->join('order_details', 'reviews.product_id', '=', 'order_details.product_id')
+            ->join('orders', 'order_details.order_id', '=', 'orders.id')
+            ->where('orders.branch_id', $branchId)
+            ->where('reviews.is_active', 1)
+            ->select([
+                'reviews.product_id',
+                'products.name as product_name',
+                'products.image as product_image',
+                DB::raw('AVG(reviews.rating) as ratings_average'),
+                DB::raw('COUNT(DISTINCT reviews.id) as total_reviews'),
             ])
-            ->groupBy('product_id')
-            ->orderBy("total", 'desc')
-            ->orderBy("ratings_average", 'desc')
+            ->groupBy('reviews.product_id', 'products.name', 'products.image')
+            ->orderBy('total_reviews', 'desc')
+            ->orderBy('ratings_average', 'desc')
             ->take(5)
             ->get();
 
-        $topCustomer = $this->order->with(['customer'])
-            ->where('branch_id', auth('branch')->id())
-            ->select('user_id', DB::raw('COUNT(user_id) as count'))
-            ->groupBy('user_id')
-            ->orderBy("count", 'desc')
+        // Optimized top customers query for branch
+        $topCustomer = $this->order
+            ->join('users', 'orders.user_id', '=', 'users.id')
+            ->where('orders.branch_id', $branchId)
+            ->select(
+                'orders.user_id',
+                'users.f_name',
+                'users.l_name',
+                'users.email',
+                'users.image',
+                DB::raw('COUNT(orders.id) as total_orders'),
+                DB::raw('SUM(orders.order_amount) as total_spent')
+            )
+            ->whereNotNull('orders.user_id')
+            ->groupBy('orders.user_id', 'users.f_name', 'users.l_name', 'users.email', 'users.image')
+            ->orderBy('total_orders', 'desc')
             ->take(5)
             ->get();
 
@@ -63,12 +93,22 @@ class DashboardController extends Controller
         $data['most_rated_products'] = $mostRatedProducts;
         $data['top_customer'] = $topCustomer;
 
-        $data['pending_count'] = $this->order->where(['order_status' => 'pending', 'branch_id' => auth('branch')->id()])->count();
-        $data['ongoing_count'] = $this->order->whereIn('order_status', ['confirmed', 'processing', 'out_for_delivery'])->where(['branch_id' => auth('branch')->id()])->count();
-        $data['delivered_count'] = $this->order->where(['order_status' => 'delivered', 'branch_id' => auth('branch')->id()])->count();
-        $data['canceled_count'] = $this->order->where(['order_status' => 'canceled', 'branch_id' => auth('branch')->id()])->count();
-        $data['returned_count'] = $this->order->where(['order_status' => 'returned', 'branch_id' => auth('branch')->id()])->count();
-        $data['failed_count'] = $this->order->where(['order_status' => 'failed', 'branch_id' => auth('branch')->id()])->count();
+        // Optimized order status counts with single query for branch
+        $orderStatusCounts = $this->order
+            ->where('branch_id', $branchId)
+            ->select('order_status', DB::raw('COUNT(*) as count'))
+            ->groupBy('order_status')
+            ->pluck('count', 'order_status')
+            ->toArray();
+
+        $data['pending_count'] = $orderStatusCounts['pending'] ?? 0;
+        $data['ongoing_count'] = ($orderStatusCounts['confirmed'] ?? 0) +
+                                 ($orderStatusCounts['processing'] ?? 0) +
+                                 ($orderStatusCounts['out_for_delivery'] ?? 0);
+        $data['delivered_count'] = $orderStatusCounts['delivered'] ?? 0;
+        $data['canceled_count'] = $orderStatusCounts['canceled'] ?? 0;
+        $data['returned_count'] = $orderStatusCounts['returned'] ?? 0;
+        $data['failed_count'] = $orderStatusCounts['failed'] ?? 0;
 
         $data['recent_orders'] = $this->order->notPos()->where('branch_id', auth('branch')->id())->latest()->take(5)->get(['id', 'created_at', 'order_status']);
 

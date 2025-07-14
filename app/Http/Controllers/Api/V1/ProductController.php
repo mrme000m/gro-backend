@@ -21,6 +21,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -369,14 +371,38 @@ class ProductController extends Controller
     public function getDailyNeedProducts(Request $request): JsonResponse
     {
         try {
-            $paginator = $this->product->active()->withCount(['wishlist'])->with(['rating'])->where(['daily_needs' => 1])->orderBy('id', 'desc')->paginate($request['limit'], ['*'], 'page', $request['offset']);
+            // Optimized query with proper eager loading and selective fields
+            $paginator = $this->product
+                ->active()
+                ->where('daily_needs', 1)
+                ->with([
+                    'rating' => function($query) {
+                        $query->select('product_id', DB::raw('AVG(rating) as average'));
+                    },
+                    'active_reviews' => function($query) {
+                        $query->select('product_id', 'rating', 'comment', 'customer_id', 'created_at')
+                              ->latest()
+                              ->take(3);
+                    }
+                ])
+                ->withCount(['wishlist as wishlist_count'])
+                ->select([
+                    'id', 'name', 'description', 'image', 'price', 'discount',
+                    'discount_type', 'tax', 'tax_type', 'unit', 'total_stock',
+                    'capacity', 'status', 'created_at', 'updated_at'
+                ])
+                ->orderBy('id', 'desc')
+                ->paginate($request['limit'], ['*'], 'page', $request['offset']);
+
             $products = [
                 'total_size' => $paginator->total(),
                 'limit' => $request['limit'],
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
             ];
-            $paginator = Helpers::product_data_formatting($products['products'], true);
+
+            // Format products data
+            $products['products'] = Helpers::product_data_formatting($products['products'], true);
 
             return response()->json($products, 200);
         } catch (\Exception $e) {
@@ -474,12 +500,32 @@ class ProductController extends Controller
     public function featuredProducts(Request $request): JsonResponse
     {
         try {
-            $paginator = $this->product->active()
-                ->withCount(['wishlist'])
-                ->with(['rating'])
-                ->where(['is_featured' => 1])
-                ->orderBy('id', 'desc')
-                ->paginate($request['limit'], ['*'], 'page', $request['offset']);
+            // Optimized featured products query with caching
+            $cacheKey = "featured_products_" . $request['limit'] . "_" . $request['offset'];
+
+            $paginator = Cache::remember($cacheKey, 300, function() use ($request) {
+                return $this->product
+                    ->active()
+                    ->where('is_featured', 1)
+                    ->with([
+                        'rating' => function($query) {
+                            $query->select('product_id', DB::raw('AVG(rating) as average'));
+                        },
+                        'active_reviews' => function($query) {
+                            $query->select('product_id', 'rating', 'comment', 'customer_id', 'created_at')
+                                  ->latest()
+                                  ->take(3);
+                        }
+                    ])
+                    ->withCount(['wishlist as wishlist_count'])
+                    ->select([
+                        'id', 'name', 'description', 'image', 'price', 'discount',
+                        'discount_type', 'tax', 'tax_type', 'unit', 'total_stock',
+                        'capacity', 'status', 'created_at', 'updated_at'
+                    ])
+                    ->orderBy('id', 'desc')
+                    ->paginate($request['limit'], ['*'], 'page', $request['offset']);
+            });
 
             $products = [
                 'total_size' => $paginator->total(),
@@ -487,7 +533,9 @@ class ProductController extends Controller
                 'offset' => $request['offset'],
                 'products' => $paginator->items()
             ];
-            $paginator = Helpers::product_data_formatting($products['products'], true);
+
+            // Format products data
+            $products['products'] = Helpers::product_data_formatting($products['products'], true);
 
             return response()->json($products, 200);
         } catch (\Exception $e) {
