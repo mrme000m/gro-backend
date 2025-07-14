@@ -80,12 +80,12 @@
                 </div>
 
                 <div class="user-menu-items">
-                    <a href="{{ route('admin.settings') }}" class="user-menu-item">
+                    <a href="{{ route('admin.business-settings.store.ecom-setup') }}" class="user-menu-item">
                         <i class="fas fa-user-cog"></i>
                         <span>{{ translate('Profile Settings') }}</span>
                     </a>
 
-                    <a href="{{ route('admin.business-settings.restaurant-index') }}" class="user-menu-item">
+                    <a href="{{ route('admin.business-settings.store.ecom-setup') }}" class="user-menu-item">
                         <i class="fas fa-cog"></i>
                         <span>{{ translate('System Settings') }}</span>
                     </a>

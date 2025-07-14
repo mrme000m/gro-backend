@@ -2591,4 +2591,5 @@
   'Attributes' => 'Attributes',
   'Main Categories' => 'Main Categories',
   'Earning Reports' => 'Earning Reports',
+  'System' => 'System',
 );

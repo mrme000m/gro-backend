@@ -283,7 +283,7 @@
             <div class="nav-section-title">{{ translate('System') }}</div>
 
             <div class="nav-item">
-                <a href="{{ route('admin.business-settings.restaurant-index') }}"
+                <a href="{{ route('admin.business-settings.store.ecom-setup') }}"
                    class="nav-link {{ Request::is('admin/business-settings*') ? 'active' : '' }}"
                    data-tooltip="Settings">
                     <div class="nav-icon">
