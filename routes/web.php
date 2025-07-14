@@ -26,8 +26,26 @@ use App\Http\Controllers\PageController;
  */
 
 
+// Health check route for Railway
+Route::get('/health', function () {
+    return response()->json([
+        'status' => 'ok',
+        'app' => 'GroFresh Restaurant Bazar',
+        'timestamp' => now()->toISOString()
+    ]);
+});
+
 Route::get('/', function () {
-    return redirect(\route('admin.dashboard'));
+    // For Railway health check, return a simple response if no database
+    try {
+        return redirect(\route('admin.dashboard'));
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'ok',
+            'message' => 'GroFresh Restaurant Bazar API is running',
+            'note' => 'Admin dashboard requires database setup'
+        ]);
+    }
 });
 
 Route::get('authentication-failed', function () {

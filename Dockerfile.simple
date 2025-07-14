@@ -41,7 +41,7 @@ RUN chown -R www-data:www-data /var/www/html \
 COPY docker/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
 
 # Create Railway-optimized entrypoint script
-COPY docker/railway-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
+COPY docker/railway-entrypoint-simple.sh /usr/local/bin/railway-entrypoint.sh
 RUN chmod +x /usr/local/bin/railway-entrypoint.sh
 
 # Expose port (Railway will assign the PORT environment variable)
