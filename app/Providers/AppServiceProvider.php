@@ -9,6 +9,8 @@ use App\Observers\BusinessSettingObserver;
 use App\Observers\CategoryObserver;
 use App\Observers\ProductObserver;
 use App\Services\CacheService;
+use App\Services\ApiResponseService;
+use App\Services\PaginationService;
 use App\Traits\SystemAddonTrait;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
@@ -27,6 +29,16 @@ class AppServiceProvider extends ServiceProvider
         // Register CacheService as singleton
         $this->app->singleton(CacheService::class, function ($app) {
             return new CacheService();
+        });
+
+        // Register ApiResponseService as singleton
+        $this->app->singleton(ApiResponseService::class, function ($app) {
+            return new ApiResponseService();
+        });
+
+        // Register PaginationService as singleton
+        $this->app->singleton(PaginationService::class, function ($app) {
+            return new PaginationService();
         });
     }
 

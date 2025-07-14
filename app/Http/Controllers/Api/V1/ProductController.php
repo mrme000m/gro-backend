@@ -24,6 +24,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use App\Services\CacheService;
+use App\Services\ApiResponseService;
+use App\Services\PaginationService;
 
 class ProductController extends Controller
 {
@@ -40,7 +42,9 @@ class ProductController extends Controller
         private SearchedProduct $searched_product,
         private Translation $translation,
         private VisitedProduct $visited_product,
-        private CacheService $cacheService
+        private CacheService $cacheService,
+        private ApiResponseService $apiResponseService,
+        private PaginationService $paginationService
     ){}
 
     /**
@@ -49,31 +53,59 @@ class ProductController extends Controller
      */
     public function getAllProducts(Request $request): JsonResponse
     {
+        $startTime = microtime(true);
+
         $validator = Validator::make($request->all(), [
             'sort_by' => 'nullable|in:latest,popular,recommended,trending',
+            'limit' => 'nullable|integer|min:1|max:100',
+            'offset' => 'nullable|integer|min:1',
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['errors' => Helpers::error_processor($validator)], 403);
+            return $this->apiResponseService->error(
+                'Validation failed',
+                422,
+                Helpers::error_processor($validator)
+            );
         }
 
-        $sortBy = $request['sort_by'];
-
-        if ($sortBy == 'latest'){
-            $products = ProductLogic::getLatestProducts($request['limit'], $request['offset']);
-        }elseif ($sortBy == 'popular'){
-            $products = ProductLogic::getPopularProducts($request['limit'], $request['offset']);
-        }elseif ($sortBy == 'recommended'){
+        try {
             $user = $request->user();
-            $products = ProductLogic::getRecommendedProducts($user, $request['limit'], $request['offset']);
-        }elseif ($sortBy == 'trending'){
-            $products = ProductLogic::getTrendingProducts($request['limit'], $request['offset']);
-        }else{
-            $products = ProductLogic::getLatestProducts($request['limit'], $request['offset']);
-        }
+            $sortBy = $request->get('sort_by', 'latest');
 
-        $products['products'] = Helpers::product_data_formatting($products['products'], true);
-        return response()->json($products, 200);
+            // Create cache key based on parameters
+            $cacheKey = "products:all:{$sortBy}:" . md5(serialize($request->only(['limit', 'offset', 'category_id'])));
+
+            // Try to get from cache first
+            $products = Cache::remember($cacheKey, 300, function () use ($request, $sortBy, $user) {
+                switch ($sortBy) {
+                    case 'popular':
+                        return ProductLogic::getPopularProducts($request['limit'], $request['offset']);
+                    case 'recommended':
+                        return ProductLogic::getRecommendedProducts($user, $request['limit'], $request['offset']);
+                    case 'trending':
+                        return ProductLogic::getTrendingProducts($request['limit'], $request['offset']);
+                    default:
+                        return ProductLogic::getLatestProducts($request['limit'], $request['offset']);
+                }
+            });
+
+            // Format products data
+            $products['products'] = Helpers::product_data_formatting($products['products'], true);
+
+            // Transform to new pagination format
+            $response = $this->apiResponseService->transformLegacyPagination($products, 'Products retrieved successfully');
+
+            $executionTime = microtime(true) - $startTime;
+            return $this->apiResponseService->withPerformanceHeaders($response, $executionTime);
+
+        } catch (\Exception $e) {
+            return $this->apiResponseService->error(
+                'Products not found!',
+                404,
+                [['code' => 'product-001', 'message' => 'Products not found!']]
+            );
+        }
     }
 
     /**
@@ -231,27 +263,50 @@ class ProductController extends Controller
      */
     public function getProduct(Request $request, $id): JsonResponse
     {
+        $startTime = microtime(true);
+
         try {
-            $product = ProductLogic::getProduct($id);
-            if (!isset($product)) {
-                return response()->json(['errors' => ['code' => 'product-001', 'message' => 'Product not found!']], 404);
+            // Use cache service for product details
+            $product = $this->cacheService->getProductById((int)$id);
+
+            if (!$product) {
+                return $this->apiResponseService->error(
+                    'Product not found!',
+                    404,
+                    [['code' => 'product-001', 'message' => 'Product not found!']]
+                );
             }
 
-            $product = Helpers::product_data_formatting($product, false);
+            // Format product data
+            $formattedProduct = Helpers::product_data_formatting($product, false);
 
-            $product->increment('view_count');
+            // Increment view count asynchronously (don't block response)
+            dispatch(function () use ($product) {
+                $product->increment('view_count');
+            })->afterResponse();
 
-            if($request->has('attribute') && $request->attribute == 'product' && !is_null(auth('api')->user())) {
-                $visitedProduct = $this->visited_product;
-                $visitedProduct->user_id = auth('api')->user()->id ?? null;
-                $visitedProduct->product_id = $product->id;
-                $visitedProduct->save();
+            // Track visited product for authenticated users
+            if ($request->has('attribute') && $request->attribute == 'product' && auth('api')->user()) {
+                dispatch(function () use ($request, $product) {
+                    $this->visited_product->create([
+                        'user_id' => auth('api')->user()->id,
+                        'product_id' => $product->id,
+                    ]);
+                })->afterResponse();
             }
 
-            return response()->json($product, 200);
+            $executionTime = microtime(true) - $startTime;
+            $response = $this->apiResponseService->success($formattedProduct, 'Product details retrieved successfully');
+
+            return $this->apiResponseService->withPerformanceHeaders($response, $executionTime)
+                                           ->withCacheHeaders($response, 600); // Cache for 10 minutes
 
         } catch (\Exception $e) {
-            return response()->json(['errors' => ['code' => 'product-001', 'message' => 'Product not found!']], 404);
+            return $this->apiResponseService->error(
+                'Product not found!',
+                404,
+                [['code' => 'product-001', 'message' => 'Product not found!']]
+            );
         }
     }
 

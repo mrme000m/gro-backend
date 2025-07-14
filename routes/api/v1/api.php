@@ -50,17 +50,31 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
         Route::get('/', [ConfigController::class, 'configuration']);
     });
 
-    Route::group(['prefix' => 'products'], function () {
-        Route::get('all', [ProductController::class, 'getAllProducts']);
-        Route::get('latest', [ProductController::class, 'getLatestProducts']);
-        Route::get('popular', [ProductController::class, 'getPopularProducts']);
-        Route::get('discounted', [ProductController::class, 'getDiscountedProducts']);
+    Route::group(['prefix' => 'products', 'middleware' => ['api.rate.limit:120,1', 'compress:1024']], function () {
+        // Cached product endpoints (10 minutes cache)
+        Route::middleware(['cache.api:600'])->group(function () {
+            Route::get('all', [ProductController::class, 'getAllProducts']);
+            Route::get('latest', [ProductController::class, 'getLatestProducts']);
+            Route::get('popular', [ProductController::class, 'getPopularProducts']);
+            Route::get('discounted', [ProductController::class, 'getDiscountedProducts']);
+            Route::get('featured', [ProductController::class, 'featuredProducts']);
+            Route::get('most-viewed', [ProductController::class, 'getMostViewedProducts']);
+            Route::get('trending', [ProductController::class, 'getTrendingProducts']);
+            Route::get('most-reviewed', [ProductController::class, 'getMostReviewedProducts']);
+            Route::get('daily-needs', [ProductController::class, 'getDailyNeedProducts']);
+        });
+
+        // Product details with longer cache (30 minutes)
+        Route::middleware(['cache.api:1800'])->group(function () {
+            Route::get('details/{id}', [ProductController::class, 'getProduct']);
+            Route::get('related-products/{product_id}', [ProductController::class, 'getRelatedProducts']);
+            Route::get('reviews/{product_id}', [ProductController::class, 'getProductReviews']);
+            Route::get('rating/{product_id}', [ProductController::class, 'getProductRating']);
+        });
+
+        // User-specific endpoints (no cache)
         Route::get('search', [ProductController::class, 'getSearchedProducts']);
-        Route::get('details/{id}', [ProductController::class, 'getProduct']);
-        Route::get('related-products/{product_id}', [ProductController::class, 'getRelatedProducts']);
-        Route::get('reviews/{product_id}', [ProductController::class, 'getProductReviews']);
-        Route::get('rating/{product_id}', [ProductController::class, 'getProductRating']);
-        Route::get('daily-needs', [ProductController::class, 'getDailyNeedProducts']);
+        Route::get('recommended', [ProductController::class, 'getRecommendedProducts']);
         Route::post('reviews/submit', [ProductController::class, 'submitProductReview'])->middleware('auth:api');
 
         Route::group(['prefix' => 'favorite', 'middleware' => ['auth:api', 'customer_is_block']], function () {
@@ -68,12 +82,6 @@ Route::group(['namespace' => 'Api\V1', 'middleware'=>'localization'], function (
             Route::post('/', [ProductController::class, 'addFavoriteProducts']);
             Route::delete('/', [ProductController::class, 'removeFavoriteProducts']);
         });
-
-        Route::get('featured', [ProductController::class, 'featuredProducts']);
-        Route::get('most-viewed', [ProductController::class, 'getMostViewedProducts']);
-        Route::get('trending', [ProductController::class, 'getTrendingProducts']);
-        Route::get('recommended', [ProductController::class, 'getRecommendedProducts']);
-        Route::get('most-reviewed', [ProductController::class, 'getMostReviewedProducts']);
     });
 
     Route::group(['prefix' => 'banners'], function () {

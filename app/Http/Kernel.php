@@ -78,5 +78,7 @@ class Kernel extends HttpKernel
         'active_branch_check' => \App\Http\Middleware\ActiveBranchCheck::class,
         'guest_user' => \App\Http\Middleware\GuestUser::class,
         'cache.api' => \App\Http\Middleware\CacheApiResponse::class,
+        'compress' => \App\Http\Middleware\CompressResponse::class,
+        'api.rate.limit' => \App\Http\Middleware\ApiRateLimit::class,
     ];
 }
