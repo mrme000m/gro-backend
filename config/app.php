@@ -174,6 +174,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\FeatureServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         \App\Providers\ConfigServiceProvider::class,
         Kreait\Laravel\Firebase\ServiceProvider::class,

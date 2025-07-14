@@ -85,6 +85,35 @@
             text-align: center;
         }
 
+        /* Submenu Styles */
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(0,0,0,0.1);
+            margin: 0.25rem 0;
+            border-radius: 0.25rem;
+        }
+
+        .submenu.show {
+            max-height: 300px;
+        }
+
+        .submenu-link {
+            display: block;
+            padding: 0.5rem 1rem 0.5rem 3rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+
+        .submenu-link:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            text-decoration: none;
+        }
+
         /* Main Content */
         .main-content {
             margin-left: 280px;
@@ -327,36 +356,26 @@
         </div>
 
         <nav class="sidebar-nav">
-            <div class="nav-item">
-                <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::is('admin') ? 'active' : '' }}">
-                    <i class="fas fa-tachometer-alt nav-icon"></i>
-                    Dashboard
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-shopping-cart nav-icon"></i>
-                    Orders
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-box nav-icon"></i>
-                    Products
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-users nav-icon"></i>
-                    Customers
-                </a>
-            </div>
-            <div class="nav-item">
-                <a href="#" class="nav-link">
-                    <i class="fas fa-cog nav-icon"></i>
-                    Settings
-                </a>
-            </div>
+            @foreach(admin_navigation() as $item)
+                @if($item['enabled'])
+                    <div class="nav-item">
+                        <a href="{{ route($item['route']) }}" class="nav-link {{ $item['active'] ? 'active' : '' }}">
+                            <i class="{{ $item['icon'] }} nav-icon"></i>
+                            {{ $item['name'] }}
+                        </a>
+
+                        @if(isset($item['submenu']) && count($item['submenu']) > 0)
+                            <div class="submenu {{ $item['active'] ? 'show' : '' }}">
+                                @foreach($item['submenu'] as $subitem)
+                                    <a href="{{ isset($subitem['params']) ? route($subitem['route'], $subitem['params']) : route($subitem['route']) }}" class="submenu-link">
+                                        {{ $subitem['name'] }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endif
+            @endforeach
         </nav>
     </div>
 

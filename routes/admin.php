@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\BusinessSettingsController;
+use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\CouponController;
@@ -53,6 +54,15 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('settings', [SystemController::class, 'settings'])->name('settings');
             Route::post('settings', [SystemController::class, 'settingsUpdate']);
             Route::post('settings-password', [SystemController::class, 'settingsPasswordUpdate'])->name('settings-password');
+
+            // Feature Management Routes
+            Route::group(['prefix' => 'settings/features', 'as' => 'settings.features.'], function () {
+                Route::get('/', [FeatureController::class, 'index'])->name('index');
+                Route::post('/update', [FeatureController::class, 'update'])->name('update');
+                Route::get('/reset', [FeatureController::class, 'reset'])->name('reset');
+                Route::get('/status', [FeatureController::class, 'status'])->name('status');
+                Route::post('/toggle', [FeatureController::class, 'toggle'])->name('toggle');
+            });
             Route::get('/get-restaurant-data', [SystemController::class, 'restaurantData'])->name('get-restaurant-data');
             Route::get('dashboard/order-statistics', [DashboardController::class, 'getOrderStatistics'])->name('dashboard.order-statistics');
             Route::get('dashboard/earning-statistics', [DashboardController::class, 'getEarningStatistics'])->name('dashboard.earning-statistics');
