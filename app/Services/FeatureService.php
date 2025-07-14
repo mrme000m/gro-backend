@@ -509,11 +509,7 @@ class FeatureService
             $submenu[] = ['name' => 'Multi Language', 'route' => 'admin.business-settings.web-app.system-setup.language.index'];
         }
 
-        if ($this->isEnabled('advanced.multi_currency')) {
-            $submenu[] = ['name' => 'Multi Currency', 'route' => 'admin.business-settings.currency-add'];
-        }
-
-        // Note: Multi Vendor, Advanced SEO, Custom Fields, Webhooks, and API Access
+        // Note: Multi Vendor, Multi Currency, Advanced SEO, Custom Fields, Webhooks, and API Access
         // are disabled in config as they are not implemented yet
 
         return $submenu;

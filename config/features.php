@@ -106,7 +106,7 @@ return array (
     'enabled' => true,
     'multi_vendor' => false,
     'multi_language' => true,
-    'multi_currency' => true,
+    'multi_currency' => false,
     'advanced_seo' => false,
     'custom_fields' => false,
     'webhooks' => false,
