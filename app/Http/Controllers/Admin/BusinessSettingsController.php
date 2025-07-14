@@ -1747,6 +1747,197 @@ class BusinessSettingsController extends Controller
     /**
      * @return Application|Factory|View
      */
+    public function googleAnalyticsIndex(): Factory|View|Application
+    {
+        if (!$this->businessSettings->where(['key' => 'google_analytics'])->first()) {
+            $this->businessSettings->insert([
+                'key'   => 'google_analytics',
+                'value' => json_encode([
+                    'status'  => 0,
+                    'tracking_id' => '',
+                    'measurement_id' => '',
+                ]),
+            ]);
+        }
+
+        return view('admin-views.business-settings.google-analytics-index');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function googleAnalyticsUpdate(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'tracking_id' => 'nullable|string|max:255',
+            'measurement_id' => 'nullable|string|max:255',
+        ]);
+
+        DB::table('business_settings')->updateOrInsert(['key' => 'google_analytics'], [
+            'value' => json_encode([
+                'status' => $request->has('status') ? 1 : 0,
+                'tracking_id' => $request['tracking_id'] ?? '',
+                'measurement_id' => $request['measurement_id'] ?? '',
+            ]),
+        ]);
+
+        Toastr::success(translate('Google Analytics settings updated successfully'));
+        return back();
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function facebookPixelIndex(): Factory|View|Application
+    {
+        if (!$this->businessSettings->where(['key' => 'facebook_pixel'])->first()) {
+            $this->businessSettings->insert([
+                'key'   => 'facebook_pixel',
+                'value' => json_encode([
+                    'status'  => 0,
+                    'pixel_id' => '',
+                    'access_token' => '',
+                ]),
+            ]);
+        }
+
+        return view('admin-views.business-settings.facebook-pixel-index');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function facebookPixelUpdate(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'pixel_id' => 'nullable|string|max:255',
+            'access_token' => 'nullable|string|max:500',
+        ]);
+
+        DB::table('business_settings')->updateOrInsert(['key' => 'facebook_pixel'], [
+            'value' => json_encode([
+                'status' => $request->has('status') ? 1 : 0,
+                'pixel_id' => $request['pixel_id'] ?? '',
+                'access_token' => $request['access_token'] ?? '',
+            ]),
+        ]);
+
+        Toastr::success(translate('Facebook Pixel settings updated successfully'));
+        return back();
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function accountingSoftwareIndex(): Factory|View|Application
+    {
+        if (!$this->businessSettings->where(['key' => 'accounting_software'])->first()) {
+            $this->businessSettings->insert([
+                'key'   => 'accounting_software',
+                'value' => json_encode([
+                    'status'  => 0,
+                    'provider' => 'quickbooks', // quickbooks, xero, sage, etc.
+                    'client_id' => '',
+                    'client_secret' => '',
+                    'sandbox_mode' => 1,
+                    'sync_customers' => 0,
+                    'sync_products' => 0,
+                    'sync_orders' => 0,
+                ]),
+            ]);
+        }
+
+        return view('admin-views.business-settings.accounting-software-index');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function accountingSoftwareUpdate(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'provider' => 'required|in:quickbooks,xero,sage,freshbooks',
+            'client_id' => 'nullable|string|max:255',
+            'client_secret' => 'nullable|string|max:500',
+        ]);
+
+        DB::table('business_settings')->updateOrInsert(['key' => 'accounting_software'], [
+            'value' => json_encode([
+                'status' => $request->has('status') ? 1 : 0,
+                'provider' => $request['provider'],
+                'client_id' => $request['client_id'] ?? '',
+                'client_secret' => $request['client_secret'] ?? '',
+                'sandbox_mode' => $request->has('sandbox_mode') ? 1 : 0,
+                'sync_customers' => $request->has('sync_customers') ? 1 : 0,
+                'sync_products' => $request->has('sync_products') ? 1 : 0,
+                'sync_orders' => $request->has('sync_orders') ? 1 : 0,
+            ]),
+        ]);
+
+        Toastr::success(translate('Accounting software settings updated successfully'));
+        return back();
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
+    public function crmIntegrationIndex(): Factory|View|Application
+    {
+        if (!$this->businessSettings->where(['key' => 'crm_integration'])->first()) {
+            $this->businessSettings->insert([
+                'key'   => 'crm_integration',
+                'value' => json_encode([
+                    'status'  => 0,
+                    'provider' => 'salesforce', // salesforce, hubspot, pipedrive, etc.
+                    'api_key' => '',
+                    'api_secret' => '',
+                    'instance_url' => '',
+                    'sync_customers' => 0,
+                    'sync_leads' => 0,
+                    'sync_orders' => 0,
+                ]),
+            ]);
+        }
+
+        return view('admin-views.business-settings.crm-integration-index');
+    }
+
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function crmIntegrationUpdate(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'provider' => 'required|in:salesforce,hubspot,pipedrive,zoho',
+            'api_key' => 'nullable|string|max:255',
+            'api_secret' => 'nullable|string|max:500',
+            'instance_url' => 'nullable|url|max:255',
+        ]);
+
+        DB::table('business_settings')->updateOrInsert(['key' => 'crm_integration'], [
+            'value' => json_encode([
+                'status' => $request->has('status') ? 1 : 0,
+                'provider' => $request['provider'],
+                'api_key' => $request['api_key'] ?? '',
+                'api_secret' => $request['api_secret'] ?? '',
+                'instance_url' => $request['instance_url'] ?? '',
+                'sync_customers' => $request->has('sync_customers') ? 1 : 0,
+                'sync_leads' => $request->has('sync_leads') ? 1 : 0,
+                'sync_orders' => $request->has('sync_orders') ? 1 : 0,
+            ]),
+        ]);
+
+        Toastr::success(translate('CRM integration settings updated successfully'));
+        return back();
+    }
+
+    /**
+     * @return Application|Factory|View
+     */
     public function chatIndex(): Factory|View|Application
     {
         if (!$this->businessSettings->where(['key' => 'whatsapp'])->first()) {

@@ -360,6 +360,18 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
                     Route::post('update-fcm-messages', [BusinessSettingsController::class, 'updateFcmMessages'])->name('update-fcm-messages')->middleware('actch');
                     Route::get('chat-index', [BusinessSettingsController::class, 'chatIndex'])->name('chat-index');
                     Route::post('update-chat', [BusinessSettingsController::class, 'updateChat'])->name('update-chat');
+
+                    Route::get('google-analytics', [BusinessSettingsController::class, 'googleAnalyticsIndex'])->name('google-analytics');
+                    Route::post('google-analytics-update', [BusinessSettingsController::class, 'googleAnalyticsUpdate'])->name('google-analytics-update');
+
+                    Route::get('facebook-pixel', [BusinessSettingsController::class, 'facebookPixelIndex'])->name('facebook-pixel');
+                    Route::post('facebook-pixel-update', [BusinessSettingsController::class, 'facebookPixelUpdate'])->name('facebook-pixel-update');
+
+                    Route::get('accounting-software', [BusinessSettingsController::class, 'accountingSoftwareIndex'])->name('accounting-software');
+                    Route::post('accounting-software-update', [BusinessSettingsController::class, 'accountingSoftwareUpdate'])->name('accounting-software-update');
+
+                    Route::get('crm-integration', [BusinessSettingsController::class, 'crmIntegrationIndex'])->name('crm-integration');
+                    Route::post('crm-integration-update', [BusinessSettingsController::class, 'crmIntegrationUpdate'])->name('crm-integration-update');
                     Route::get('firebase-otp-verification', [BusinessSettingsController::class, 'firebaseOTPVerification'])->name('firebase-otp-verification');
                     Route::post('firebase-otp-verification-update', [BusinessSettingsController::class, 'firebaseOTPVerificationUpdate'])->name('firebase-otp-verification-update');
 

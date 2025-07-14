@@ -277,6 +277,97 @@
         </div>
         @endif
 
+        <!-- Integrations -->
+        @if(feature_enabled('integrations.enabled'))
+        <div class="nav-section">
+            <div class="nav-section-title">{{ translate('Integrations') }}</div>
+
+            @if(feature_enabled('integrations.google_analytics'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.third-party.google-analytics') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/third-party/google-analytics*') ? 'active' : '' }}"
+                   data-tooltip="Google Analytics">
+                    <div class="nav-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Google Analytics') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('integrations.facebook_pixel'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.third-party.facebook-pixel') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/third-party/facebook-pixel*') ? 'active' : '' }}"
+                   data-tooltip="Facebook Pixel">
+                    <div class="nav-icon">
+                        <i class="fab fa-facebook"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Facebook Pixel') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('integrations.whatsapp_integration'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.third-party.chat-index') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/third-party/chat-index*') ? 'active' : '' }}"
+                   data-tooltip="WhatsApp">
+                    <div class="nav-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('WhatsApp') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('integrations.sms_gateway'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.sms-module') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/sms-module*') ? 'active' : '' }}"
+                   data-tooltip="SMS Gateway">
+                    <div class="nav-icon">
+                        <i class="fas fa-sms"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('SMS Gateway') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('integrations.accounting_software'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.third-party.accounting-software') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/third-party/accounting-software*') ? 'active' : '' }}"
+                   data-tooltip="Accounting Software">
+                    <div class="nav-icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('Accounting') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+
+            @if(feature_enabled('integrations.crm_integration'))
+            <div class="nav-item">
+                <a href="{{ route('admin.business-settings.web-app.third-party.crm-integration') }}"
+                   class="nav-link {{ Request::is('admin/business-settings/web-app/third-party/crm-integration*') ? 'active' : '' }}"
+                   data-tooltip="CRM Integration">
+                    <div class="nav-icon">
+                        <i class="fas fa-users-cog"></i>
+                    </div>
+                    <span class="nav-text">{{ translate('CRM') }}</span>
+                    <div class="nav-indicator"></div>
+                </a>
+            </div>
+            @endif
+        </div>
+        @endif
+
         <!-- System Settings -->
         @if(feature_enabled('system.enabled'))
         <div class="nav-section">

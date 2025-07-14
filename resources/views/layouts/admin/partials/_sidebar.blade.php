@@ -779,6 +779,72 @@
                                             <span class="text-truncate">{{translate('Offline Payment')}}</span>
                                         </a>
                                     </li>
+
+                                    @if(feature_enabled('integrations.google_analytics'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/google-analytics*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.third-party.google-analytics')}}"
+                                           title="{{translate('Google Analytics')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Google Analytics')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('integrations.facebook_pixel'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/facebook-pixel*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.third-party.facebook-pixel')}}"
+                                           title="{{translate('Facebook Pixel')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Facebook Pixel')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('integrations.whatsapp_integration'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/chat-index*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.third-party.chat-index')}}"
+                                           title="{{translate('WhatsApp Integration')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('WhatsApp Integration')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('integrations.sms_gateway'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/sms-module*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.sms-module')}}"
+                                           title="{{translate('SMS Gateway')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('SMS Gateway')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('integrations.accounting_software'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/accounting-software*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.third-party.accounting-software')}}"
+                                           title="{{translate('Accounting Software')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('Accounting Software')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
+
+                                    @if(feature_enabled('integrations.crm_integration'))
+                                    <li class="nav-item {{Request::is('admin/business-settings/web-app/third-party/crm-integration*')?'active':''}}">
+                                        <a class="nav-link " href="{{route('admin.business-settings.web-app.third-party.crm-integration')}}"
+                                           title="{{translate('CRM Integration')}}"
+                                        >
+                                            <span class="tio-circle nav-indicator-icon"></span>
+                                            <span class="text-truncate">{{translate('CRM Integration')}}</span>
+                                        </a>
+                                    </li>
+                                    @endif
                                 </ul>
                             </li>
 
