@@ -2607,4 +2607,5 @@
   'recent_searches' => 'Recent searches',
   'Save Configuration' => 'Save Configuration',
   'product_tag' => 'Product tag',
+  'product_searched_by_...' => 'Product searched by ...',
 );

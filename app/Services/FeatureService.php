@@ -504,10 +504,7 @@ class FeatureService
     {
         $submenu = [];
 
-        if ($this->isEnabled('advanced.multi_vendor')) {
-            $submenu[] = ['name' => 'Multi Vendor', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
-        }
-
+        // Only show features that have actual implementations
         if ($this->isEnabled('advanced.multi_language')) {
             $submenu[] = ['name' => 'Multi Language', 'route' => 'admin.business-settings.web-app.system-setup.language.index'];
         }
@@ -516,21 +513,8 @@ class FeatureService
             $submenu[] = ['name' => 'Multi Currency', 'route' => 'admin.business-settings.currency-add'];
         }
 
-        if ($this->isEnabled('advanced.advanced_seo')) {
-            $submenu[] = ['name' => 'Advanced SEO', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
-        }
-
-        if ($this->isEnabled('advanced.custom_fields')) {
-            $submenu[] = ['name' => 'Custom Fields', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
-        }
-
-        if ($this->isEnabled('advanced.webhooks')) {
-            $submenu[] = ['name' => 'Webhooks', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
-        }
-
-        if ($this->isEnabled('advanced.api_access')) {
-            $submenu[] = ['name' => 'API Access', 'route' => 'admin.business-settings.web-app.system-setup.app_setting'];
-        }
+        // Note: Multi Vendor, Advanced SEO, Custom Fields, Webhooks, and API Access
+        // are disabled in config as they are not implemented yet
 
         return $submenu;
     }

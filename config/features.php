@@ -107,10 +107,10 @@ return array (
     'multi_vendor' => false,
     'multi_language' => true,
     'multi_currency' => true,
-    'advanced_seo' => true,
-    'custom_fields' => true,
-    'webhooks' => true,
-    'api_access' => true,
+    'advanced_seo' => false,
+    'custom_fields' => false,
+    'webhooks' => false,
+    'api_access' => false,
   ),
   'integrations' =>
   array (
