@@ -168,25 +168,55 @@ R2_ENDPOINT=https://your_account.r2.cloudflarestorage.com
 
 ### Common Issues
 
-1. **Database Connection Errors**
+1. **Docker Build Failures**
+
+   **Node.js/npm build errors:**
+   - If you encounter npm build failures, use `Dockerfile.simple` instead
+   - Update railway.json to use `"dockerfilePath": "Dockerfile.simple"`
+   - This skips frontend asset compilation for backend-only deployment
+
+   **Composer/PHP errors:**
+   - Ensure composer.lock is committed to repository
+   - Check PHP version compatibility (requires PHP 8.1+)
+   - Verify all required PHP extensions are available
+
+2. **Database Connection Errors**
    - Ensure DATABASE_URL is properly set
    - Check if database service is running
    - Verify database credentials
 
-2. **File Upload Issues**
+3. **File Upload Issues**
    - Configure cloud storage (S3/R2)
    - Set proper FILESYSTEM_DRIVER
    - Verify storage credentials
 
-3. **Queue Jobs Not Processing**
+4. **Queue Jobs Not Processing**
    - Check if worker service is running
    - Verify QUEUE_CONNECTION=redis
    - Check Redis connection
 
-4. **Scheduled Tasks Not Running**
+5. **Scheduled Tasks Not Running**
    - Verify cron service is running
    - Check Laravel scheduler configuration
    - Monitor cron service logs
+
+### Alternative Deployment Options
+
+If the main Dockerfile fails, try these alternatives:
+
+1. **Backend-only deployment** (recommended for API-only usage):
+   ```json
+   {
+     "build": {
+       "dockerfilePath": "Dockerfile.simple"
+     }
+   }
+   ```
+
+2. **Nixpacks deployment** (Railway's automatic detection):
+   - Remove railway.json temporarily
+   - Let Railway auto-detect and use Nixpacks
+   - May require additional configuration
 
 ### Viewing Logs
 

@@ -8,11 +8,15 @@ echo "=== Building GroFresh Application for Railway ==="
 
 # Install Node.js dependencies
 echo "Installing Node.js dependencies..."
-npm ci --only=production
+npm install
 
-# Build frontend assets
+# Build frontend assets (with error handling)
 echo "Building frontend assets..."
-NODE_OPTIONS="--openssl-legacy-provider" npm run production
+if NODE_OPTIONS="--openssl-legacy-provider" npm run production; then
+    echo "Frontend assets built successfully"
+else
+    echo "Warning: Frontend asset build failed, continuing with backend-only deployment"
+fi
 
 # Install PHP dependencies
 echo "Installing PHP dependencies..."

@@ -1,4 +1,4 @@
-# Railway-optimized single-stage Dockerfile for GroFresh
+# Simple Railway Dockerfile without Node.js build (for backend-only deployment)
 FROM php:8.1-apache
 
 # Set working directory
@@ -19,10 +19,6 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Node.js 18 (LTS) for better compatibility
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
@@ -34,11 +30,6 @@ COPY . .
 
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Install Node.js dependencies and build assets
-RUN npm install && \
-    NODE_OPTIONS="--openssl-legacy-provider" npm run production && \
-    rm -rf node_modules
 
 # Set proper permissions
 RUN chown -R www-data:www-data /var/www/html \
