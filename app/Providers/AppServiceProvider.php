@@ -14,6 +14,7 @@ use App\Services\PaginationService;
 use App\Services\ImageOptimizationService;
 use App\Services\CdnService;
 use App\Services\LazyLoadingService;
+use App\Services\QueueService;
 use App\Traits\SystemAddonTrait;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
@@ -60,6 +61,11 @@ class AppServiceProvider extends ServiceProvider
                 $app->make(CdnService::class),
                 $app->make(ImageOptimizationService::class)
             );
+        });
+
+        // Register QueueService as singleton
+        $this->app->singleton(QueueService::class, function ($app) {
+            return new QueueService();
         });
     }
 

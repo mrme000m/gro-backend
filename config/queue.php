@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('QUEUE_CONNECTION', 'sync'),
+    'default' => env('QUEUE_CONNECTION', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,6 +39,7 @@ return [
             'table' => 'jobs',
             'queue' => 'default',
             'retry_after' => 90,
+            'after_commit' => false,
         ],
 
         'beanstalkd' => [
@@ -64,6 +65,25 @@ return [
             'queue' => env('REDIS_QUEUE', 'default'),
             'retry_after' => 90,
             'block_for' => null,
+            'after_commit' => false,
+        ],
+
+        // High priority queues
+        'high_priority' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'high',
+            'retry_after' => 60,
+            'after_commit' => false,
+        ],
+
+        // Low priority queues
+        'low_priority' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'low',
+            'retry_after' => 300,
+            'after_commit' => false,
         ],
 
     ],
