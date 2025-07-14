@@ -31,6 +31,7 @@ Route::get('/health', function () {
     return response()->json([
         'status' => 'ok',
         'app' => 'GroFresh Restaurant Bazar',
+        'version' => '1.0.1',
         'timestamp' => now()->toISOString()
     ]);
 });
