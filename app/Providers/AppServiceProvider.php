@@ -18,6 +18,7 @@ use App\Services\QueueService;
 use App\Traits\SystemAddonTrait;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -76,6 +77,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Force HTTPS in production (Railway)
+        if (config('app.env') === 'production') {
+            URL::forceScheme('https');
+        }
+
+        // Trust Railway proxy headers
+        if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+            URL::forceScheme('https');
+        }
+
         //for system addon
         Config::set('addon_admin_routes',$this->get_addon_admin_routes());
         Config::set('get_payment_publish_status',$this->get_payment_publish_status());
