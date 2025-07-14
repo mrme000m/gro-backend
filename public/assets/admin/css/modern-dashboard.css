@@ -842,6 +842,31 @@ a:hover {
   }
 }
 
+/* Main Content Layout */
+.main-content {
+  margin-left: 280px;
+  min-height: 100vh;
+  background: var(--bg-secondary);
+  transition: margin-left var(--transition-normal);
+  position: relative;
+  z-index: 1;
+}
+
+.modern-sidebar.collapsed + .main-content {
+  margin-left: 80px;
+}
+
+/* Content wrapper for proper spacing */
+.main-content main {
+  padding: var(--spacing-6);
+}
+
+.main-content .content {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 /* Modern Header */
 .modern-header {
   background: var(--bg-header);
@@ -1018,6 +1043,10 @@ a:hover {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+  }
+
   .modern-sidebar {
     transform: translateX(-100%);
   }
@@ -1032,6 +1061,24 @@ a:hover {
 
   .modern-header {
     padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--bg-overlay);
+    z-index: var(--z-overlay);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-normal);
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: all;
   }
 }
 

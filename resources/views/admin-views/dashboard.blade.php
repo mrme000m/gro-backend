@@ -1,478 +1,561 @@
 @extends('layouts.admin.modern-app')
 
 @section('title', translate('Dashboard'))
-@section('page-title', translate('Dashboard'))
-@section('page-subtitle', translate('Welcome back! Here\'s what\'s happening with your store today.'))
-
-@push('css')
-<style>
-    /* Enhanced Dashboard Styles */
-    .metric-card {
-        background: linear-gradient(135deg, var(--brand-primary), var(--brand-accent));
-        color: white;
-        border: none;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .metric-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 100px;
-        height: 100px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 50%;
-        transform: translate(30px, -30px);
-    }
-
-    .metric-card .stat-value {
-        color: white;
-        font-size: var(--font-size-3xl);
-        font-weight: var(--font-weight-bold);
-        margin-bottom: var(--spacing-2);
-    }
-
-    .metric-card .stat-label {
-        color: rgba(255, 255, 255, 0.9);
-        font-size: var(--font-size-sm);
-        font-weight: var(--font-weight-medium);
-    }
-
-    .metric-card .stat-change {
-        margin-top: var(--spacing-3);
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-1);
-        font-size: var(--font-size-sm);
-    }
-
-    .chart-card {
-        height: 400px;
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-xl);
-        padding: var(--spacing-6);
-        box-shadow: var(--shadow-sm);
-    }
-
-    .chart-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: var(--spacing-6);
-    }
-
-    .chart-title {
-        font-size: var(--font-size-lg);
-        font-weight: var(--font-weight-semibold);
-        color: var(--text-primary);
-    }
-
-    .quick-action-card {
-        transition: all var(--transition-normal);
-        cursor: pointer;
-        background: var(--bg-card);
-        border: 1px solid var(--border-color);
-        border-radius: var(--radius-xl);
-        padding: var(--spacing-6);
-        text-align: center;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .quick-action-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--brand-primary), var(--brand-accent));
-        transform: scaleX(0);
-        transition: transform var(--transition-normal);
-    }
-
-    .quick-action-card:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-xl);
-        border-color: var(--brand-primary);
-    }
-
-    .quick-action-card:hover::before {
-        transform: scaleX(1);
-    }
-
-    .status-badge {
-        padding: var(--spacing-1) var(--spacing-3);
-        border-radius: var(--radius-full);
-        font-size: var(--font-size-xs);
-        font-weight: var(--font-weight-semibold);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-    }
-
-    .status-pending {
-        background: var(--warning-light);
-        color: var(--warning-dark);
-    }
-    .status-confirmed {
-        background: var(--info-light);
-        color: var(--info-dark);
-    }
-    .status-processing {
-        background: var(--warning-light);
-        color: var(--warning-dark);
-    }
-    .status-delivered {
-        background: var(--success-light);
-        color: var(--success-dark);
-    }
-    .status-cancelled {
-        background: var(--danger-light);
-        color: var(--danger-dark);
-    }
-
-    /* Modern Table Styles */
-    .modern-table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .modern-table th {
-        background: var(--bg-tertiary);
-        color: var(--text-secondary);
-        font-weight: var(--font-weight-semibold);
-        font-size: var(--font-size-xs);
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        padding: var(--spacing-3) var(--spacing-4);
-        text-align: left;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .modern-table td {
-        padding: var(--spacing-4);
-        border-bottom: 1px solid var(--border-light);
-        color: var(--text-primary);
-        font-size: var(--font-size-sm);
-    }
-
-    .modern-table tr:hover {
-        background: var(--bg-secondary);
-    }
-
-    /* Grid System */
-    .grid {
-        display: grid;
-        gap: var(--spacing-6);
-    }
-
-    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-
-    @media (min-width: 768px) {
-        .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .md\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .md\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-    }
-
-    @media (min-width: 1024px) {
-        .lg\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-        .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        .lg\\:col-span-2 { grid-column: span 2 / span 2; }
-    }
-</style>
-@endpush
 
 @section('content')
-@if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
-
-<!-- Statistics Cards -->
-<div class="stats-grid">
-    <div class="stat-card metric-card">
-        <div class="stat-value" data-count="{{ $data['total_orders'] ?? 0 }}">{{ $data['total_orders'] ?? 0 }}</div>
-        <div class="stat-label">{{ translate('Total Orders') }}</div>
-        <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+12%</span>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-value" data-count="{{ $data['customer'] ?? 0 }}">{{ $data['customer'] ?? 0 }}</div>
-        <div class="stat-label">{{ translate('Total Customers') }}</div>
-        <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+8%</span>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-value">${{ number_format($data['total_earning'] ?? 0, 2) }}</div>
-        <div class="stat-label">{{ translate('Total Revenue') }}</div>
-        <div class="stat-change positive">
-            <i class="fas fa-arrow-up"></i>
-            <span>+15%</span>
-        </div>
-    </div>
-
-    <div class="stat-card">
-        <div class="stat-value" data-count="{{ $data['product'] ?? 0 }}">{{ $data['product'] ?? 0 }}</div>
-        <div class="stat-label">{{ translate('Total Products') }}</div>
-        <div class="stat-change negative">
-            <i class="fas fa-arrow-down"></i>
-            <span>-2%</span>
-        </div>
-    </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.pos.index') }}'">
-        <div class="modern-card-body" style="text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                <i class="fas fa-cash-register" style="color: white; font-size: 1.5rem;"></i>
+    @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
+        <div class="content container-fluid">
+            <div class="page-header mb-0 pb-2 border-0">
+                <h1 class="page-header-title text-107980">{{ translate('welcome')}}, {{auth('admin')->user()->f_name}}</h1>
+                <p class="welcome-msg">{{ translate('welcome_message')}}</p>
             </div>
-            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('POS System') }}</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Process orders quickly') }}</p>
-        </div>
-    </div>
 
-    <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.product.add-new') }}'">
-        <div class="modern-card-body" style="text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--success-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                <i class="fas fa-plus" style="color: white; font-size: 1.5rem;"></i>
-            </div>
-            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('Add Product') }}</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Add new products to inventory') }}</p>
-        </div>
-    </div>
-
-    <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.orders.list', ['status' => 'all']) }}'">
-        <div class="modern-card-body" style="text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--warning-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                <i class="fas fa-shopping-cart" style="color: white; font-size: 1.5rem;"></i>
-            </div>
-            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('View Orders') }}</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('Manage customer orders') }}</p>
-        </div>
-    </div>
-
-    <div class="modern-card quick-action-card" onclick="window.location.href='{{ route('admin.report.order') }}'">
-        <div class="modern-card-body" style="text-align: center;">
-            <div style="width: 64px; height: 64px; background: var(--info-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
-                <i class="fas fa-chart-bar" style="color: white; font-size: 1.5rem;"></i>
-            </div>
-            <h3 style="font-weight: 600; color: var(--text-primary); margin-bottom: 0.5rem;">{{ translate('Reports') }}</h3>
-            <p style="color: var(--text-secondary); font-size: 0.875rem;">{{ translate('View analytics and reports') }}</p>
-        </div>
-    </div>
-</div>
-
-<!-- Charts Row -->
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <!-- Revenue Chart -->
-    <div class="chart-container chart-card">
-        <div class="chart-header">
-            <h3 class="chart-title">{{ translate('Revenue Overview') }}</h3>
-            <select class="px-3 py-1 bg-var(--bg-tertiary) border border-var(--border-color) rounded-md text-sm">
-                <option>{{ translate('Last 6 months') }}</option>
-                <option>{{ translate('Last 3 months') }}</option>
-                <option>{{ translate('This year') }}</option>
-            </select>
-        </div>
-        <canvas id="revenueChart"></canvas>
-    </div>
-
-    <!-- Orders Chart -->
-    <div class="chart-container chart-card">
-        <div class="chart-header">
-            <h3 class="chart-title">{{ translate('Order Status Distribution') }}</h3>
-        </div>
-        <canvas id="ordersChart"></canvas>
-    </div>
-</div>
-
-<!-- Recent Orders and Top Products -->
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <!-- Recent Orders -->
-    <div class="lg:col-span-2">
-        <div class="modern-card">
-            <div class="modern-card-header">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-semibold text-var(--text-primary)">{{ translate('Recent Orders') }}</h3>
-                    <a href="{{ route('admin.orders.list', ['status' => 'all']) }}"
-                       class="text-var(--primary-color) hover:underline text-sm">
-                        {{ translate('View All') }}
-                    </a>
-                </div>
-            </div>
-            <div class="modern-card-body p-0">
-                <div class="overflow-x-auto">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th>{{ translate('Order ID') }}</th>
-                                <th>{{ translate('Customer') }}</th>
-                                <th>{{ translate('Amount') }}</th>
-                                <th>{{ translate('Status') }}</th>
-                                <th>{{ translate('Date') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse($data['recent_orders'] ?? [] as $order)
-                            <tr>
-                                <td style="font-weight: 500;">#{{ $order['id'] }}</td>
-                                <td>{{ $order['customer_name'] ?? 'Guest' }}</td>
-                                <td style="font-weight: 500;">${{ number_format($order['order_amount'], 2) }}</td>
-                                <td>
-                                    <span class="status-badge status-{{ $order['order_status'] }}">
-                                        {{ translate($order['order_status']) }}
-                                    </span>
-                                </td>
-                                <td>{{ \Carbon\Carbon::parse($order['created_at'])->format('M d, Y') }}</td>
-                            </tr>
-                            @empty
-                            <tr>
-                                <td colspan="5" style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                                    {{ translate('No recent orders found') }}
-                                </td>
-                            </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Top Products -->
-    <div class="lg:col-span-1">
-        <div class="modern-card">
-            <div class="modern-card-header">
-                <h3 class="text-lg font-semibold text-var(--text-primary)">{{ translate('Top Products') }}</h3>
-            </div>
-            <div class="modern-card-body">
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                    @forelse($data['top_sell'] ?? [] as $product)
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <img src="{{ asset('storage/app/public/product/' . $product['image']) }}"
-                             alt="{{ $product['name'] }}"
-                             style="width: 48px; height: 48px; border-radius: 8px; object-fit: cover;"
-                             onerror="this.src='{{ asset('assets/admin/img/160x160/img2.jpg') }}'">
-                        <div style="flex: 1; min-width: 0;">
-                            <p style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                {{ $product['name'] }}
-                            </p>
-                            <p style="font-size: 0.75rem; color: var(--text-secondary);">
-                                {{ $product['order_count'] ?? 0 }} {{ translate('sold') }}
-                            </p>
-                        </div>
-                        <div style="text-align: right;">
-                            <p style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">
-                                ${{ number_format($product['price'], 2) }}
-                            </p>
+            <div class="card mb-10px">
+                <div class="card-body">
+                    <div class="btn--container justify-content-between align-items-center mb-2 pb-1">
+                        <h5 class="card-title mb-2">
+                            <img src="{{asset('/public/assets/admin/img/business-analytics.png')}}" alt="" class="{{ translate('card-icon')}}">
+                            {{ translate('Business Analytics') }}
+                        </h5>
+                        <div class="mb-2">
+                            <select class="custom-select statistics-type-select" name="statistics_type">
+                                <option value="overall" {{ session()->has('statistics_type') && session('statistics_type') == 'overall' ? 'selected' : '' }}>
+                                    {{ translate('Overall Statistics') }}
+                                </option>
+                                <option value="today" {{ session()->has('statistics_type') && session('statistics_type') == 'today' ? 'selected' : '' }}>
+                                    {{ translate("Today's Statistics") }}
+                                </option>
+                                <option value="this_month" {{ session()->has('statistics_type') && session('statistics_type') == 'this_month' ? 'selected' : '' }}>
+                                    {{ translate("This Month's Statistics") }}
+                                </option>
+                            </select>
                         </div>
                     </div>
-                    @empty
-                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
-                        {{ translate('No products found') }}
+                    <div class="row g-2" id="order_stats">
+                        @include('admin-views.partials._dashboard-order-stats',['data'=>$data])
                     </div>
-                    @endforelse
                 </div>
             </div>
-        </div>
-    </div>
-</div>
 
-@else
-<div class="modern-card">
-    <div class="modern-card-body text-center py-16">
-        <i class="fas fa-lock text-6xl text-var(--text-muted) mb-4"></i>
-        <h3 class="text-xl font-semibold text-var(--text-primary) mb-2">
-            {{ translate('Access Denied') }}
-        </h3>
-        <p class="text-var(--text-secondary)">
-            {{ translate('You don\'t have permission to access the dashboard.') }}
-        </p>
-    </div>
-</div>
-@endif
-@endsection
+            <div class="dashboard-statistics">
+                <div class="row g-1">
+                    <div class="col-lg-8 col--xl-8">
+                        <div class="card h-100 bg-white">
+                            <div class="card-body p-20px pb-0">
+                                <div class="btn--container justify-content-between align-items-center">
+                                    <h5 class="card-title mb-2">
+                                        <img src="{{asset('/public/assets/admin/img/order-statistics.png')}}" alt=""
+                                             class="card-icon">
+                                        <span>{{translate('order_statistics')}}</span>
+                                    </h5>
+                                    <div class="mb-2">
+                                        <div class="d-flex flex-wrap statistics-btn-grp">
+                                            <label>
+                                                <input type="radio" name="order__statistics" hidden checked>
+                                                <span class="order-type" data-order-type="yearOrder">{{ translate('This_Year') }}</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="order__statistics" hidden>
+                                                <span class="order-type" data-order-type="MonthOrder">{{ translate('This_Month') }}</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="order__statistics" hidden>
+                                                <span class="order-type" data-order-type="WeekOrder">{{ translate('This Week') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="updatingOrderData">
+                                    <div id="line-chart-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-@push('scripts')
-<script>
-// Initialize dashboard
-document.addEventListener('DOMContentLoaded', function() {
-    // Update stats periodically
-    setInterval(updateDashboardStats, 30000); // Update every 30 seconds
+                    <div class="col-lg-4 col--xl-4">
+                        <div class="card h-100 bg-white">
+                            <div class="card-header border-0 order-header-shadow">
+                                <h5 class="card-title">
+                                    <span>{{translate('order_status_statistics')}}</span>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="position-relative pie-chart">
+                                    <div id="dognut-pie"></div>
+                                    <div class="total--orders">
+                                        <h3>{{$data['pending_count'] + $data['ongoing_count'] + $data['delivered_count']+ $data['canceled_count']+ $data['returned_count']+ $data['failed_count']}} </h3>
+                                        <span>{{ translate('orders') }}</span>
+                                    </div>
+                                </div>
+                                <div class="apex-legends">
+                                    <div class="before-bg-E5F5F1">
+                                        <span>{{ translate('pending') }} ({{$data['pending_count']}})</span>
+                                    </div>
+                                    <div class="before-bg-036BB7">
+                                        <span>{{ translate('ongoing') }} ({{$data['ongoing_count']}})</span>
+                                    </div>
+                                    <div class="before-bg-107980">
+                                        <span>{{ translate('delivered') }} ({{$data['delivered_count']}})</span>
+                                    </div>
+                                    <div class="before-bg-0e0def">
+                                        <span>{{ translate('canceled') }} ({{$data['canceled_count']}})</span>
+                                    </div>
+                                    <div class="before-bg-ff00ff">
+                                        <span>{{ translate('returned') }} ({{$data['returned_count']}})</span>
+                                    </div>
+                                    <div class="before-bg-f51414">
+                                        <span>{{ translate('failed') }} ({{$data['failed_count']}})</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    // Initialize real-time features
-    initializeRealTimeUpdates();
-});
+                    <div class="col-lg-8 col--xl-8">
+                        <div class="card h-100 bg-white">
+                            <div class="card-body p-20px pb-0">
+                                <div class="btn--container justify-content-between align-items-center">
+                                    <h5 class="card-title mb-2">
+                                        <img src="{{asset('/public/assets/admin/img/order-statistics.png')}}" alt=""
+                                             class="card-icon">
+                                        <span>{{translate('earning_statistics')}}</span>
+                                    </h5>
+                                    <div class="mb-2">
+                                        <div class="d-flex flex-wrap statistics-btn-grp">
+                                            <label>
+                                                <input type="radio" name="earning__statistics" hidden checked>
+                                                <span class="earning-statistics" data-earn-type="yearEarn">{{ translate('This_Year') }}</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="earning__statistics" hidden>
+                                                <span class="earning-statistics" data-earn-type="MonthEarn">{{ translate('This_Month') }}</span>
+                                            </label>
+                                            <label>
+                                                <input type="radio" name="earning__statistics" hidden>
+                                                <span class="earning-statistics" data-earn-type="WeekEarn">{{ translate('This Week') }}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="updatingData">
+                                    <div id="line-adwords"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-function updateDashboardStats() {
-    // Fetch updated statistics
-    fetch('{{ route("admin.dashboard.stats") }}')
-        .then(response => response.json())
-        .then(data => {
-            if (window.modernDashboard) {
-                window.modernDashboard.updateStatCard('.stat-card:nth-child(1)', data.total_orders, data.orders_change);
-                window.modernDashboard.updateStatCard('.stat-card:nth-child(2)', data.customer, data.customers_change);
-                window.modernDashboard.updateStatCard('.stat-card:nth-child(4)', data.product, data.products_change);
-            }
-        })
-        .catch(error => {
-            console.error('Error updating stats:', error);
-            // Fallback to simulated updates if API fails
-            console.log('Using simulated stats update');
-        });
-}
+                    <div class="col-lg-4 col--xl-4">
+                        <div class="card h-100 bg-white">
+                            <div class="card-header border-0 order-header-shadow">
+                                <h5 class="card-title d-flex justify-content-between flex-grow-1">
+                                    <span>{{translate('recent_orders')}}</span>
+                                    <a href="{{route('admin.orders.list',['all'])}}"
+                                       class="fz-12px font-medium text-006AE5">{{translate('view_all')}}</a>
+                                </h5>
+                            </div>
+                            <div class="card-body p-10px">
+                                <ul class="recent--orders">
+                                    @foreach($data['recent_orders'] as $order)
+                                        <li>
+                                            <a href="{{route('admin.orders.details', ['id'=>$order['id']])}}">
+                                                <div>
+                                                    <h6>{{translate('order')}} #{{$order['id']}}</h6>
+                                                    <span
+                                                        class="text-uppercase">{{date('m-d-Y  h:i A', strtotime($order['created_at']))}}</span>
+                                                </div>
+                                                @if($order['order_status'] == 'pending')
+                                                    <span
+                                                        class="status text-0661cb">{{translate($order['order_status'])}}</span>
+                                                @elseif($order['order_status'] == 'delivered')
+                                                    <span
+                                                        class="status text-56b98f">{{translate($order['order_status'])}}</span>
+                                                @elseif($order['order_status'] == 'confirmed' || $order['order_status'] == 'processing' || $order['order_status'] == 'out_for_delivery')
+                                                    <span
+                                                        class="status text-F5A200">{{$order['order_status'] == 'processing' ? translate('packaging') : translate($order['order_status'])}}</span>
+                                                @elseif($order['order_status'] == 'canceled' || $order['order_status'] == 'failed')
+                                                    <span
+                                                        class="status text-F5A200">{{translate($order['order_status'])}}</span>
+                                                @else
+                                                    <span
+                                                        class="status text-0661CB">{{translate($order['order_status'])}}</span>
+                                                @endif
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
 
-function initializeRealTimeUpdates() {
-    // This would typically connect to a WebSocket or use Server-Sent Events
-    // For now, we'll simulate real-time updates
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            @include('admin-views.partials._top-selling-products',['top_sell'=>$data['top_sell']])
+                        </div>
+                    </div>
 
-    // Simulate new order notifications
-    setInterval(() => {
-        if (Math.random() > 0.9) { // 10% chance every interval
-            if (window.modernDashboard) {
-                window.modernDashboard.showNotification(
-                    'New order received! Order #' + Math.floor(Math.random() * 10000),
-                    'success'
-                );
-            }
-        }
-    }, 10000);
-}
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            @include('admin-views.partials._most-rated-products',['most_rated_products'=>$data['most_rated_products']])
+                        </div>
+                    </div>
 
-// Keyboard shortcuts for quick actions
-document.addEventListener('keydown', function(e) {
-    if (e.altKey) {
-        switch(e.key) {
-            case '1':
-                e.preventDefault();
-                window.location.href = '{{ route("admin.pos.index") }}';
-                break;
-            case '2':
-                e.preventDefault();
-                window.location.href = '{{ route("admin.product.add-new") }}';
-                break;
-            case '3':
-                e.preventDefault();
-                window.location.href = '{{ route("admin.orders.list", ["status" => "all"]) }}';
-                break;
-            case '4':
-                e.preventDefault();
-                window.location.href = '{{ route("admin.report.order") }}';
-                break;
-        }
-    }
-});
-</script>
-@endpush
+                    <div class="col-lg-4">
+                        <div class="card h-100">
+                            @include('admin-views.partials._top-customer',['top_customer'=>$data['top_customer']])
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endsection
+
+            @push('script')
+                <script src="{{asset('public/assets/admin')}}/vendor/chart.js/dist/Chart.min.js"></script>
+                <script src="{{asset('public/assets/admin')}}/vendor/chart.js.extensions/chartjs-extensions.js"></script>
+                <script src="{{asset('public/assets/admin')}}/vendor/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.js"></script>
+                <script src="{{asset('public/assets/admin/js/apex-charts/apexcharts.js')}}"></script>
+            @endpush
+
+            @push('script_2')
+                <script src="{{asset('public/assets/admin/js/apex-charts/dashboard.js')}}"></script>
+                <script>
+                    "use strict";
+
+                    $('.statistics-type-select').on('change', function() {
+                        order_stats_update($(this).val());
+                    });
+
+                    $('.order-type').on('click', function() {
+                        var orderType = $(this).data('order-type');
+                        orderStatisticsUpdate(orderType);
+                    });
+
+                    $('.earning-statistics').on('click', function() {
+                        var earnType = $(this).data('earn-type');
+                        earningStatisticsUpdate(earnType);
+                    });
+
+                    var options = {
+                        series: [{
+                            name: "{{ translate('Orders') }}",
+                            data: [
+                                {{$orderStatisticsChart[1]}}, {{$orderStatisticsChart[2]}}, {{$orderStatisticsChart[3]}}, {{$orderStatisticsChart[4]}},
+                                {{$orderStatisticsChart[5]}}, {{$orderStatisticsChart[6]}}, {{$orderStatisticsChart[7]}}, {{$orderStatisticsChart[8]}},
+                                {{$orderStatisticsChart[9]}}, {{$orderStatisticsChart[10]}}, {{$orderStatisticsChart[11]}}, {{$orderStatisticsChart[12]}}
+                            ],
+                        }],
+                        chart: {
+                            height: 316,
+                            type: 'line',
+                            zoom: {
+                                enabled: false
+                            },
+                            toolbar: {
+                                show: false,
+                            },
+                            markers: {
+                                size: 5,
+                            }
+                        },
+                        dataLabels: {
+                            enabled: false,
+                        },
+                        colors: ['#87bcbf', '#107980'],
+                        stroke: {
+                            curve: 'smooth',
+                            width: 3,
+                        },
+                        xaxis: {
+                            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        },
+                        grid: {
+                            show: true,
+                            padding: {
+                                bottom: 0
+                            },
+                            borderColor: "#d9e7ef",
+                            strokeDashArray: 7,
+                            xaxis: {
+                                lines: {
+                                    show: true
+                                }
+                            }
+                        },
+                        yaxis: {
+                            tickAmount: 4,
+                        }
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#line-chart-1"), options);
+                    chart.render();
+
+                    var options = {
+                        series: [{{$data['ongoing_count']}}, {{$data['delivered_count']}}, {{$data['pending_count']}}, {{$data['canceled']}}, {{$data['returned']}}, {{$data['failed']}}],
+                        chart: {
+                            width: 320,
+                            type: 'donut',
+                        },
+                        labels: ['{{ translate('ongoing') }}', '{{ translate('delivered') }}', '{{ translate('pending') }}', '{{translate('canceled')}}', '{{translate('returned')}}', '{{translate('failed')}}'],
+                        dataLabels: {
+                            enabled: false,
+                            style: {
+                                colors: ['#036BB7', '#107980', '#6a5acd', '#ff00ff', '#0e0def', '#f51414']
+                            }
+                        },
+                        responsive: [{
+                            breakpoint: 1650,
+                            options: {
+                                chart: {
+                                    width: 250
+                                },
+                            }
+                        }],
+                        colors: ['#036BB7', '#107980', '#6a5acd', '#0e0def', '#ff00ff', '#f51414'],
+                        fill: {
+                            colors: ['#036BB7', '#107980', '#6a5acd', '#0e0def', '#ff00ff', '#f51414']
+                        },
+                        legend: {
+                            show: false
+                        },
+                    };
+
+                    var chart = new ApexCharts(document.querySelector("#dognut-pie"), options);
+                    chart.render();
+
+                    var optionsLine = {
+                        chart: {
+                            height: 328,
+                            type: 'line',
+                            zoom: {
+                                enabled: false
+                            },
+                            toolbar: {
+                                show: false,
+                            },
+                        },
+                        stroke: {
+                            curve: 'straight',
+                            width: 2
+                        },
+                        colors: ['#87bcbf', '#107980'],
+                        series: [{
+                            name: "{{ translate('Earning') }}",
+                            data: [{{$earning[1]}}, {{$earning[2]}}, {{$earning[3]}}, {{$earning[4]}}, {{$earning[5]}}, {{$earning[6]}}, {{$earning[7]}}, {{$earning[8]}}, {{$earning[9]}}, {{$earning[10]}}, {{$earning[11]}}, {{$earning[12]}}],
+                        },
+                        ],
+                        markers: {
+                            size: 6,
+                            strokeWidth: 0,
+                            hover: {
+                                size: 9
+                            }
+                        },
+                        grid: {
+                            show: true,
+                            padding: {
+                                bottom: 0
+                            },
+                            borderColor: "#d9e7ef",
+                            strokeDashArray: 7,
+                            xaxis: {
+                                lines: {
+                                    show: true
+                                }
+                            }
+                        },
+                        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                        xaxis: {
+                            tooltip: {
+                                enabled: false
+                            }
+                        },
+                        legend: {
+                            position: 'top',
+                            horizontalAlign: 'right',
+                            offsetY: -20
+                        }
+                    }
+                    var chartLine = new ApexCharts(document.querySelector('#line-adwords'), optionsLine);
+                    chartLine.render();
+
+                    function order_stats_update(type) {
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+
+                        $.ajax({
+                            url: "{{route('admin.order-stats')}}",
+                            type: "post",
+                            data: {
+                                statistics_type: type,
+                            },
+                            beforeSend: function () {
+                                $('#loading').show()
+                            },
+                            success: function (data) {
+                                $('#order_stats').html(data.view)
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                            },
+                            complete: function () {
+                                $('#loading').hide()
+                            }
+                        });
+                    }
+
+                    Chart.plugins.unregister(ChartDataLabels);
+
+                    function orderStatisticsUpdate(value) {
+
+                        $.ajax({
+                            url: '{{route('admin.dashboard.order-statistics')}}',
+                            type: 'GET',
+                            data: {
+                                type: value
+                            },
+                            beforeSend: function () {
+                                $('#loading').show()
+                            },
+                            success: function (response_data) {
+                                console.log(response_data);
+                                document.getElementById("line-chart-1").remove();
+                                let graph = document.createElement('div');
+                                graph.setAttribute("id", "line-chart-1");
+                                document.getElementById("updatingOrderData").appendChild(graph);
+
+                                var options = {
+                                    series: [{
+                                        name: "{{ translate('Orders') }}",
+                                        data: response_data.orders,
+                                    }],
+                                    chart: {
+                                        height: 316,
+                                        type: 'line',
+                                        zoom: {
+                                            enabled: false
+                                        },
+                                        toolbar: {
+                                            show: false,
+                                        },
+                                        markers: {
+                                            size: 5,
+                                        }
+                                    },
+                                    dataLabels: {
+                                        enabled: false,
+                                    },
+                                    colors: ['#87bcbf', '#107980'],
+                                    stroke: {
+                                        curve: 'smooth',
+                                        width: 3,
+                                    },
+                                    xaxis: {
+                                        categories: response_data.orders_label,
+                                    },
+                                    grid: {
+                                        show: true,
+                                        padding: {
+                                            bottom: 0
+                                        },
+                                        borderColor: "#d9e7ef",
+                                        strokeDashArray: 7,
+                                        xaxis: {
+                                            lines: {
+                                                show: true
+                                            }
+                                        }
+                                    },
+                                    yaxis: {
+                                        tickAmount: 4,
+                                    }
+                                };
+
+                                var chart = new ApexCharts(document.querySelector("#line-chart-1"), options);
+                                chart.render();
+                            },
+                            complete: function () {
+                                $('#loading').hide()
+                            }
+                        });
+                    }
+
+                    function earningStatisticsUpdate(value) {
+                        $.ajax({
+                            url: '{{route('admin.dashboard.earning-statistics')}}',
+                            type: 'GET',
+                            data: {
+                                type: value
+                            },
+                            beforeSend: function () {
+                                $('#loading').show()
+                            },
+                            success: function (response_data) {
+                                document.getElementById("line-adwords").remove();
+                                let graph = document.createElement('div');
+                                graph.setAttribute("id", "line-adwords");
+                                document.getElementById("updatingData").appendChild(graph);
+
+                                var optionsLine = {
+                                    chart: {
+                                        height: 328,
+                                        type: 'line',
+                                        zoom: {
+                                            enabled: false
+                                        },
+                                        toolbar: {
+                                            show: false,
+                                        },
+                                    },
+                                    stroke: {
+                                        curve: 'straight',
+                                        width: 2
+                                    },
+                                    colors: ['#87bcbf', '#107980'],
+                                    series: [{
+                                        name: "{{ translate('Earning') }}",
+                                        data: response_data.earning,
+                                    }],
+                                    markers: {
+                                        size: 6,
+                                        strokeWidth: 0,
+                                        hover: {
+                                            size: 9
+                                        }
+                                    },
+                                    grid: {
+                                        show: true,
+                                        padding: {
+                                            bottom: 0
+                                        },
+                                        borderColor: "#d9e7ef",
+                                        strokeDashArray: 7,
+                                        xaxis: {
+                                            lines: {
+                                                show: true
+                                            }
+                                        }
+                                    },
+                                    labels: response_data.earning_label,
+                                    xaxis: {
+                                        tooltip: {
+                                            enabled: false
+                                        }
+                                    },
+                                    legend: {
+                                        position: 'top',
+                                        horizontalAlign: 'right',
+                                        offsetY: -20
+                                    }
+                                }
+                                var chartLine = new ApexCharts(document.querySelector('#line-adwords'), optionsLine);
+                                chartLine.render();
+                            },
+                            complete: function () {
+                                $('#loading').hide()
+                            }
+                        });
+                    }
+                </script>
+        @endpush

@@ -2597,4 +2597,6 @@
   'Marketing' => 'Marketing',
   'Customers' => 'Customers',
   'Customer Management' => 'Customer Management',
+  'POS System' => 'POS System',
+  'Main' => 'Main',
 );
