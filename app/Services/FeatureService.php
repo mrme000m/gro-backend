@@ -102,7 +102,7 @@ class FeatureService
         // Dashboard (always enabled)
         $navigation[] = [
             'name' => 'Dashboard',
-            'icon' => 'fas fa-tachometer-alt',
+            'icon' => 'animated-icon icon-dashboard pulse',
             'route' => 'admin.dashboard',
             'active' => request()->routeIs('admin.dashboard'),
             'enabled' => true,
@@ -112,7 +112,7 @@ class FeatureService
         if ($this->isCategoryEnabled('orders')) {
             $navigation[] = [
                 'name' => 'Orders',
-                'icon' => 'fas fa-shopping-cart',
+                'icon' => 'animated-icon icon-orders bounce',
                 'route' => 'admin.orders.list',
                 'route_params' => ['all'],
                 'active' => request()->routeIs('admin.orders.*'),
@@ -125,7 +125,7 @@ class FeatureService
         if ($this->isCategoryEnabled('products')) {
             $navigation[] = [
                 'name' => 'Products',
-                'icon' => 'fas fa-box',
+                'icon' => 'animated-icon icon-products',
                 'route' => 'admin.product.list',
                 'active' => request()->routeIs('admin.product.*'),
                 'enabled' => true,
@@ -137,7 +137,7 @@ class FeatureService
         if ($this->isCategoryEnabled('customers')) {
             $navigation[] = [
                 'name' => 'Customers',
-                'icon' => 'fas fa-users',
+                'icon' => 'animated-icon icon-customers',
                 'route' => 'admin.customer.list',
                 'active' => request()->routeIs('admin.customer.*'),
                 'enabled' => true,
@@ -149,7 +149,7 @@ class FeatureService
         if ($this->isCategoryEnabled('marketing')) {
             $navigation[] = [
                 'name' => 'Marketing',
-                'icon' => 'fas fa-bullhorn',
+                'icon' => 'animated-icon icon-marketing shake',
                 'route' => 'admin.coupon.add-new',
                 'active' => request()->routeIs('admin.coupon.*') || request()->routeIs('admin.banner.*'),
                 'enabled' => true,
@@ -161,7 +161,7 @@ class FeatureService
         if ($this->isCategoryEnabled('analytics')) {
             $navigation[] = [
                 'name' => 'Analytics',
-                'icon' => 'fas fa-chart-bar',
+                'icon' => 'animated-icon icon-analytics',
                 'route' => 'admin.analytics.keyword-search',
                 'active' => request()->routeIs('admin.analytics.*') || request()->routeIs('admin.report.*'),
                 'enabled' => true,
@@ -173,7 +173,7 @@ class FeatureService
         if ($this->isCategoryEnabled('inventory')) {
             $navigation[] = [
                 'name' => 'Inventory',
-                'icon' => 'fas fa-warehouse',
+                'icon' => 'animated-icon icon-inventory pulse',
                 'route' => 'admin.product.limited-stock',
                 'active' => request()->routeIs('admin.product.limited-stock'),
                 'enabled' => true,
@@ -185,7 +185,7 @@ class FeatureService
         if ($this->isCategoryEnabled('delivery')) {
             $navigation[] = [
                 'name' => 'Delivery',
-                'icon' => 'fas fa-truck',
+                'icon' => 'animated-icon icon-delivery',
                 'route' => 'admin.delivery-man.list',
                 'active' => request()->routeIs('admin.delivery-man.*'),
                 'enabled' => true,
@@ -196,7 +196,7 @@ class FeatureService
         // Settings (always enabled)
         $navigation[] = [
             'name' => 'Settings',
-            'icon' => 'fas fa-cog',
+            'icon' => 'animated-icon icon-settings rotate',
             'route' => 'admin.settings',
             'active' => request()->routeIs('admin.settings*') || request()->routeIs('admin.business-settings.*'),
             'enabled' => true,

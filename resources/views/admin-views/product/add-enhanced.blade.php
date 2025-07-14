@@ -322,7 +322,7 @@
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
-                                    <i class="fas fa-info-circle text-primary"></i>
+                                    <span class="animated-icon icon-info"></span>
                                     {{translate('Product Information')}}
                                 </h5>
                                 <small class="text-muted">{{translate('Enter the basic details of your product')}}</small>
@@ -906,13 +906,13 @@
                         <!-- Form Navigation -->
                         <div class="form-navigation">
                             <button type="button" class="btn btn-secondary-enhanced" id="prevBtn" onclick="changeStep(-1)" disabled>
-                                <i class="fas fa-arrow-left"></i> {{translate('Previous')}}
+                                ⬅️ {{translate('Previous')}}
                             </button>
                             <button type="button" class="btn btn-primary-enhanced" id="nextBtn" onclick="changeStep(1)">
-                                {{translate('Next')}} <i class="fas fa-arrow-right"></i>
+                                {{translate('Next')}} ➡️
                             </button>
                             <button type="submit" class="btn btn-success-enhanced" id="submitBtn" style="display: none;">
-                                <i class="fas fa-check"></i> {{translate('Create Product')}}
+                                <span class="animated-icon icon-success"></span> {{translate('Create Product')}}
                             </button>
                         </div>
                     </form>

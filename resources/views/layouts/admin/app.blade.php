@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/toastr.css">
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/custom-helper.css">
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/ux-standards.css">
+    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/animated-icons.css">
 </head>
 
 <body class="footer-offset">
@@ -82,6 +83,7 @@
 <script src="{{asset('assets/admin')}}/js/auto-save.js"></script>
 <script src="{{asset('assets/admin')}}/js/form-validation.js"></script>
 <script src="{{asset('assets/admin')}}/js/accessibility.js"></script>
+<script src="{{asset('assets/admin')}}/js/icon-replacer.js"></script>
 
 
 {!! Toastr::message() !!}

@@ -60,7 +60,7 @@
                                     {{-- Has Submenu --}}
                                     <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                        href="javascript:" title="{{ $item['name'] }}">
-                                        <i class="{{ $item['icon'] }} nav-icon"></i>
+                                        <span class="{{ $item['icon'] }} nav-icon"></span>
                                         <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
                                             {{ $item['name'] }}
                                         </span>
@@ -83,7 +83,7 @@
                                     <a class="js-navbar-vertical-aside-menu-link nav-link"
                                        href="{{ isset($item['route_params']) ? route($item['route'], $item['route_params']) : route($item['route']) }}"
                                        title="{{ $item['name'] }}">
-                                        <i class="{{ $item['icon'] }} nav-icon"></i>
+                                        <span class="{{ $item['icon'] }} nav-icon"></span>
                                         <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
                                             {{ $item['name'] }}
                                         </span>

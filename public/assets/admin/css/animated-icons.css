@@ -1,0 +1,621 @@
+/*
+|--------------------------------------------------------------------------
+| GroFresh Animated Icons System
+|--------------------------------------------------------------------------
+|
+| Modern animated icon system inspired by Flaticon animated icons.
+| Provides smooth animations, hover effects, and consistent styling.
+|
+*/
+
+/* Base Icon Styles */
+.animated-icon {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    vertical-align: middle;
+}
+
+.animated-icon.lg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.animated-icon.xl {
+    width: 2rem;
+    height: 2rem;
+}
+
+.animated-icon.xxl {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* Hover Effects */
+.animated-icon:hover {
+    transform: scale(1.1);
+}
+
+.animated-icon.bounce:hover {
+    animation: iconBounce 0.6s ease-in-out;
+}
+
+.animated-icon.pulse:hover {
+    animation: iconPulse 1s infinite;
+}
+
+.animated-icon.rotate:hover {
+    animation: iconRotate 0.5s ease-in-out;
+}
+
+.animated-icon.shake:hover {
+    animation: iconShake 0.5s ease-in-out;
+}
+
+/* Dashboard Icon */
+.icon-dashboard {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.icon-dashboard::before {
+    content: "📊";
+    font-size: 1.2em;
+    display: block;
+    animation: dashboardPulse 2s infinite;
+}
+
+/* Orders Icon */
+.icon-orders {
+    color: #10b981;
+}
+
+.icon-orders::before {
+    content: "🛒";
+    font-size: 1.2em;
+    display: block;
+    animation: cartBounce 3s infinite;
+}
+
+/* Products Icon */
+.icon-products {
+    color: #f59e0b;
+}
+
+.icon-products::before {
+    content: "📦";
+    font-size: 1.2em;
+    display: block;
+    animation: boxFloat 2s ease-in-out infinite;
+}
+
+/* Customers Icon */
+.icon-customers {
+    color: #3b82f6;
+}
+
+.icon-customers::before {
+    content: "👥";
+    font-size: 1.2em;
+    display: block;
+    animation: usersWave 2.5s infinite;
+}
+
+/* Marketing Icon */
+.icon-marketing {
+    color: #ef4444;
+}
+
+.icon-marketing::before {
+    content: "📢";
+    font-size: 1.2em;
+    display: block;
+    animation: megaphoneShake 3s infinite;
+}
+
+/* Analytics Icon */
+.icon-analytics {
+    color: #8b5cf6;
+}
+
+.icon-analytics::before {
+    content: "📈";
+    font-size: 1.2em;
+    display: block;
+    animation: chartGrow 2s ease-in-out infinite;
+}
+
+/* Inventory Icon */
+.icon-inventory {
+    color: #06b6d4;
+}
+
+.icon-inventory::before {
+    content: "🏪";
+    font-size: 1.2em;
+    display: block;
+    animation: warehousePulse 2.5s infinite;
+}
+
+/* Delivery Icon */
+.icon-delivery {
+    color: #84cc16;
+}
+
+.icon-delivery::before {
+    content: "🚚";
+    font-size: 1.2em;
+    display: block;
+    animation: truckMove 3s linear infinite;
+}
+
+/* Settings Icon */
+.icon-settings {
+    color: #6b7280;
+}
+
+.icon-settings::before {
+    content: "⚙️";
+    font-size: 1.2em;
+    display: block;
+    animation: gearRotate 4s linear infinite;
+}
+
+/* Form Icons */
+.icon-save {
+    color: #10b981;
+}
+
+.icon-save::before {
+    content: "💾";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-edit {
+    color: #f59e0b;
+}
+
+.icon-edit::before {
+    content: "✏️";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-delete {
+    color: #ef4444;
+}
+
+.icon-delete::before {
+    content: "🗑️";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-add {
+    color: #10b981;
+}
+
+.icon-add::before {
+    content: "➕";
+    font-size: 1.2em;
+    display: block;
+    animation: addPulse 2s infinite;
+}
+
+.icon-search {
+    color: #6b7280;
+}
+
+.icon-search::before {
+    content: "🔍";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-filter {
+    color: #8b5cf6;
+}
+
+.icon-filter::before {
+    content: "🔽";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-export {
+    color: #06b6d4;
+}
+
+.icon-export::before {
+    content: "📤";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-import {
+    color: #84cc16;
+}
+
+.icon-import::before {
+    content: "📥";
+    font-size: 1.2em;
+    display: block;
+}
+
+/* Status Icons */
+.icon-success {
+    color: #10b981;
+}
+
+.icon-success::before {
+    content: "✅";
+    font-size: 1.2em;
+    display: block;
+    animation: successBounce 0.5s ease-out;
+}
+
+.icon-warning {
+    color: #f59e0b;
+}
+
+.icon-warning::before {
+    content: "⚠️";
+    font-size: 1.2em;
+    display: block;
+    animation: warningPulse 1s infinite;
+}
+
+.icon-error {
+    color: #ef4444;
+}
+
+.icon-error::before {
+    content: "❌";
+    font-size: 1.2em;
+    display: block;
+    animation: errorShake 0.5s ease-out;
+}
+
+.icon-info {
+    color: #3b82f6;
+}
+
+.icon-info::before {
+    content: "ℹ️";
+    font-size: 1.2em;
+    display: block;
+}
+
+/* Notification Icons */
+.icon-notification {
+    color: #f59e0b;
+}
+
+.icon-notification::before {
+    content: "🔔";
+    font-size: 1.2em;
+    display: block;
+    animation: bellRing 2s infinite;
+}
+
+.icon-message {
+    color: #3b82f6;
+}
+
+.icon-message::before {
+    content: "💬";
+    font-size: 1.2em;
+    display: block;
+}
+
+/* User Icons */
+.icon-user {
+    color: #6b7280;
+}
+
+.icon-user::before {
+    content: "👤";
+    font-size: 1.2em;
+    display: block;
+}
+
+.icon-logout {
+    color: #ef4444;
+}
+
+.icon-logout::before {
+    content: "🚪";
+    font-size: 1.2em;
+    display: block;
+}
+
+/* Animations */
+@keyframes iconBounce {
+    0%, 20%, 53%, 80%, 100% {
+        transform: translate3d(0, 0, 0);
+    }
+    40%, 43% {
+        transform: translate3d(0, -8px, 0);
+    }
+    70% {
+        transform: translate3d(0, -4px, 0);
+    }
+    90% {
+        transform: translate3d(0, -2px, 0);
+    }
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes iconRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes iconShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-2px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(2px);
+    }
+}
+
+@keyframes dashboardPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.8;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes cartBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes boxFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+@keyframes usersWave {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-5deg);
+    }
+    75% {
+        transform: rotate(5deg);
+    }
+}
+
+@keyframes megaphoneShake {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-3deg);
+    }
+    75% {
+        transform: rotate(3deg);
+    }
+}
+
+@keyframes chartGrow {
+    0% {
+        transform: scaleY(0.8);
+    }
+    50% {
+        transform: scaleY(1.1);
+    }
+    100% {
+        transform: scaleY(0.8);
+    }
+}
+
+@keyframes warehousePulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+@keyframes truckMove {
+    0% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(2px);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+@keyframes gearRotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes addPulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes successBounce {
+    0% {
+        transform: scale(0.8);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes warningPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+@keyframes errorShake {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    25% {
+        transform: translateX(-3px);
+    }
+    75% {
+        transform: translateX(3px);
+    }
+}
+
+@keyframes bellRing {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    10%, 30% {
+        transform: rotate(-10deg);
+    }
+    20%, 40% {
+        transform: rotate(10deg);
+    }
+}
+
+/* SVG-based Icons (Alternative) */
+.svg-icon {
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    vertical-align: middle;
+}
+
+.svg-icon.lg {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.svg-icon.xl {
+    width: 2rem;
+    height: 2rem;
+}
+
+.svg-icon svg {
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+}
+
+/* SVG Icon Classes */
+.svg-icon-dashboard {
+    background-image: url('../icons/dashboard.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.svg-icon-orders {
+    background-image: url('../icons/orders.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.svg-icon-products {
+    background-image: url('../icons/products.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.svg-icon-settings {
+    background-image: url('../icons/settings.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* Icon Utility Classes */
+.icon-primary {
+    color: #107980;
+}
+
+.icon-success {
+    color: #10b981;
+}
+
+.icon-warning {
+    color: #f59e0b;
+}
+
+.icon-danger {
+    color: #ef4444;
+}
+
+.icon-info {
+    color: #3b82f6;
+}
+
+.icon-secondary {
+    color: #6b7280;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .animated-icon,
+    .animated-icon::before,
+    .svg-icon svg * {
+        animation: none !important;
+        transition: none !important;
+    }
+}
