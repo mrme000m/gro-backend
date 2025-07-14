@@ -2602,4 +2602,5 @@
   'register_devices' => 'Register devices',
   'customer_wallet_status_is_disable' => 'Customer wallet status is disable',
   '1 BDT Equal To How Much Loyalty Points?' => '1 BDT Equal To How Much Loyalty Points ',
+  'No images uploaded' => 'No images uploaded',
 );

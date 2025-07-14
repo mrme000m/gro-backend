@@ -8,76 +8,138 @@
     <link href="{{asset('public/assets/admin/css/ux-standards.css')}}" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
     <style>
+        /* Enhanced Form Styles */
         .form-step {
             display: none;
         }
         .form-step.active {
             display: block;
         }
+
+        /* Step Indicator */
         .step-indicator {
             display: flex;
             justify-content: space-between;
             margin-bottom: 2rem;
+            background: white;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .step {
             flex: 1;
             text-align: center;
-            padding: 1rem;
-            border-bottom: 3px solid var(--gray-200);
+            padding: 0.5rem;
+            border-bottom: 3px solid #dee2e6;
             position: relative;
+            transition: all 0.3s ease;
         }
         .step.active {
-            border-bottom-color: var(--primary-color);
-            color: var(--primary-color);
+            border-bottom-color: #107980;
+            color: #107980;
         }
         .step.completed {
-            border-bottom-color: var(--success-color);
-            color: var(--success-color);
+            border-bottom-color: #28a745;
+            color: #28a745;
         }
         .step-number {
             display: inline-block;
             width: 2rem;
             height: 2rem;
             border-radius: 50%;
-            background: var(--gray-200);
-            color: var(--gray-600);
+            background: #dee2e6;
+            color: #6c757d;
             line-height: 2rem;
             margin-bottom: 0.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         .step.active .step-number {
-            background: var(--primary-color);
+            background: #107980;
             color: white;
         }
         .step.completed .step-number {
-            background: var(--success-color);
+            background: #28a745;
             color: white;
         }
+        .step-title {
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Enhanced Form Groups */
+        .form-group-enhanced {
+            margin-bottom: 1.5rem;
+        }
+        .form-label-enhanced {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 0.5rem;
+        }
+        .form-label-enhanced.required::after {
+            content: ' *';
+            color: #dc3545;
+        }
+        .form-control-enhanced {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 2px solid #ced4da;
+            border-radius: 0.375rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-control-enhanced:focus {
+            border-color: #107980;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(16, 121, 128, 0.25);
+        }
+        .form-help-text {
+            font-size: 0.75rem;
+            color: #6c757d;
+            margin-top: 0.25rem;
+        }
+
+        /* Override existing form styles */
+        .form-control-enhanced.js-select2-custom {
+            border: 2px solid #ced4da !important;
+        }
+        .form-control-enhanced.js-select2-custom:focus {
+            border-color: #107980 !important;
+            box-shadow: 0 0 0 0.2rem rgba(16, 121, 128, 0.25) !important;
+        }
+
+        /* Card styling improvements */
+        .card {
+            border: none;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+        .card-header {
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Image Upload */
         .image-preview {
-            border: 2px dashed var(--gray-300);
-            border-radius: var(--radius-lg);
+            border: 2px dashed #ced4da;
+            border-radius: 0.5rem;
             padding: 2rem;
             text-align: center;
-            transition: border-color var(--transition-fast);
+            transition: all 0.3s ease;
+            background: #f8f9fa;
         }
         .image-preview:hover {
-            border-color: var(--primary-color);
+            border-color: #107980;
+            background: #e8f4f5;
         }
         .image-preview.dragover {
-            border-color: var(--primary-color);
-            background-color: var(--primary-light);
-        }
-        .price-calculator {
-            background: var(--gray-50);
-            border-radius: var(--radius-md);
-            padding: 1rem;
-            margin-top: 1rem;
-        }
-        .form-navigation {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 2rem;
-            padding-top: 1rem;
-            border-top: 1px solid var(--gray-200);
+            border-color: #107980;
+            background: #e8f4f5;
         }
         .image-grid {
             display: grid;
@@ -87,8 +149,9 @@
         }
         .image-item {
             position: relative;
-            border-radius: var(--radius-md);
+            border-radius: 0.375rem;
             overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         .image-item img {
             width: 100%;
@@ -106,6 +169,89 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background: rgba(220, 53, 69, 0.9);
+            border: none;
+            color: white;
+        }
+
+        /* Price Calculator */
+        .price-calculator {
+            background: #f8f9fa;
+            border-radius: 0.375rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border: 1px solid #dee2e6;
+        }
+
+        /* Form Navigation */
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #dee2e6;
+            background: white;
+            border-radius: 0 0 8px 8px;
+            padding: 1rem 1.5rem;
+        }
+
+        /* Auto-save indicator */
+        .auto-save-status {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1050;
+            background: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .auto-save-status.show {
+            opacity: 1;
+        }
+
+        /* Button Enhancements */
+        .btn-enhanced {
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            border-radius: 0.375rem;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        .btn-primary-enhanced {
+            background: #107980;
+            border-color: #107980;
+            color: white;
+        }
+        .btn-primary-enhanced:hover {
+            background: #0d6066;
+            border-color: #0d6066;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(16, 121, 128, 0.3);
+        }
+        .btn-secondary-enhanced {
+            background: white;
+            border-color: #ced4da;
+            color: #495057;
+        }
+        .btn-secondary-enhanced:hover {
+            background: #f8f9fa;
+            border-color: #adb5bd;
+        }
+        .btn-success-enhanced {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+        .btn-success-enhanced:hover {
+            background: #218838;
+            border-color: #1e7e34;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
         }
     </style>
 @endpush
@@ -113,61 +259,66 @@
 @section('content')
     <div class="content container-fluid">
         <!-- Page Header -->
-        <div class="page-header">
+        <div class="page-header mb-4">
             <div class="d-flex align-items-center justify-content-between">
                 <h1 class="page-header-title">
                     <span class="page-header-icon">
                         <img src="{{asset('public/assets/admin/img/add-product.png')}}" class="w--24" alt="">
                     </span>
-                    <span>{{translate('add New Product')}}</span>
+                    <span>{{translate('Add New Product')}}</span>
                 </h1>
-                <div class="auto-save-status" id="autoSaveStatus" style="display: none;">
-                    <small class="text-muted">
-                        <i class="fas fa-clock"></i> <span id="autoSaveText">Draft saved</span>
-                    </small>
+            </div>
+        </div>
+
+        <!-- Auto-save Status (Fixed Position) -->
+        <div class="auto-save-status" id="autoSaveStatus">
+            <i class="fas fa-save"></i> <span id="autoSaveText">Auto-save enabled</span>
+        </div>
+
+        <!-- Enhanced Form Container -->
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <!-- Step Indicator -->
+                <div class="step-indicator">
+                    <div class="step active" data-step="1">
+                        <div class="step-number">1</div>
+                        <div class="step-title">{{translate('Basic Information')}}</div>
+                    </div>
+                    <div class="step" data-step="2">
+                        <div class="step-number">2</div>
+                        <div class="step-title">{{translate('Category & Details')}}</div>
+                    </div>
+                    <div class="step" data-step="3">
+                        <div class="step-number">3</div>
+                        <div class="step-title">{{translate('Images & Media')}}</div>
+                    </div>
+                    <div class="step" data-step="4">
+                        <div class="step-number">4</div>
+                        <div class="step-title">{{translate('Pricing & Stock')}}</div>
+                    </div>
+                    <div class="step" data-step="5">
+                        <div class="step-number">5</div>
+                        <div class="step-title">{{translate('Review & Submit')}}</div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Step Indicator -->
-        <div class="step-indicator">
-            <div class="step active" data-step="1">
-                <div class="step-number">1</div>
-                <div class="step-title">{{translate('Basic Information')}}</div>
-            </div>
-            <div class="step" data-step="2">
-                <div class="step-number">2</div>
-                <div class="step-title">{{translate('Category & Details')}}</div>
-            </div>
-            <div class="step" data-step="3">
-                <div class="step-number">3</div>
-                <div class="step-title">{{translate('Images & Media')}}</div>
-            </div>
-            <div class="step" data-step="4">
-                <div class="step-number">4</div>
-                <div class="step-title">{{translate('Pricing & Stock')}}</div>
-            </div>
-            <div class="step" data-step="5">
-                <div class="step-number">5</div>
-                <div class="step-title">{{translate('Review & Submit')}}</div>
-            </div>
-        </div>
+                <!-- Form Content Area -->
+                <div class="p-4">
+                    <!-- Enhanced Form -->
+                    <form action="javascript:" method="post" id="product_form_enhanced"
+                          enctype="multipart/form-data"
+                          data-auto-save="true"
+                          data-validate="true"
+                          role="form"
+                          aria-label="Add new product form">
+                        @csrf
+                        @php($data = Helpers::get_business_settings('language'))
+                        @php($default_lang = Helpers::get_default_language())
 
-        <!-- Enhanced Form -->
-        <form action="javascript:" method="post" id="product_form_enhanced"
-              enctype="multipart/form-data"
-              data-auto-save="true"
-              data-validate="true"
-              role="form"
-              aria-label="Add new product form">
-            @csrf
-            @php($data = Helpers::get_business_settings('language'))
-            @php($default_lang = Helpers::get_default_language())
-
-            <!-- Step 1: Basic Information -->
-            <div class="form-step active" id="step-1">
-                <div class="row">
-                    <div class="col-lg-8">
+                        <!-- Step 1: Basic Information -->
+                        <div class="form-step active" id="step-1">
+                            <div class="row">
+                                <div class="col-lg-8">
                         <div class="card">
                             <div class="card-header">
                                 <h5 class="card-title">
@@ -752,19 +903,22 @@
                 </div>
             </div>
 
-            <!-- Form Navigation -->
-            <div class="form-navigation">
-                <button type="button" class="btn btn-secondary-enhanced" id="prevBtn" onclick="changeStep(-1)" disabled>
-                    <i class="fas fa-arrow-left"></i> {{translate('Previous')}}
-                </button>
-                <button type="button" class="btn btn-primary-enhanced" id="nextBtn" onclick="changeStep(1)">
-                    {{translate('Next')}} <i class="fas fa-arrow-right"></i>
-                </button>
-                <button type="submit" class="btn btn-success-enhanced" id="submitBtn" style="display: none;">
-                    <i class="fas fa-check"></i> {{translate('Create Product')}}
-                </button>
+                        <!-- Form Navigation -->
+                        <div class="form-navigation">
+                            <button type="button" class="btn btn-secondary-enhanced" id="prevBtn" onclick="changeStep(-1)" disabled>
+                                <i class="fas fa-arrow-left"></i> {{translate('Previous')}}
+                            </button>
+                            <button type="button" class="btn btn-primary-enhanced" id="nextBtn" onclick="changeStep(1)">
+                                {{translate('Next')}} <i class="fas fa-arrow-right"></i>
+                            </button>
+                            <button type="submit" class="btn btn-success-enhanced" id="submitBtn" style="display: none;">
+                                <i class="fas fa-check"></i> {{translate('Create Product')}}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 @endsection
 
@@ -778,13 +932,17 @@
     <script>
         let currentStep = 1;
         const totalSteps = 5;
+        let uploadedImages = []; // Global variable for uploaded images
 
         // Initialize enhanced form
         $(document).ready(function() {
+            // Show auto-save status initially
+            $('#autoSaveStatus').addClass('show');
+
             // Initialize auto-save
             $('#product_form_enhanced').autoSave({
                 saveInterval: 3000,
-                showIndicator: true
+                showIndicator: false // We'll handle our own indicator
             });
 
             // Initialize validation
@@ -816,8 +974,20 @@
 
             // Auto-save status updates
             $('#product_form_enhanced').on('autosaved', function(e) {
-                $('#autoSaveStatus').show();
-                $('#autoSaveText').text('Draft saved at ' + new Date().toLocaleTimeString());
+                $('#autoSaveStatus').removeClass('show');
+                $('#autoSaveText').html('<i class="fas fa-check"></i> Saved at ' + new Date().toLocaleTimeString());
+                $('#autoSaveStatus').addClass('show');
+
+                // Hide after 3 seconds
+                setTimeout(function() {
+                    $('#autoSaveStatus').removeClass('show');
+                }, 3000);
+            });
+
+            // Show saving indicator on form changes
+            $('#product_form_enhanced').on('input change', function() {
+                $('#autoSaveText').html('<i class="fas fa-spinner fa-spin"></i> Saving...');
+                $('#autoSaveStatus').addClass('show');
             });
 
             // Initialize image upload
