@@ -75,9 +75,13 @@ run_migrations() {
         if [ -n "$DATABASE_URL" ]; then
             echo "DATABASE_URL found, setting up database..."
 
-            # Initialize database with base schema using Laravel command
-            echo "Initializing database with base schema..."
-            php artisan db:initialize || echo "Warning: Database initialization failed, continuing..."
+            # Create essential base tables first
+            echo "Creating essential base tables..."
+            php artisan db:create-base-tables || echo "Warning: Base table creation failed, continuing..."
+
+            # Try full schema initialization as backup
+            echo "Attempting full schema initialization..."
+            php artisan db:initialize || echo "Warning: Full schema initialization failed, continuing..."
 
             echo "Running Laravel migrations..."
             php artisan migrate --force || echo "Warning: Some migrations failed, continuing..."
