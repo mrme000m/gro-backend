@@ -1,20 +1,43 @@
-node_modules
+# Development files
 npm-debug.log
 .git
 .gitignore
-README.md
 .env
 .env.backup
 .phpunit.result.cache
 Homestead.json
 Homestead.yaml
 auth.json
-/vendor
+
+# Storage directories (will be created in container)
 /storage/logs/*
 /storage/framework/cache/*
 /storage/framework/sessions/*
 /storage/framework/testing/*
 /storage/framework/views/*
 /storage/debugbar/*
+
+# OS files
 .DS_Store
 Thumbs.db
+
+# Documentation (except main README)
+*.md
+!README.md
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# Test files
+/tests/
+phpunit.xml
+
+# Development Docker files
+docker-compose.yml
+test-railway-deployment.sh
+
+# Note: We include node_modules and vendor as they're needed for the build
+# Railway will handle dependency installation in the build process

@@ -45,13 +45,17 @@ The GroFresh application follows a "majestic monolith" architecture on Railway:
 3. Configure the following:
 
 **Build Settings:**
-- Build Command: `chmod +x ./build-app.sh && ./build-app.sh`
+- Builder: Dockerfile
+- Dockerfile Path: `Dockerfile.railway` (optimized for Railway)
+- Build Command: (leave empty, handled by Dockerfile)
 - Pre-Deploy Command: `php artisan migrate --force`
 
 **Deploy Settings:**
 - Start Command: (leave empty, uses Dockerfile)
 - Health Check Path: `/`
 - Health Check Timeout: `300`
+
+**Note:** We use `Dockerfile.railway` which is optimized for Railway's build environment and avoids multi-stage build issues.
 
 ### 5. Set Environment Variables
 
