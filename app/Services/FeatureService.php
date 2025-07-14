@@ -487,7 +487,7 @@ class FeatureService
         }
 
         if ($this->isEnabled('system.maintenance_mode')) {
-            $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.maintenance-mode'];
+            $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.store.maintenance-mode'];
         }
 
         if ($this->isEnabled('system.api_management')) {
