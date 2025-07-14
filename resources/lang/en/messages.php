@@ -2592,4 +2592,9 @@
   'Main Categories' => 'Main Categories',
   'Earning Reports' => 'Earning Reports',
   'System' => 'System',
+  'Sale Reports' => 'Sale Reports',
+  'Order Reports' => 'Order Reports',
+  'Marketing' => 'Marketing',
+  'Customers' => 'Customers',
+  'Customer Management' => 'Customer Management',
 );

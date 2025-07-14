@@ -217,7 +217,7 @@ class DashboardController extends Controller
             ['title' => 'Dashboard', 'url' => route('admin.dashboard')]
         ];
 
-        return view('admin-views.modern-dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
+        return view('admin-views.dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
     }
 
     /**
@@ -270,7 +270,7 @@ class DashboardController extends Controller
             ['title' => 'Dashboard', 'url' => route('admin.dashboard')]
         ];
 
-        return view('admin-views.modern-dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
+        return view('admin-views.dashboard', compact('data', 'earning', 'orderStatisticsChart', 'dashboardData', 'breadcrumbs'));
     }
 
     /**
