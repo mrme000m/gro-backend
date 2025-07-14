@@ -2541,4 +2541,10 @@
   'visited_products' => 'Visited products',
   'searched_products' => 'Searched products',
   'searched_keyword_use...' => 'Searched keyword use...',
+  'searched_keyword_cou...' => 'Searched keyword cou...',
+  'searched_data' => 'Searched data',
+  'searched_categories' => 'Searched categories',
+  'One Referrer Equal To How Much BDT' => 'One Referrer Equal To How Much BDT',
+  'No addons' => 'No addons',
+  'No system addons installed. Upload addon files to enable this feature.' => 'No system addons installed. Upload addon files to enable this feature.',
 );

@@ -1,32 +1,10 @@
 $(document).ready(function() {
-    // Safe Chart.js initialization - prevent errors
-    console.log('ApexCharts dashboard loaded');
+    // Disable Chart.js initialization to prevent errors
+    // This dashboard uses ApexCharts instead of Chart.js
+    console.log('Dashboard loaded - using ApexCharts for visualization');
 
-    // Initialize Chart.js charts only if elements exist and HSCore is available
-    if (typeof $.HSCore !== 'undefined' && $.HSCore.components && $.HSCore.components.HSChartJS) {
-        $('.js-chart').each(function () {
-            if ($(this).length > 0 && $(this).is('canvas')) {
-                try {
-                    $.HSCore.components.HSChartJS.init($(this));
-                } catch (e) {
-                    console.warn('Failed to initialize chart:', e);
-                }
-            }
-        });
-
-        // Check if updatingData element exists and has canvas before initializing
-        var updatingChart = null;
-        if ($('#updatingData').length > 0 && $('#updatingData canvas').length > 0) {
-            try {
-                updatingChart = $.HSCore.components.HSChartJS.init($('#updatingData'));
-            } catch (e) {
-                console.warn('Failed to initialize updating chart:', e);
-            }
-        }
-    } else {
-        console.warn('HSCore Chart.js components not available - using ApexCharts only');
-        var updatingChart = null;
-    }
+    // Set updatingChart to null since we're not using Chart.js
+    var updatingChart = null;
 
     $('[data-toggle="chart-bar"]').click(function (e) {
         // Only proceed if updatingChart was successfully initialized
@@ -73,10 +51,7 @@ $(document).ready(function() {
     })
 
     $('.js-chart-datalabels').each(function () {
-        // Safe initialization for chart data labels
-        if (typeof $.HSCore !== 'undefined' && $.HSCore.components && $.HSCore.components.HSChartJS && $(this).is('canvas')) {
-            try {
-                $.HSCore.components.HSChartJS.init($(this), {
+        $.HSCore.components.HSChartJS.init($(this), {
             plugins: [ChartDataLabels],
             options: {
                 plugins: {
@@ -116,11 +91,5 @@ $(document).ready(function() {
                 }
             },
         });
-            } catch (e) {
-                console.warn('Failed to initialize chart with data labels:', e);
-            }
-        } else {
-            console.warn('Chart data labels element found but Chart.js not available or element is not canvas');
-        }
     });
 });

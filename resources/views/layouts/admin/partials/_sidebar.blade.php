@@ -5,7 +5,9 @@
             <div class="navbar-vertical-footer-offset">
                 <div class="navbar-brand-wrapper justify-content-between">
 
-                    @php($logo=\App\Model\BusinessSetting::where(['key'=>'logo'])->first()->value)
+                    @php
+                        $logo = \App\Model\BusinessSetting::where(['key'=>'logo'])->first()->value;
+                    @endphp
                     <a class="navbar-brand" href="{{route('admin.dashboard')}}" aria-label="Front">
                         <img class="w-100 side-logo"
                              src="{{ App\CentralLogics\Helpers::onErrorImage($logo, asset('storage/app/public/restaurant') . '/' . $logo, asset('assets/admin/img/160x160/img2.jpg'), 'restaurant/')}}"
@@ -833,14 +835,43 @@
                                 <small class="tio-more-horizontal nav-subtitle-replacer"></small>
                             </li>
 
-                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/system-addon')?'active':''}}">
-                                <a class="js-navbar-vertical-aside-menu-link nav-link"
-                                   href="{{route('admin.system-addon.index')}}" title="{{translate('System Addons')}}">
-                                    <i class="tio-add-circle-outlined nav-icon"></i>
-                                    <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
-                                    {{translate('System Addons')}}
-                                </span>
-                                </a>
+                            @php
+                                // Simple check for addon directories
+                                $hasAddons = false;
+                                $modulesPath = base_path('Modules');
+                                if (is_dir($modulesPath)) {
+                                    $directories = array_diff(scandir($modulesPath), array('.', '..', 'readme.txt'));
+                                    foreach ($directories as $directory) {
+                                        if (is_dir($modulesPath . '/' . $directory) && is_dir($modulesPath . '/' . $directory . '/Addon')) {
+                                            $hasAddons = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            @endphp
+
+                            <li class="navbar-vertical-aside-has-menu {{Request::is('admin/system-addon')?'active':''}} {{ !$hasAddons ? 'disabled-menu-item' : '' }}">
+                                @if($hasAddons)
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link"
+                                       href="{{route('admin.system-addon.index')}}" title="{{translate('System Addons')}}">
+                                        <i class="tio-add-circle-outlined nav-icon"></i>
+                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{translate('System Addons')}}
+                                    </span>
+                                    </a>
+                                @else
+                                    <a class="js-navbar-vertical-aside-menu-link nav-link disabled-link"
+                                       href="javascript:void(0)"
+                                       title="{{translate('No system addons installed. Upload addon files to enable this feature.')}}"
+                                       data-toggle="tooltip"
+                                       data-placement="right"
+                                       style="opacity: 0.5; cursor: not-allowed; pointer-events: none;">
+                                        <i class="tio-add-circle-outlined nav-icon"></i>
+                                        <span class="navbar-vertical-aside-mini-mode-hidden-elements text-truncate">
+                                        {{translate('System Addons')}} <small>({{translate('No addons')}})</small>
+                                    </span>
+                                    </a>
+                                @endif
                             </li>
 
                             @if(count(config('addon_admin_routes'))>0)
