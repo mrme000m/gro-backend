@@ -68,32 +68,23 @@ clear_caches() {
     php artisan view:clear || true
 }
 
-# Initialize database and run migrations
+# Initialize database with complete schema
 run_migrations() {
     if [ "$RAILWAY_SERVICE_NAME" != "worker" ] && [ "$RAILWAY_SERVICE_NAME" != "cron" ]; then
         echo "Checking database configuration..."
         if [ -n "$DATABASE_URL" ]; then
             echo "DATABASE_URL found, setting up database..."
 
-            # Create essential base tables first
-            echo "Creating essential base tables..."
-            php artisan db:create-base-tables || echo "Warning: Base table creation failed, continuing..."
+            # Use complete database initialization
+            echo "Initializing complete database schema..."
+            php artisan db:init-complete || echo "Warning: Complete database initialization failed"
 
-            # Fix migration conflicts
-            echo "Fixing migration conflicts..."
-            php artisan db:fix-migrations || echo "Warning: Migration fix failed, continuing..."
-
-            # Try full schema initialization as backup
-            echo "Attempting full schema initialization..."
-            php artisan db:initialize || echo "Warning: Full schema initialization failed, continuing..."
-
-            echo "Running Laravel migrations..."
-            php artisan migrate --force || echo "Warning: Some migrations failed, continuing..."
+            echo "Database initialization complete!"
         else
             echo "No DATABASE_URL found. To connect database:"
             echo "1. Add MySQL/PostgreSQL service in Railway"
             echo "2. DATABASE_URL will be automatically provided"
-            echo "Skipping migrations for now..."
+            echo "Skipping database setup for now..."
         fi
     fi
 }
