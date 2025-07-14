@@ -68,13 +68,33 @@ clear_caches() {
     php artisan view:clear || true
 }
 
-# Run migrations (with error handling)
+# Import base schema and run migrations
 run_migrations() {
     if [ "$RAILWAY_SERVICE_NAME" != "worker" ] && [ "$RAILWAY_SERVICE_NAME" != "cron" ]; then
         echo "Checking database configuration..."
         if [ -n "$DATABASE_URL" ]; then
-            echo "DATABASE_URL found, running migrations..."
-            php artisan migrate --force || echo "Warning: Migration failed, continuing..."
+            echo "DATABASE_URL found, setting up database..."
+
+            # Check if database is already initialized
+            if php artisan migrate:status | grep -q "Migration table not found"; then
+                echo "Database not initialized. Importing base schema..."
+
+                # Parse DATABASE_URL to get connection details
+                DB_HOST=$(echo $DATABASE_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
+                DB_PORT=$(echo $DATABASE_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+                DB_NAME=$(echo $DATABASE_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
+                DB_USER=$(echo $DATABASE_URL | sed -n 's/.*\/\/\([^:]*\):.*/\1/p')
+                DB_PASS=$(echo $DATABASE_URL | sed -n 's/.*\/\/[^:]*:\([^@]*\)@.*/\1/p')
+
+                # Import base schema if it exists
+                if [ -f "/var/www/html/installation/v4.1.sql" ]; then
+                    echo "Importing base schema from installation/v4.1.sql..."
+                    mysql -h"$DB_HOST" -P"$DB_PORT" -u"$DB_USER" -p"$DB_PASS" "$DB_NAME" < /var/www/html/installation/v4.1.sql || echo "Warning: Base schema import failed"
+                fi
+            fi
+
+            echo "Running Laravel migrations..."
+            php artisan migrate --force || echo "Warning: Some migrations failed, continuing..."
         else
             echo "No DATABASE_URL found. To connect database:"
             echo "1. Add MySQL/PostgreSQL service in Railway"
