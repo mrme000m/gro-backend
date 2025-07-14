@@ -77,5 +77,6 @@ class Kernel extends HttpKernel
         'employee_active_check' => \App\Http\Middleware\EmployeeActiveCheck::class,
         'active_branch_check' => \App\Http\Middleware\ActiveBranchCheck::class,
         'guest_user' => \App\Http\Middleware\GuestUser::class,
+        'cache.api' => \App\Http\Middleware\CacheApiResponse::class,
     ];
 }

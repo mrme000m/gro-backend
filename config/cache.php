@@ -74,6 +74,33 @@ return [
         'redis' => [
             'driver' => 'redis',
             'connection' => 'cache',
+            'lock_connection' => 'default',
+        ],
+
+        // Dedicated cache stores for different data types
+        'products' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+
+        'orders' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+
+        'users' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+
+        'settings' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
+        ],
+
+        'api' => [
+            'driver' => 'redis',
+            'connection' => 'cache',
         ],
 
         'dynamodb' => [

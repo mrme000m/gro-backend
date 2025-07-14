@@ -176,15 +176,27 @@ class Helpers
 
     public static function get_business_settings($name)
     {
-        $config = null;
-        $data = \App\Model\BusinessSetting::where(['key' => $name])->first();
-        if (isset($data)) {
-            $config = json_decode($data['value'], true);
-            if (is_null($config)) {
-                $config = $data['value'];
+        // Use cache service for better performance
+        try {
+            $cacheService = app(\App\Services\CacheService::class);
+            $value = $cacheService->getBusinessSetting($name);
+            if ($value) {
+                $config = json_decode($value, true);
+                return is_null($config) ? $value : $config;
             }
+            return null;
+        } catch (\Exception $e) {
+            // Fallback to direct database query
+            $config = null;
+            $data = \App\Model\BusinessSetting::where(['key' => $name])->first();
+            if (isset($data)) {
+                $config = json_decode($data['value'], true);
+                if (is_null($config)) {
+                    $config = $data['value'];
+                }
+            }
+            return $config;
         }
-        return $config;
     }
 
     public static function currency_code()

@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use App\Services\CacheService;
 
 class ProductController extends Controller
 {
@@ -38,7 +39,8 @@ class ProductController extends Controller
         private SearchedKeywordUser $searched_keyword_user,
         private SearchedProduct $searched_product,
         private Translation $translation,
-        private VisitedProduct $visited_product
+        private VisitedProduct $visited_product,
+        private CacheService $cacheService
     ){}
 
     /**
@@ -500,38 +502,25 @@ class ProductController extends Controller
     public function featuredProducts(Request $request): JsonResponse
     {
         try {
-            // Optimized featured products query with caching
-            $cacheKey = "featured_products_" . $request['limit'] . "_" . $request['offset'];
+            // Use cache service for featured products
+            $limit = $request['limit'] ?? 10;
+            $offset = $request['offset'] ?? 1;
 
-            $paginator = Cache::remember($cacheKey, 300, function() use ($request) {
-                return $this->product
-                    ->active()
-                    ->where('is_featured', 1)
-                    ->with([
-                        'rating' => function($query) {
-                            $query->select('product_id', DB::raw('AVG(rating) as average'));
-                        },
-                        'active_reviews' => function($query) {
-                            $query->select('product_id', 'rating', 'comment', 'customer_id', 'created_at')
-                                  ->latest()
-                                  ->take(3);
-                        }
-                    ])
-                    ->withCount(['wishlist as wishlist_count'])
-                    ->select([
-                        'id', 'name', 'description', 'image', 'price', 'discount',
-                        'discount_type', 'tax', 'tax_type', 'unit', 'total_stock',
-                        'capacity', 'status', 'created_at', 'updated_at'
-                    ])
-                    ->orderBy('id', 'desc')
-                    ->paginate($request['limit'], ['*'], 'page', $request['offset']);
-            });
+            $featuredProducts = $this->cacheService->getFeaturedProducts($limit);
+
+            // For pagination, we need to handle it differently with cache
+            $total = $featuredProducts->count();
+            $perPage = $limit;
+            $currentPage = $offset;
+
+            // Slice the collection for pagination
+            $paginatedProducts = $featuredProducts->slice(($currentPage - 1) * $perPage, $perPage)->values();
 
             $products = [
-                'total_size' => $paginator->total(),
-                'limit' => $request['limit'],
-                'offset' => $request['offset'],
-                'products' => $paginator->items()
+                'total_size' => $total,
+                'limit' => $limit,
+                'offset' => $offset,
+                'products' => $paginatedProducts->toArray()
             ];
 
             // Format products data

@@ -3,6 +3,12 @@
 namespace App\Providers;
 
 use App\Model\BusinessSetting;
+use App\Model\Category;
+use App\Model\Product;
+use App\Observers\BusinessSettingObserver;
+use App\Observers\CategoryObserver;
+use App\Observers\ProductObserver;
+use App\Services\CacheService;
 use App\Traits\SystemAddonTrait;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
@@ -18,7 +24,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // Register CacheService as singleton
+        $this->app->singleton(CacheService::class, function ($app) {
+            return new CacheService();
+        });
     }
 
     /**
@@ -31,6 +40,11 @@ class AppServiceProvider extends ServiceProvider
         //for system addon
         Config::set('addon_admin_routes',$this->get_addon_admin_routes());
         Config::set('get_payment_publish_status',$this->get_payment_publish_status());
+
+        // Register model observers for cache invalidation
+        Product::observe(ProductObserver::class);
+        Category::observe(CategoryObserver::class);
+        BusinessSetting::observe(BusinessSettingObserver::class);
 
         try {
             $timezone = BusinessSetting::where(['key' => 'time_zone'])->first();
