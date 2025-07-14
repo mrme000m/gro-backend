@@ -35,6 +35,50 @@ Route::get('/health', function () {
     ]);
 });
 
+// Status endpoint for deployment verification
+Route::get('/status', function () {
+    $status = [
+        'app' => 'GroFresh Restaurant Bazar',
+        'version' => '1.0.0',
+        'environment' => app()->environment(),
+        'timestamp' => now()->toISOString(),
+        'services' => [
+            'database' => 'not_configured',
+            'redis' => 'not_configured',
+            'storage' => 'local'
+        ]
+    ];
+
+    // Check database connection
+    try {
+        DB::connection()->getPdo();
+        $status['services']['database'] = 'connected';
+    } catch (\Exception $e) {
+        $status['services']['database'] = 'not_connected';
+        $status['database_note'] = 'Add MySQL/PostgreSQL service in Railway dashboard';
+    }
+
+    // Check Redis connection
+    try {
+        if (extension_loaded('redis')) {
+            $status['services']['redis'] = 'extension_loaded';
+            // Try to connect if REDIS_URL is available
+            if (env('REDIS_URL')) {
+                $status['services']['redis'] = 'configured';
+            }
+        } else {
+            $status['services']['redis'] = 'extension_missing';
+        }
+    } catch (\Exception $e) {
+        $status['services']['redis'] = 'error';
+    }
+
+    // Check storage configuration
+    $status['services']['storage'] = config('filesystems.default');
+
+    return response()->json($status);
+});
+
 Route::get('/', function () {
     // For Railway health check, return a simple response if no database
     try {

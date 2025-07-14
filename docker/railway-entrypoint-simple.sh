@@ -21,24 +21,24 @@ setup_basic_env() {
     if [ ! -f /var/www/html/.env ]; then
         echo "Creating basic .env file..."
         cp /var/www/html/.env.example /var/www/html/.env
-        
+
         # Set basic configuration
         sed -i 's/APP_ENV=.*/APP_ENV=production/' /var/www/html/.env
         sed -i 's/APP_DEBUG=.*/APP_DEBUG=false/' /var/www/html/.env
         sed -i 's/LOG_CHANNEL=.*/LOG_CHANNEL=errorlog/' /var/www/html/.env
-        
+
         # Configure database if DATABASE_URL is available
         if [ -n "$DATABASE_URL" ]; then
             echo "DATABASE_URL=$DATABASE_URL" >> /var/www/html/.env
         fi
-        
+
         # Configure Redis if REDIS_URL is available
         if [ -n "$REDIS_URL" ]; then
             echo "REDIS_URL=$REDIS_URL" >> /var/www/html/.env
             sed -i 's/CACHE_DRIVER=.*/CACHE_DRIVER=redis/' /var/www/html/.env
             sed -i 's/SESSION_DRIVER=.*/SESSION_DRIVER=redis/' /var/www/html/.env
         fi
-        
+
         # Set Railway-specific URLs
         if [ -n "$RAILWAY_STATIC_URL" ]; then
             sed -i "s|APP_URL=.*|APP_URL=https://$RAILWAY_STATIC_URL|" /var/www/html/.env
@@ -71,11 +71,15 @@ clear_caches() {
 # Run migrations (with error handling)
 run_migrations() {
     if [ "$RAILWAY_SERVICE_NAME" != "worker" ] && [ "$RAILWAY_SERVICE_NAME" != "cron" ]; then
-        echo "Running database migrations..."
+        echo "Checking database configuration..."
         if [ -n "$DATABASE_URL" ]; then
+            echo "DATABASE_URL found, running migrations..."
             php artisan migrate --force || echo "Warning: Migration failed, continuing..."
         else
-            echo "No DATABASE_URL found, skipping migrations"
+            echo "No DATABASE_URL found. To connect database:"
+            echo "1. Add MySQL/PostgreSQL service in Railway"
+            echo "2. DATABASE_URL will be automatically provided"
+            echo "Skipping migrations for now..."
         fi
     fi
 }
@@ -89,7 +93,7 @@ create_storage_link() {
 # Main execution
 main() {
     echo "Starting initialization..."
-    
+
     configure_apache
     setup_basic_env
     generate_app_key
@@ -97,10 +101,10 @@ main() {
     clear_caches
     create_storage_link
     run_migrations
-    
+
     echo "=== Initialization Complete ==="
     echo "Starting Apache server on port ${PORT:-80}..."
-    
+
     # Start Apache in foreground
     exec apache2-foreground
 }
