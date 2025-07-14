@@ -3,7 +3,7 @@
 @section('title', translate('Dashboard'))
 
 @section('content')
-    @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
+    @if(feature_enabled('core.dashboard'))
         <div class="content container-fluid">
             <div class="page-header mb-0 pb-2 border-0">
                 <h1 class="page-header-title text-107980">{{ translate('welcome')}}, {{auth('admin')->user()->f_name}}</h1>

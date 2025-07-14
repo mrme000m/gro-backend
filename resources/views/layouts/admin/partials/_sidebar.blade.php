@@ -36,7 +36,7 @@
                         </div>
                     </form>
                     <ul class="navbar-nav navbar-nav-lg nav-tabs">
-                    @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
+                    @if(feature_enabled('core.dashboard'))
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin')?'show active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link"
                                    href="{{route('admin.dashboard')}}" title="{{translate('dashboard')}}">
@@ -48,7 +48,7 @@
                             </li>
                     @endif
 
-                    @if(Helpers::module_permission_check(MANAGEMENT_SECTION['pos_management']))
+                    @if(feature_enabled('orders.enabled'))
                             <li class="navbar-vertical-aside-has-menu {{Request::is('admin/pos*')?'active':''}}">
                                 <a class="js-navbar-vertical-aside-menu-link nav-link nav-link-toggle"
                                    href="javascript:" title="{{translate('POS')}}">
@@ -81,7 +81,7 @@
                                 </ul>
                             </li>
                         @endif
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['order_management']))
+                        @if(feature_enabled('orders.enabled'))
                             <li class="nav-item">
                                 <small
                                     class="nav-subtitle">{{translate('order_management')}}</small>
@@ -221,7 +221,7 @@
                             </li>
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['product_management']))
+                        @if(feature_enabled('products.enabled'))
                             <li class="nav-item">
                                 <small
                                     class="nav-subtitle">{{translate('product_management')}} </small>
@@ -310,7 +310,7 @@
                             </li>
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
+                        @if(feature_enabled('marketing.enabled'))
                             <li class="nav-item">
                                 <small
                                     class="nav-subtitle">{{translate('promotion_management')}} </small>
@@ -372,7 +372,7 @@
                             </li>
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['support_management']))
+                        @if(feature_enabled('customers.customer_support'))
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Layouts">{{translate('Help & Support Section')}}</small>
@@ -392,7 +392,7 @@
                             </li>
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_management']))
+                        @if(feature_enabled('analytics.enabled'))
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Documentation">{{translate('report_and_analytics')}}</small>
@@ -460,7 +460,7 @@
                         @endif
 
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
+                        @if(feature_enabled('customers.enabled') || feature_enabled('system.user_management'))
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Documentation">{{translate('user management')}}</small>
@@ -680,7 +680,7 @@
                             @endif
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
+                        @if(feature_enabled('system.enabled'))
                             <li class="nav-item">
                                 <small class="nav-subtitle"
                                        title="Layouts">{{translate('system setting')}}</small>
@@ -828,7 +828,7 @@
 
                         @endif
 
-                        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['addon_management']))
+                        @if(feature_enabled('system.enabled'))
 
                             <li class="nav-item">
                                 <small class="nav-subtitle">{{translate('system')}} {{translate('addon')}}</small>

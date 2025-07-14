@@ -42,7 +42,7 @@
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Main') }}</div>
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['dashboard_management']))
+            @if(feature_enabled('core.dashboard'))
             <div class="nav-item">
                 <a href="{{ route('admin.dashboard') }}"
                    class="nav-link {{ Request::is('admin') ? 'active' : '' }}"
@@ -56,7 +56,7 @@
             </div>
             @endif
 
-            @if(Helpers::module_permission_check(MANAGEMENT_SECTION['pos_management']))
+            @if(feature_enabled('orders.enabled'))
             <div class="nav-item">
                 <a href="{{ route('admin.pos.index') }}"
                    class="nav-link {{ Request::is('admin/pos*') ? 'active' : '' }}"
@@ -72,7 +72,7 @@
         </div>
 
         <!-- Order Management -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['order_management']))
+        @if(feature_enabled('orders.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Order Management') }}</div>
 
@@ -130,7 +130,7 @@
         @endif
 
         <!-- Product Management -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['product_management']))
+        @if(feature_enabled('products.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Product Management') }}</div>
 
@@ -193,7 +193,7 @@
         @endif
 
         <!-- Customer Management -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['user_management']))
+        @if(feature_enabled('customers.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Customer Management') }}</div>
 
@@ -212,7 +212,7 @@
         @endif
 
         <!-- Marketing & Promotions -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['promotion_management']))
+        @if(feature_enabled('marketing.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Marketing') }}</div>
 
@@ -243,7 +243,7 @@
         @endif
 
         <!-- Reports & Analytics -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['report_management']))
+        @if(feature_enabled('analytics.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('Analytics') }}</div>
 
@@ -278,7 +278,7 @@
         @endif
 
         <!-- System Settings -->
-        @if(Helpers::module_permission_check(MANAGEMENT_SECTION['system_management']))
+        @if(feature_enabled('system.enabled'))
         <div class="nav-section">
             <div class="nav-section-title">{{ translate('System') }}</div>
 

@@ -157,7 +157,7 @@
         location.href = '{{route('admin.order.list',['status'=>'all'])}}';
     })
 
-    @if(Helpers::module_permission_check('order_management'))
+    @if(feature_enabled('orders.enabled'))
         setInterval(function () {
             $.get({
                 url: '{{route('admin.get-restaurant-data')}}',

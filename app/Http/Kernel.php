@@ -5,6 +5,7 @@ namespace App\Http;
 use App\Http\Middleware\ActivationCheckMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Middleware\BranchMiddleware;
+use App\Http\Middleware\FeatureMiddleware;
 use App\Http\Middleware\InstallationMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -72,6 +73,7 @@ class Kernel extends HttpKernel
         'actch' => ActivationCheckMiddleware::class,
         'localization' => \App\Http\Middleware\localization::class,
         'module' => \App\Http\Middleware\ModulePermissionMiddleware::class,
+        'feature' => \App\Http\Middleware\FeatureMiddleware::class,
         'customer_is_block' => \App\Http\Middleware\CustomerIsBlocked::class,
         'deliveryman_is_active' => \App\Http\Middleware\DeliverymanIsBlock::class,
         'employee_active_check' => \App\Http\Middleware\EmployeeActiveCheck::class,

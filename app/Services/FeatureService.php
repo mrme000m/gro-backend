@@ -61,6 +61,11 @@ class FeatureService
      */
     public function isCategoryEnabled(string $category): bool
     {
+        // Core category is always enabled
+        if ($category === 'core') {
+            return true;
+        }
+
         return $this->isEnabled($category . '.enabled');
     }
 
@@ -74,7 +79,13 @@ class FeatureService
     {
         $features = $this->getAllFeatures();
 
-        if (!isset($features[$category]) || !$this->isCategoryEnabled($category)) {
+        if (!isset($features[$category])) {
+            return [];
+        }
+
+        // For core category, always return enabled features since core is always enabled
+        // For other categories, check if the category itself is enabled
+        if ($category !== 'core' && !$this->isCategoryEnabled($category)) {
             return [];
         }
 
@@ -397,17 +408,58 @@ class FeatureService
     public function updateFeatures(array $features): bool
     {
         try {
+            // Validate features array structure
+            if (!$this->validateFeaturesStructure($features)) {
+                return false;
+            }
+
             // Update the configuration
             $configPath = config_path('features.php');
             $configContent = "<?php\n\nreturn " . var_export($features, true) . ";\n";
-            file_put_contents($configPath, $configContent);
+
+            // Create backup of current config
+            $backupPath = $configPath . '.backup.' . time();
+            if (file_exists($configPath)) {
+                copy($configPath, $backupPath);
+            }
+
+            // Write new configuration
+            if (file_put_contents($configPath, $configContent) === false) {
+                return false;
+            }
 
             // Clear cache
             $this->clearCache();
 
             return true;
         } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Failed to update features configuration: ' . $e->getMessage());
             return false;
         }
+    }
+
+    /**
+     * Validate features array structure
+     *
+     * @param array $features
+     * @return bool
+     */
+    private function validateFeaturesStructure(array $features): bool
+    {
+        // Check if core features exist and are properly structured
+        if (!isset($features['core']) || !is_array($features['core'])) {
+            return false;
+        }
+
+        // Ensure core features are always enabled
+        $requiredCoreFeatures = ['dashboard', 'authentication', 'settings'];
+        foreach ($requiredCoreFeatures as $feature) {
+            if (!isset($features['core'][$feature]) || !$features['core'][$feature]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

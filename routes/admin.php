@@ -68,7 +68,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('dashboard/earning-statistics', [DashboardController::class, 'getEarningStatistics'])->name('dashboard.earning-statistics');
             Route::get('dashboard/stats', [DashboardController::class, 'getStats'])->name('dashboard.stats');
 
-        Route::group(['prefix' => 'custom-role', 'as' => 'custom-role.', 'middleware'=>['module:user_management']], function () {
+        Route::group(['prefix' => 'custom-role', 'as' => 'custom-role.', 'middleware'=>['feature:system.role_permissions']], function () {
             Route::get('create', [CustomRoleController::class, 'create'])->name('create');
             Route::post('create', [CustomRoleController::class, 'store'])->name('store');
             Route::get('update/{id}', [CustomRoleController::class, 'edit'])->name('update');
@@ -78,7 +78,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('export', [CustomRoleController::class, 'export'])->name('export');
         });
 
-        Route::group(['prefix' => 'employee', 'as' => 'employee.','middleware'=>['module:user_management']], function () {
+        Route::group(['prefix' => 'employee', 'as' => 'employee.','middleware'=>['feature:system.user_management']], function () {
             Route::get('add-new', [EmployeeController::class, 'index'])->name('add-new');
             Route::post('add-new', [EmployeeController::class, 'store']);
             Route::get('list', [EmployeeController::class, 'list'])->name('list');
@@ -88,7 +88,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::delete('delete/{id}', [EmployeeController::class, 'delete'])->name('delete');
             Route::get('export', [EmployeeController::class, 'export'])->name('export');
         });
-        Route::group(['prefix' => 'pos', 'as' => 'pos.','middleware'=>['module:pos_management']], function () {
+        Route::group(['prefix' => 'pos', 'as' => 'pos.','middleware'=>['feature:orders.enabled']], function () {
             Route::get('/', [POSController::class, 'index'])->name('index');
             Route::get('quick-view', [POSController::class, 'quickView'])->name('quick-view');
             Route::post('variant_price', [POSController::class, 'variantPrice'])->name('variant_price');
@@ -113,7 +113,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         });
 
-        Route::group(['prefix' => 'banner', 'as' => 'banner.','middleware'=>['module:promotion_management']], function () {
+        Route::group(['prefix' => 'banner', 'as' => 'banner.','middleware'=>['feature:marketing.banners']], function () {
             Route::get('add-new', [BannerController::class, 'index'])->name('add-new');
             Route::post('store', [BannerController::class, 'store'])->name('store');
             Route::get('edit/{id}', [BannerController::class, 'edit'])->name('edit');
@@ -122,7 +122,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::delete('delete/{id}', [BannerController::class, 'delete'])->name('delete');
         });
 
-        Route::group(['prefix' => 'discount', 'as' => 'discount.','middleware'=>['module:promotion_management']], function () {
+        Route::group(['prefix' => 'discount', 'as' => 'discount.','middleware'=>['feature:marketing.discounts']], function () {
             Route::get('add-new', [DiscountController::class, 'index'])->name('add-new');
             Route::post('store', [DiscountController::class, 'store'])->name('store');
             Route::get('edit/{id}', [DiscountController::class, 'edit'])->name('edit');
@@ -132,7 +132,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::delete('delete/{id}', [DiscountController::class, 'delete'])->name('delete');
         });
 
-        Route::group(['prefix' => 'attribute', 'as' => 'attribute.','middleware'=>['module:product_management']], function () {
+        Route::group(['prefix' => 'attribute', 'as' => 'attribute.','middleware'=>['feature:products.product_attributes']], function () {
             Route::get('add-new', [AttributeController::class, 'index'])->name('add-new');
             Route::post('store', [AttributeController::class, 'store'])->name('store');
             Route::get('edit/{id}', [AttributeController::class, 'edit'])->name('edit');
@@ -141,7 +141,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('status/{id}/{status}', [AttributeController::class, 'status'])->name('status');
         });
 
-        Route::group(['prefix' => 'branch', 'as' => 'branch.','middleware'=>['module:system_management']], function () {
+        Route::group(['prefix' => 'branch', 'as' => 'branch.','middleware'=>['feature:system.enabled']], function () {
             Route::get('add-new', [BranchController::class, 'index'])->name('add-new');
             Route::get('list', [BranchController::class, 'list'])->name('list');
             Route::post('store', [BranchController::class, 'store'])->name('store');
@@ -151,7 +151,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('status/{id}/{status}', [BranchController::class, 'status'])->name('status');
         });
 
-        Route::group(['prefix' => 'delivery-man', 'as' => 'delivery-man.','middleware'=>['module:user_management']], function () {
+        Route::group(['prefix' => 'delivery-man', 'as' => 'delivery-man.','middleware'=>['feature:delivery.delivery_partners']], function () {
             Route::get('add', [DeliveryManController::class, 'index'])->name('add');
             Route::post('store', [DeliveryManController::class, 'store'])->name('store');
             Route::get('list', [DeliveryManController::class, 'list'])->name('list');
@@ -170,7 +170,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             });
         });
 
-        Route::group(['prefix' => 'notification', 'as' => 'notification.','middleware'=>['module:promotion_management']], function () {
+        Route::group(['prefix' => 'notification', 'as' => 'notification.','middleware'=>['feature:marketing.push_notifications']], function () {
             Route::get('add-new', [NotificationController::class, 'index'])->name('add-new');
             Route::post('store', [NotificationController::class, 'store'])->name('store');
             Route::get('edit/{id}', [NotificationController::class, 'edit'])->name('edit');
@@ -179,7 +179,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::delete('delete/{id}', [NotificationController::class, 'delete'])->name('delete');
         });
 
-        Route::group(['prefix' => 'product', 'as' => 'product.','middleware'=>['module:product_management']], function () {
+        Route::group(['prefix' => 'product', 'as' => 'product.','middleware'=>['feature:products.enabled']], function () {
             Route::get('add-new', [ProductController::class, 'index'])->name('add-new');
             Route::get('add-enhanced', [ProductController::class, 'addEnhanced'])->name('add-enhanced');
             Route::post('variant-combination', [ProductController::class, 'variantCombination'])->name('variant-combination');
@@ -203,13 +203,13 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('feature/{id}/{is_featured}', [ProductController::class, 'feature'])->name('feature');
         });
 
-        Route::group(['prefix' => 'orders', 'as' => 'orders.','middleware'=>['module:order_management']], function () {
+        Route::group(['prefix' => 'orders', 'as' => 'orders.','middleware'=>['feature:orders.enabled']], function () {
             Route::get('list/{status}', [OrderController::class, 'list'])->name('list');
             Route::get('details/{id}', [OrderController::class, 'details'])->name('details');
             Route::get('status', [OrderController::class, 'status'])->name('status');
             Route::get('add-delivery-man/{order_id}/{delivery_man_id}', [OrderController::class, 'addDeliveryman'])->name('add-delivery-man');
             Route::get('payment-status', [OrderController::class, 'paymentStatus'])->name('payment-status');
-            Route::get('generate-invoice/{id}', [OrderController::class, 'generateInvoice'])->name('generate-invoice')->withoutMiddleware(['module:order_management']);
+            Route::get('generate-invoice/{id}', [OrderController::class, 'generateInvoice'])->name('generate-invoice')->withoutMiddleware(['feature:orders.enabled']);
             Route::post('add-payment-ref-code/{id}', [OrderController::class, 'addPaymentReferenceCode'])->name('add-payment-ref-code');
             Route::get('branch-filter/{branch_id}', [OrderController::class, 'branchFilter'])->name('branch-filter');
             Route::post('search', [OrderController::class, 'search'])->name('search');
@@ -217,7 +217,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('verify-offline-payment/{order_id}/{status}', [OrderController::class, 'verifyOfflinePayment']);
         });
 
-        Route::group(['prefix' => 'order', 'as' => 'order.','middleware'=>['module:order_management']], function () {
+        Route::group(['prefix' => 'order', 'as' => 'order.','middleware'=>['feature:orders.manage_orders']], function () {
             Route::get('list/{status}', [OrderController::class, 'list'])->name('list');
             Route::put('status-update/{id}', [OrderController::class, 'status'])->name('status-update');
             Route::post('update-shipping/{id}', [OrderController::class, 'updateShipping'])->name('update-shipping');
@@ -225,7 +225,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::post('update-deliveryDate', [OrderController::class, 'updateDeliveryDate'])->name('update-deliveryDate');
         });
 
-        Route::group(['prefix' => 'category', 'as' => 'category.','middleware'=>['module:product_management']], function () {
+        Route::group(['prefix' => 'category', 'as' => 'category.','middleware'=>['feature:products.product_categories']], function () {
             Route::get('add', [CategoryController::class, 'index'])->name('add');
             Route::get('add-sub-category', [CategoryController::class, 'subIndex'])->name('add-sub-category');
             Route::post('store', [CategoryController::class, 'store'])->name('store');
@@ -238,7 +238,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('priority', [CategoryController::class, 'priority'])->name('priority');
         });
 
-        Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['module:support_management']], function () {
+        Route::group(['prefix' => 'message', 'as' => 'message.','middleware'=>['feature:customers.customer_support']], function () {
             Route::get('list', [ConversationController::class, 'list'])->name('list');
             Route::post('update-fcm-token', [ConversationController::class, 'updateFcmToken'])->name('update_fcm_token');
             Route::get('get-conversations', [ConversationController::class, 'getConversations'])->name('get_conversations');
@@ -246,12 +246,12 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('view/{user_id}', [ConversationController::class, 'view'])->name('view');
         });
 
-        Route::group(['prefix' => 'reviews', 'as' => 'reviews.','middleware'=>['module:user_management']], function () {
+        Route::group(['prefix' => 'reviews', 'as' => 'reviews.','middleware'=>['feature:products.product_reviews']], function () {
             Route::get('list', [ReviewsController::class, 'list'])->name('list');
             Route::get('status/{id}/{status}', [ReviewsController::class, 'status'])->name('status');
         });
 
-        Route::group(['prefix' => 'coupon', 'as' => 'coupon.','middleware'=>['module:promotion_management']], function () {
+        Route::group(['prefix' => 'coupon', 'as' => 'coupon.','middleware'=>['feature:marketing.coupons']], function () {
             Route::get('add-new', [CouponController::class, 'index'])->name('add-new');
             Route::post('store', [CouponController::class, 'store'])->name('store');
             Route::get('update/{id}', [CouponController::class, 'edit'])->name('update');
@@ -262,7 +262,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         });
 
-        Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.','middleware'=>['module:system_management']], function () {
+        Route::group(['prefix' => 'business-settings', 'as' => 'business-settings.','middleware'=>['feature:system.enabled']], function () {
 
             Route::group(['prefix'=>'store','as'=>'store.'], function() {
                 Route::get('ecom-setup', [BusinessSettingsController::class, 'businessSettingsIndex'])->name('ecom-setup')->middleware('actch');
@@ -411,7 +411,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         });
 
-        Route::group(['prefix' => 'report', 'as' => 'report.','middleware'=>['module:report_management']], function () {
+        Route::group(['prefix' => 'report', 'as' => 'report.','middleware'=>['feature:analytics.enabled']], function () {
             Route::get('order', [ReportController::class, 'order_index'])->name('order');
             Route::get('earning', [ReportController::class, 'earning_index'])->name('earning');
             Route::post('set-date', [ReportController::class, 'setDate'])->name('set-date');
@@ -422,7 +422,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
             Route::get('expense-export-pdf', [ReportController::class, 'expenseSummaryPdf'])->name('expense.export.pdf');
         });
 
-        Route::group(['prefix' => 'analytics', 'as' => 'analytics.','middleware'=>['module:report_management']], function () {
+        Route::group(['prefix' => 'analytics', 'as' => 'analytics.','middleware'=>['feature:analytics.enabled']], function () {
             Route::get('keyword-search', [AnalyticController::class, 'getKeywordSearch'])->name('keyword-search');
             Route::get('customer-search', [AnalyticController::class, 'getCustomerSearch'])->name('customer-search');
             Route::get('keyword-export-excel', [AnalyticController::class, 'exportKeywordSearch'])->name('keyword.export.excel');
@@ -430,7 +430,7 @@ Route::group(['namespace' => 'Admin', 'as' => 'admin.'], function () {
 
         });
 
-        Route::group(['prefix' => 'customer', 'as' => 'customer.','middleware'=>['module:user_management']], function () {
+        Route::group(['prefix' => 'customer', 'as' => 'customer.','middleware'=>['feature:customers.enabled']], function () {
             Route::get('list', [CustomerController::class, 'list'])->name('list');
             Route::get('view/{user_id}', [CustomerController::class, 'view'])->name('view');
             Route::post('search', [CustomerController::class, 'search'])->name('search');
