@@ -98,8 +98,8 @@ return array (
   'system' => 
   array (
     'enabled' => true,
-    'user_management' => true,
-    'role_permissions' => true,
+    'user_management' => false,
+    'role_permissions' => false,
     'system_logs' => false,
     'backup_restore' => false,
     'maintenance_mode' => false,

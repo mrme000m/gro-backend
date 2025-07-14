@@ -102,11 +102,11 @@ return array (
     'role_permissions' => true,
     'system_logs' => false,
     'backup_restore' => false,
-    'maintenance_mode' => false,
+    'maintenance_mode' => true,
     'api_management' => false,
     'branches' => true,
     'pos_system' => true,
-    'time_slots' => false,
+    'time_slots' => true,
     'system_addons' => false,
   ),
   'advanced' => 

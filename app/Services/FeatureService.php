@@ -216,15 +216,14 @@ class FeatureService
             ];
         }
 
-        // System Management
-        if ($this->isCategoryEnabled('system')) {
+        // POS System
+        if ($this->isEnabled('system.pos_system')) {
             $navigation[] = [
-                'name' => 'System',
-                'icon' => 'animated-icon icon-system pulse',
-                'route' => 'admin.custom-role.create',
-                'active' => request()->routeIs('admin.custom-role.*') || request()->routeIs('admin.employee.*') || request()->routeIs('admin.business-settings.web-app.system-setup.*'),
+                'name' => 'POS',
+                'icon' => 'animated-icon icon-pos pulse',
+                'route' => 'admin.pos.index',
+                'active' => request()->routeIs('admin.pos.*'),
                 'enabled' => true,
-                'submenu' => $this->getSystemSubmenu(),
             ];
         }
 
@@ -486,45 +485,7 @@ class FeatureService
         return $submenu;
     }
 
-    /**
-     * Get system management submenu items
-     */
-    private function getSystemSubmenu(): array
-    {
-        $submenu = [];
 
-        // User & Role Management
-        if ($this->isEnabled('system.user_management')) {
-            $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.list'];
-        }
-
-        if ($this->isEnabled('system.role_permissions')) {
-            $submenu[] = ['name' => 'Role Permissions', 'route' => 'admin.custom-role.create'];
-        }
-
-        // System Features
-        if ($this->isEnabled('system.branches')) {
-            $submenu[] = ['name' => 'Branch Management', 'route' => 'admin.branch.list'];
-        }
-
-        if ($this->isEnabled('system.pos_system')) {
-            $submenu[] = ['name' => 'POS System', 'route' => 'admin.pos.index'];
-        }
-
-        if ($this->isEnabled('system.time_slots')) {
-            $submenu[] = ['name' => 'Time Slots', 'route' => 'admin.business-settings.store.timeSlot.add-new'];
-        }
-
-        if ($this->isEnabled('system.maintenance_mode')) {
-            $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.store.maintenance-mode'];
-        }
-
-        if ($this->isEnabled('system.system_addons')) {
-            $submenu[] = ['name' => 'System Addons', 'route' => 'admin.system-addon.index'];
-        }
-
-        return $submenu;
-    }
 
     /**
      * Get advanced features submenu items
@@ -609,18 +570,36 @@ class FeatureService
         $submenu = [];
 
         $submenu[] = ['name' => 'General Settings', 'route' => 'admin.settings'];
+        $submenu[] = ['name' => 'Business Settings', 'route' => 'admin.business-settings.store.ecom-setup'];
 
+        // System Management Features under Settings
         if ($this->isCategoryEnabled('system')) {
             if ($this->isEnabled('system.user_management')) {
-                $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.add-new'];
+                $submenu[] = ['name' => 'Employee Management', 'route' => 'admin.employee.list'];
             }
 
             if ($this->isEnabled('system.role_permissions')) {
-                $submenu[] = ['name' => 'Employee Roles', 'route' => 'admin.custom-role.create'];
+                $submenu[] = ['name' => 'Role Permissions', 'route' => 'admin.custom-role.create'];
+            }
+
+            if ($this->isEnabled('system.branches')) {
+                $submenu[] = ['name' => 'Branch Management', 'route' => 'admin.branch.list'];
+            }
+
+            if ($this->isEnabled('system.time_slots')) {
+                $submenu[] = ['name' => 'Time Slots', 'route' => 'admin.business-settings.store.timeSlot.add-new'];
+            }
+
+            if ($this->isEnabled('system.maintenance_mode')) {
+                $submenu[] = ['name' => 'Maintenance Mode', 'route' => 'admin.business-settings.store.maintenance-mode'];
+            }
+
+            if ($this->isEnabled('system.system_addons')) {
+                $submenu[] = ['name' => 'System Addons', 'route' => 'admin.system-addon.index'];
             }
         }
 
-        $submenu[] = ['name' => 'Business Settings', 'route' => 'admin.business-settings.store.ecom-setup'];
+        $submenu[] = ['name' => 'Feature Settings', 'route' => 'admin.settings.features.index'];
 
         return $submenu;
     }
