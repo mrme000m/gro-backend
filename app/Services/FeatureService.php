@@ -514,6 +514,7 @@ class FeatureService
     {
         $submenu = [];
 
+        // All these integrations have working admin interfaces
         if ($this->isEnabled('integrations.google_analytics')) {
             $submenu[] = ['name' => 'Google Analytics', 'route' => 'admin.business-settings.web-app.third-party.google-analytics'];
         }

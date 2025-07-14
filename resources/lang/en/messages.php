@@ -2615,4 +2615,6 @@
   'offline_payment_meth...' => 'Offline payment meth...',
   'Google Analytics will track page views, user interactions, and conversion events on your website.' => 'Google Analytics will track page views  user interactions  and conversion events on your website.',
   'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.' => 'Make sure your privacy policy includes information about Facebook Pixel tracking and obtain proper user consent where required by law.',
+  'Privacy Notice:' => 'Privacy Notice:',
+  'Page views, purchases, add to cart, view content, and other conversion events.' => 'Page views  purchases  add to cart  view content  and other conversion events.',
 );

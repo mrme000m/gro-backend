@@ -119,8 +119,8 @@ return array (
     'facebook_pixel' => true,
     'whatsapp_integration' => true,
     'sms_gateway' => true,
-    'accounting_software' => false,
-    'crm_integration' => false,
+    'accounting_software' => true,
+    'crm_integration' => true,
   ),
   'mobile_app' =>
   array (
