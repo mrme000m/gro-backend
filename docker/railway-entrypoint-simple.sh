@@ -83,6 +83,10 @@ run_migrations() {
             echo "Creating default admin user..."
             php artisan admin:create-default || echo "Warning: Default admin creation failed"
 
+            # Fix admin dashboard issues
+            echo "Fixing admin dashboard..."
+            php artisan admin:fix-dashboard || echo "Warning: Dashboard fix failed"
+
             echo "Database initialization complete!"
         else
             echo "No DATABASE_URL found. To connect database:"

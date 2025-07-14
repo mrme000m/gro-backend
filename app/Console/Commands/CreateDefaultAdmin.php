@@ -17,8 +17,8 @@ class CreateDefaultAdmin extends Command
 
         try {
             // Check if admin already exists
-            $existingAdmin = DB::table('admins')->where('email', 'admin@restaurantbazar.com')->first();
-            
+            $existingAdmin = DB::table('admins')->where('email', 'admin@4restaurants.store')->first();
+
             if ($existingAdmin) {
                 $this->info('✅ Default admin already exists!');
                 $this->displayCredentials();
@@ -30,7 +30,7 @@ class CreateDefaultAdmin extends Command
                 'f_name' => 'Restaurant',
                 'l_name' => 'Admin',
                 'phone' => '+1234567890',
-                'email' => 'admin@restaurantbazar.com',
+                'email' => 'admin@4restaurants.store',
                 'image' => 'def.png',
                 'password' => Hash::make('admin123'),
                 'role_id' => 1,
@@ -42,10 +42,10 @@ class CreateDefaultAdmin extends Command
             if ($adminId) {
                 $this->info('✅ Default admin user created successfully!');
                 $this->displayCredentials();
-                
+
                 // Also create some basic business settings if they don't exist
                 $this->createBasicSettings();
-                
+
                 return 0;
             } else {
                 $this->error('❌ Failed to create admin user');
@@ -63,7 +63,7 @@ class CreateDefaultAdmin extends Command
         $this->info('');
         $this->info('🎯 DEFAULT ADMIN CREDENTIALS:');
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        $this->info('📧 Email:    admin@restaurantbazar.com');
+        $this->info('📧 Email:    admin@4restaurants.store');
         $this->info('🔑 Password: admin123');
         $this->info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         $this->info('');
@@ -87,7 +87,7 @@ class CreateDefaultAdmin extends Command
                     'driver' => 'smtp',
                     'port' => '587',
                     'username' => '',
-                    'email_id' => 'admin@restaurantbazar.com',
+                    'email_id' => 'admin@4restaurants.store',
                     'encryption' => 'tls',
                     'password' => ''
                 ])],
@@ -98,7 +98,7 @@ class CreateDefaultAdmin extends Command
                 ['key' => 'time_zone', 'value' => 'UTC'],
                 ['key' => 'time_format', 'value' => '24'],
                 ['key' => 'phone', 'value' => '+1234567890'],
-                ['key' => 'email', 'value' => 'admin@restaurantbazar.com'],
+                ['key' => 'email', 'value' => 'admin@4restaurants.store'],
                 ['key' => 'address', 'value' => 'Your Restaurant Address'],
                 ['key' => 'country', 'value' => 'US'],
                 ['key' => 'pagination_limit', 'value' => '25'],
